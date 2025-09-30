@@ -5,9 +5,6 @@ nav_order: 1
 layout: default
 ---
 
-# Data types in C
-
-
 # C Data Types
 
 ## Introduction
@@ -20,6 +17,7 @@ helps ensure your program uses memory efficiently and behaves correctly.
 ## Why Data Types Matter
 
 Every variable in C has a type, which determines:
+
 - **How much memory** it uses
 - **What operations** are allowed
 - **How it's printed** or displayed
@@ -34,11 +32,14 @@ in embedded systems where you might have *kB* of RAM rather than *GB* on a PC!
 In some ways `C` makes it easy for us, in that there are actually very few in built data types.
 We will see how this makes it hard for us in other ways later!
 
-Numeric types can be 
-- `signed` where 1 bit is used to store where the number is positive or negative 
-- `unsigned` can store only positive numbers but can store larger max number for the same memory
+Numeric types can be either:
+
+- `signed`: Can represent both positive and negative numbers. One bit is used for the sign, so the range is roughly half negative and half positive.
+
+- `unsigned`: Can only represent non-negative numbers (zero and positive). All bits are used for the value, so the maximum value is about twice as large as the signed type of the same size.
 
 ### `char`
+
 - Stores a single character or byte.
 - Typically **1 byte**.
 - `printf` format: `%c` (as char), `%hhd` (as signed int)
@@ -50,19 +51,8 @@ printf("char: %c, as int: %hhd\n", ch, (signed char)ch);
 
 ---
 
-### `short` and `unsigned short`
-- Typically **2 bytes** on most platforms.
-- `printf` format: `%hd` (signed), `%hu` (unsigned)
-
-```c
-short s = -1234;
-unsigned short us = 50000;
-printf("short: %hd, unsigned short: %hu\n", s, us);
-```
-
----
-
 ### `int` and `unsigned int`
+
 - Typically **4 bytes** on modern systems.
 - `printf` format: `%d` (signed), `%u` (unsigned)
 
@@ -75,6 +65,7 @@ printf("int: %d, unsigned int: %u\n", i, ui);
 ---
 
 ### `long` and `unsigned long`
+
 - Size varies: often 4 bytes on 32-bit, 8 bytes on 64-bit.
 - `printf` format: `%ld` (signed), `%lu` (unsigned)
 
@@ -87,6 +78,7 @@ printf("long: %ld, unsigned long: %lu\n", l, ul);
 ---
 
 ### `long long` and `unsigned long long`
+
 - Typically **8 bytes**.
 - `printf` format: `%lld` (signed), `%llu` (unsigned)
 
@@ -99,6 +91,9 @@ printf("long long: %lld, unsigned long long: %llu\n", ll, ull);
 ---
 
 ### Floating Point Types
+
+
+
 - `float`: usually 4 bytes, `printf` with `%f` (promoted to double)
 - `double`: usually 8 bytes, `%f`
 - `long double`: 8–16 bytes, `%Lf`
@@ -114,6 +109,7 @@ printf("float: %f, double: %f, long double: %Lf\n", f, d, ld);
 ---
 
 ### `bool` (from `<stdbool.h>`)
+
 - Typically 1 byte.
 - `printf` as integer: `%d`
 
@@ -137,6 +133,7 @@ printf("size_t: %zu\n", n);
 ---
 
 ### Pointers
+
 - Size depends on architecture (4 bytes on 32-bit, 8 bytes on 64-bit).
 - `printf` format: `%p` (cast to `(void*)`)
 
@@ -152,8 +149,6 @@ printf("pointer: %p\n", (void*)&x);
 | Type                     | Typical Size | `printf` Format      |
 |-------------------------|-------------:|----------------------|
 | `char`                  | 1 byte       | `%c`, `%hhd`         |
-| `short`                 | 2 bytes      | `%hd`                |
-| `unsigned short`        | 2 bytes      | `%hu`                |
 | `int`                   | 4 bytes      | `%d`                 |
 | `unsigned int`          | 4 bytes      | `%u`                 |
 | `long`                  | 4 or 8       | `%ld`                |
@@ -174,8 +169,7 @@ printf("pointer: %p\n", (void*)&x);
 
 ## Print sizes on *your* platform
 
-Use this tiny program to print the actual sizes your compiler uses. It follows the same style:
-C99, K&R braces, 2-space indentation.
+Use this tiny program to print the actual sizes your compiler uses. This will likely be different between your PC and the Nucleo boards in Semester 2!
 
 ```c
 #include <stdio.h>
@@ -188,8 +182,6 @@ int main(void) {
   printf("char:                  %zu\n", sizeof(char));
   printf("signed char:           %zu\n", sizeof(signed char));
   printf("unsigned char:         %zu\n", sizeof(unsigned char));
-  printf("short:                 %zu\n", sizeof(short));
-  printf("unsigned short:        %zu\n", sizeof(unsigned short));
   printf("int:                   %zu\n", sizeof(int));
   printf("unsigned int:          %zu\n", sizeof(unsigned int));
   printf("long:                  %zu\n", sizeof(long));
@@ -208,10 +200,3 @@ int main(void) {
   return 0;
 }
 ```
-
-**Compile & run**
-```bash
-cc -std=c99 -Wall -Wextra -Werror sizes.c -o sizes
-./sizes
-```
-

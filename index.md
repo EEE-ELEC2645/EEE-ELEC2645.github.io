@@ -12,6 +12,16 @@ This is the reference website for the lab work during the ELEC2645 module. It co
 
 More will be made available later in the week after I have fixed all the github classroom problems!
 
+## C Programming
+
+- Data Types
+- Conditionals
+- asdasd 
+
+
+
 
 ## Cheatsheets - Covering the basics
 
+- Markdown, for writing readmes and documentation
+- Git and Version Control

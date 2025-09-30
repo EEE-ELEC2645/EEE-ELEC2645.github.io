@@ -22,6 +22,7 @@ In C, the two main loop types for condition-based repetition are `while` and `do
 ## Why Loops Matter
 
 Loops help you:
+
 - Process multiple items (e.g., array elements)
 - Retry operations until success
 - Validate input
@@ -60,7 +61,9 @@ int main(void) {
 }
 ```
 
-### Example 2 — Sum numbers until zero (sentinel value)
+### Example 2 — Sum numbers until zero
+
+Often a special value is used to signal the end of the loop, known as the *sentinel* value. For example we can read input numbers until the user inputs 0 (the sentinel value): 
 
 ```c
 #include <stdio.h>
@@ -72,7 +75,7 @@ int main(void) {
   printf("Enter numbers (0 to stop): ");
   if (scanf("%d", &n) != 1) return 1;  // basic input check
 
-  while (n != 0) {
+  while (n != 0) { // 0 is the sentinel value to indicate "stop looping"
     sum += n;
     if (scanf("%d", &n) != 1) return 1;
   }
@@ -165,7 +168,7 @@ int main(void) {
 
 ## Quick tips
 
-- Always ensure the loop **condition changes** inside the loop, or you'll create an infinite loop.
+- Always ensure the loop **condition changes** inside the loop, or you'll create an infinite loop. Everyone has done this at least once :D
 - Use braces `{}` even for single statements for clarity.
 - For input loops, validate user input inside the loop body and handle `scanf` failures.
 - Compile with warnings: `-Wall -Wextra -Werror` to catch common mistakes.

@@ -20,12 +20,12 @@ errors, or choosing between actions.
 ## Why conditionals matter
 
 Without conditionals, your program would run the same way every time. Conditionals let you:
+
 - Respond to different inputs
 - Branch into different logic paths
 - Make your program interactive and robust
 
-They keep code clear, testable, and efficient—especially when combined with good naming and small
-functions.
+They keep code clear, testable, and efficient - especially when combined with good naming and small functions.
 
 ---
 
@@ -35,18 +35,19 @@ functions.
 
 ```c
 if (condition) {
-  // statements if condition is true
+  // do stuff if condition is true
 } else if (another_condition) {
-  // statements if another_condition is true
+  // do stuff if another_condition is true
 } else {
-  // statements if none of the above are true
+  // do stuff if none of the above are true
 }
 ```
 
 **Rules of thumb**
+
 - Conditions are evaluated **top to bottom**; the first true branch runs, the rest are skipped.
-- Use braces `{}` even for one-line bodies—this avoids mistakes when adding lines later.
-- Keep conditions simple; extract complex checks into well-named helper functions. i.e. better use `if (CheckInput(input,limits) == 1 )` than `if ( input < X && X < Y and input >= Z .......... ) `
+- Always use braces `{}` even for one-line statements after e.g. `if (x >1) y=1` but its not good practice as its easy to get confused when adding more lines later.
+- Keep conditions simple; extract complex checks into well-named helper functions. i.e. better use `if (CheckInput(input,limits) == 1 )` than `if ( input < X && X < Y and input >= Z .......... )`
 - Enable warnings (`-Wall -Wextra -Werror`) to catch mistakes like `=` vs `==`. I promise you will make this mistake at least once! :D
 
 ### Example 1 — Simple `if`
@@ -121,12 +122,14 @@ int main(void) {
 }
 ```
 
-> Prefer keeping nesting shallow. If a function gets deeply nested, extract helper functions or
-> return early from trivial precondition checks.
+
+ Notice things can get complicated quickly with many nested if statements! If you find yourself in this situation it might be better to reconsider the approach.
 
 ---
 
 ## `switch` statement
+
+A more readable way to handle multiple branches is with a `switch` statement, which allow you to choose between several possible values of a single variable:
 
 ### Syntax
 
@@ -144,11 +147,10 @@ switch (expression) {
 }
 ```
 
-**Key points**
 - `expression` is evaluated once; control jumps to the matching `case` label.
 - `case` labels must be **integer constant expressions** (e.g., literals, enum constants).
-- Add `break;` to avoid falling through to the next case (unless intentional).
-- Use `default` for unexpected values; log or handle the error path.
+- Add `break;` to avoid the program continuing on to the next case, in some *extremely rare* cases you might want this but probably not!
+- Use `default` for unexpected values. Here you might log or handle the errors
 
 ### Example 1 — Switch-based menu
 
@@ -180,6 +182,9 @@ int main(void) {
 
 ### Example 2 — Switch with `enum`
 
+Switch statements are useful when combined with `enums` especially when using finite state machines in Semester 2. For example if we had a program that could be in three states, we can use a switch statement using our enum variables: 
+
+
 ```c
 #include <stdio.h>
 
@@ -210,39 +215,9 @@ int main(void) {
 }
 ```
 
-### Example 3 — Combining cases + intentional fall-through
+### Example 3 — Declaring variables in a `switch` case safely
 
-```c
-#include <stdio.h>
-
-int main(void) {
-  int ch = 'A';
-  switch (ch) {
-    case 'A':
-    case 'E':
-    case 'I':
-    case 'O':
-    case 'U':
-      printf("uppercase vowel\n");
-      break;
-    case 'a':
-    case 'e':
-    case 'i':
-    case 'o':
-    case 'u':
-      /* fall through */
-    default:
-      printf("lowercase vowel or other\n");
-      break;
-  }
-  return 0;
-}
-```
-
-> **Fall-through:** If you intend to fall through to the next case, add an explicit comment like
-> `/* fall through */` and enable `-Wimplicit-fallthrough` (GCC/Clang) to catch accidents.
-
-### Example 4 — Declaring variables in a `switch` case safely
+This is something I personally have got wrong many times! Each case within `{}` creates its own scope so that variables declared in the case are local to that case only. 
 
 ```c
 #include <stdio.h>
@@ -251,13 +226,13 @@ int main(void) {
   int x = 2;
   switch (x) {
     case 1: {
-      int a = 10;  // create a scope with braces
+      int a = 10;  // this 'a' belongs to the scope within {}
       printf("case 1: a = %d\n", a);
       break;
     }
     case 2: {
-      int b = 20;  // separate scope prevents crossing initialisations
-      printf("case 2: b = %d\n", b);
+      int a = 20;  // this is ok as we are in a separate scope to case 1
+      printf("case 2: a = %d\n", a);
       break;
     }
     default:
@@ -267,9 +242,6 @@ int main(void) {
   return 0;
 }
 ```
-
-> In C, `case` labels are not blocks. Use braces to create a new scope when declaring variables
-> inside cases.
 
 ---
 
@@ -308,14 +280,3 @@ int main(void) {
 - Compile with strict warnings: `-Wall -Wextra -Werror`.
 
 ---
-
-## Compile & run examples
-
-```bash
-cc -std=c99 -Wall -Wextra -Werror if_simple.c -o if_simple
-cc -std=c99 -Wall -Wextra -Werror if_else.c -o if_else
-cc -std=c99 -Wall -Wextra -Werror if_chain.c -o if_chain
-cc -std=c99 -Wall -Wextra -Werror switch_menu.c -o switch_menu
-cc -std=c99 -Wall -Wextra -Werror switch_enum.c -o switch_enum
-cc -std=c99 -Wall -Wextra -Werror switch_scoped.c -o switch_scoped
-```
