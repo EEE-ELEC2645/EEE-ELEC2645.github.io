@@ -5,10 +5,15 @@ layout: default
 ---
 
 
-# Basic Data Types
+# C Programs Basic Syntax 
 
-things
+Covering the basics of how to write C programs
+
 
 ```c
-int c = 5;
+#include <stdio.h>
+
+int main() {
+   printf("C is the best!\n");
+}
 ```
