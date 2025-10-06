@@ -112,7 +112,7 @@ scanf("%4s", name);  // width limit must be 1 less than string length
 
 The downside of this is that if we change the size of `name` we also need to remember to change the width limit in the `scanf`.
 
-A better approach is to use the function `fgets` which also handles multiple words.
+A better approach is to use the function fgets, which can read multiple words from the user. fgets reads a whole line (up to the Enter key), and you need to tell it where to store the text (the char array), how many characters to read at most, and where to read from. Usually, we use "standard input" (stdin), which means the keyboard.
 
 ```c
 #include <stdio.h>
