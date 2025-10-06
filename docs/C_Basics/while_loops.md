@@ -1,7 +1,7 @@
 ---
-title: Loops
+title: While loops
 parent: C Basics
-nav_order: 2
+nav_order: 3
 layout: default
 ---
 
@@ -10,11 +10,9 @@ layout: default
 
 ## Introduction
 
-Loops let you repeat actions in your program. They're essential for tasks like counting, reading input,
-or processing data until a condition is met.
+Loops let you repeat actions in your program. They're essential for tasks like counting, reading input, or processing data until a condition is met.
 
 In C, the two main loop types for condition-based repetition are `while` and `do...while`.
-
 
 
 ---
@@ -38,7 +36,7 @@ They reduce repetition and make your code cleaner and more flexible.
 
 ```c
 while (condition) {
-  // statements
+  // code that does cool stuff
 }
 ```
 
@@ -63,7 +61,7 @@ int main(void) {
 
 ### Example 2 — Sum numbers until zero
 
-Often a special value is used to signal the end of the loop, known as the *sentinel* value. For example we can read input numbers until the user inputs 0 (the sentinel value): 
+Often a special value is used to signal the end of the loop, known as the *sentinel* value. For example we can read input numbers until the user inputs 0 (the sentinel value):
 
 ```c
 #include <stdio.h>
@@ -89,6 +87,8 @@ int main(void) {
 
 ## `do...while` loop
 
+A variation of a `while` loop is the `do ... while` loop, where the condition check happens *after* the body is run.
+
 ### Syntax
 
 ```c
@@ -99,6 +99,8 @@ do {
 
 - The **body runs first**, then the condition is checked.
 - The loop **always runs at least once**, even if the condition is false initially.
+
+We can use this to ensure that code runs at least once, in a more convenient way than using just `while` loops. For example: 
 
 ### Example 1 — Ask for a positive number (input validation)
 
@@ -151,12 +153,12 @@ int main(void) {
 
 ## When to use which?
 
-- Use **`while`** when you may not need the loop body to run at all (e.g., reading until EOF).
+- Use **`while`** when you may not need the loop body to run at all e.g., reading data from a file until you reach the end (sometimes called End Of File EOF).
 - Use **`do...while`** when the body must run at least once (e.g., input validation, menus).
 
 ---
 
-## Summary table
+## Summary
 
 | Feature             | `while`                    | `do...while`               |
 |---------------------|----------------------------|----------------------------|

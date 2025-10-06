@@ -16,7 +16,11 @@ More will be made available later in the week after I have fixed all the github 
 
 - Data Types
 - Conditionals
-- asdasd 
+- For Loops
+- While Loops
+- Arrays
+- Strings
+- Enums
 
 
 
