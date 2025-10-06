@@ -6,12 +6,6 @@ layout: default
 
 # Code Style in C
 
-Eagleson's Law : “Any code of your own that you haven’t looked at for six or more months might as well have been written by someone else.”
-
-Writing good code is not just about telling the computer what to do, it is communicating to __other people__ what you have told the computer to do!
-
-Use this guide to help you write consistent and readable code.
-
 <details markdown="block">
   <summary>
     Table of contents
@@ -21,6 +15,11 @@ Use this guide to help you write consistent and readable code.
 {:toc}
 </details>
 
+Eagleson's Law : “Any code of your own that you haven’t looked at for six or more months might as well have been written by someone else.”
+
+Writing good code is not just about telling the computer what to do, it is communicating to __other people__ what you have told the computer to do!
+
+Use this guide to help you write consistent and readable code.
 
 ## Introduction
 

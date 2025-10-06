@@ -5,7 +5,7 @@ nav_order: 4
 layout: default
 ---
 
-# For Loops in C
+# `For` Loops in C
 
 ## Introduction
 
