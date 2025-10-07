@@ -42,7 +42,7 @@ int main(void) {
 
 ---
 
-## Why use for loops?
+## Why use `for` loops?
 
 - Easy to write loops that run a set number of times
 - Keeps loop control in one place (initialisation, condition, update)
@@ -68,12 +68,33 @@ int main(void) {
 }
 ```
 
+## `continue` and `break`
+
+As we saw with `while` loops, we can also have more control over how the `for` loop runs using `break` and `continue`:
+
+- `break` immediately stops the loop and moves to the next line after the loop.
+- `continue` skips the rest of the current loop iteration and starts the next iteration right away.
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    for (int i = 1; i <= 10; i++) {
+        if (i == 5) continue; // Skip printing 5
+        if (i == 8) break;    // Stop the loop completely when i is 8
+        printf("%d ", i);
+    }
+    printf("\n");
+    return 0;
+}
+```
+
 ---
 
 ## Common mistakes
 
 - Forgetting to update the loop variable (can cause infinite loops)
-- Using the wrong condition (off-by-one errors)
+- Using the wrong condition so loop runs one too many or too few times, known as  [off-by-one errors](https://en.wikipedia.org/wiki/Off-by-one_error) - if you are like then you will make this error *all the time*
 - Changing the loop variable inside the loop body (can make code confusing)
 
 ---

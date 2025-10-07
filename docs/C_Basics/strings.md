@@ -86,20 +86,20 @@ int main(void) {
 
 ---
 
-## Reading strings unsafely
+## Reading strings unsafely - Bad!
 
-We can use `scanf("%s", ...)` to read a string like we have read numbers previously. It terminate upon reading a space, so is only suitable for a single word.
+We can use scanf("%s", ...) to read a string, similar to how we read numbers previously. It stops reading when it encounters a space, so it is only suitable for single words.
 
-Notice that unlike `%d` for integers we do not need to use the `&` argument, because the name of the string already represents the address.
+Notice that, unlike `%d` for integers, we do not need to use the `&` argument because the name of the string already represents its address.
 
 ```c
 char name[5];
 scanf("%s", name);  // DANGEROUS: no width limit, input could exceed buffer size
 ```
 
-However this is **extremely** bad practice as it does not protect against the input being too big for the variable trying to hold it known as [buffer overflow](https://en.wikipedia.org/wiki/Buffer_overflow#). This would cause undefined behaviour, potential crashes and is the cause of many [security exploits](https://www.youtube.com/watch?v=1S0aBV-Waeo).
+However, this is **extremely** bad practice because it does not prevent the input from exceeding the buffer size—a problem known as [buffer overflow](https://en.wikipedia.org/wiki/Buffer_overflow#). Buffer overflows can cause undefined behaviour, crashes, and are a common source of [security exploits](https://www.youtube.com/watch?v=1S0aBV-Waeo).
 
-## Reading strings safely
+## Reading strings safely - Good!
 
 Thankfully there are some safer ways we can read strings from user input.
 
