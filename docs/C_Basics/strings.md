@@ -16,7 +16,6 @@ layout: default
 {:toc}
 </details>
 
-
 ## Introduction
 
 Frankly speaking, strings in `C` are a hassle compared to other more modern programming languages...Have fun! :D
@@ -112,7 +111,7 @@ scanf("%4s", name);  // width limit must be 1 less than string length
 
 The downside of this is that if we change the size of `name` we also need to remember to change the width limit in the `scanf`.
 
-A better approach is to use the function fgets, which can read multiple words from the user. fgets reads a whole line (up to the Enter key), and you need to tell it where to store the text (the char array), how many characters to read at most, and where to read from. Usually, we use "standard input" (stdin), which means the keyboard.
+A better approach is to use the function `fgets`, which can read multiple words from the user. `fgets` reads a whole line (up to the Enter key), and you need to tell it where to store the text (the char array), how many characters to read at most, and where to read from. Usually, we use "standard input" (`stdin`), which in this case means what we have typed into the terminal.
 
 ```c
 #include <stdio.h>
@@ -128,14 +127,15 @@ int main(void) {
 }
 ```
 
-> `fgets` keeps the newline if there’s space; `strcspn` finds it safely (no loop required).
+> `fgets` also keeps the newline i.e. the `\n` for Linux\Mac or `\r\n` for Windows (this difference is a constant source of annoyance!)
 
+> So if you typed "hello" in the codespace, and hit enter `fgets` would return `h e l l o \n`, this is helpful sometimes but often not!. You can loop through and find them and replace the `\n` with a NUL `\0` or you can use the `strcspn` function, which we will explain later
 
 ## Summary
 
 - A C string is a **`char` array ending with `\0`**.
 - Always allocate space for the terminator and keep track of buffer sizes.
-- Prefer `fgets` (or width-limited `scanf`) for input, and `snprintf` for bounded formatting.
-- We can `<string.h>` functions, as we will see later
+- Prefer `fgets` (or width-limited `scanf`) for input
+- We can use `<string.h>` functions, as we will see later
 
 ---

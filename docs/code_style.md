@@ -31,10 +31,9 @@ Professional programmers stick to very strict code style guidelines and indeed, 
 by their employers. Ensuring that all employees use the same coding style means that they can all
 easily read each other’s code.
 
-Given the age of the programming language there are many different style guides. For example NASA have their own guidelines to keep code understandable and testable [detailed in this journal article](https://ieeexplore.ieee.org/document/1642624) aka [the Power of Ten](https://en.wikipedia.org/wiki/The_Power_of_10:_Rules_for_Developing_Safety-Critical_Code) which are summarised [in this video](https://youtu.be/GWYhtksrmhE?si=5YLFxiuVCObyzDX4)
+Given the age of the `C` programming language there are many different style guides. For example NASA have their own guidelines to keep code understandable and testable [detailed in this journal article](https://ieeexplore.ieee.org/document/1642624) aka [the Power of Ten](https://en.wikipedia.org/wiki/The_Power_of_10:_Rules_for_Developing_Safety-Critical_Code) which are summarised [in this video](https://youtu.be/GWYhtksrmhE?si=5YLFxiuVCObyzDX4)
 
-We will follow the typical conventions, based on [the C Bible](https://en.wikipedia.org/wiki/The_C_Programming_Language) sometimes shortened to K&R after the authors,
-and then expanded into things like [Google's C++ Guide](https://google.github.io/styleguide/cppguide.html).
+We will follow the typical conventions, based on [the C Bible](https://en.wikipedia.org/wiki/The_C_Programming_Language) sometimes shortened to K&R after the authors, and then expanded into things like [Google's C++ Guide](https://google.github.io/styleguide/cppguide.html).
 
 Following this clear, consistent __C__ style will make you into a better and more professional programmer.
 
@@ -519,7 +518,7 @@ bool in_range(int x, int lo, int hi) {
 
 __Single-exit with cleanup__
 
-Writing functions with a single return point makes cleanup and error handling easier because all resource releases and final actions happen in one predictable place. If you have multiple `return` statments then it is harder to understand when the functions stops, and what code it will return.
+Writing functions with a single return point makes cleanup and error handling easier because all resource releases and final actions happen in one predictable place. If you have multiple `return` statements then it is harder to understand when the functions stops, and what code it will return.
 A single return also improves maintainability and reduces the risk of leaks or inconsistent exit paths as the function grows in complexity.
 
 ```c

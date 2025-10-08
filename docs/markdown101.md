@@ -1,6 +1,6 @@
 ---
 title: Markdown Basics
-nav_order: 2
+nav_order: 99
 layout: default
 ---
 
@@ -235,7 +235,7 @@ Then later in the document you can put the reference
 In the body of the text
 [ELEC2645 Website][elec2645web2]
 
-Then later in the document you can put the `[]: ` bit, normally at the bottom so it doesnt matter if it is rendered or not
+Then later in the document you can put the `[]: ` bit, normally at the bottom so it doesn't matter if it is rendered or not
 
 [elec2645web2]: https://eee-elec2645.github.io/
 
