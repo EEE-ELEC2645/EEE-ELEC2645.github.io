@@ -1,21 +1,20 @@
 ---
 title: Header Guards
 parent: C Projects
-nav_order: 1
+nav_order: 2
 layout: default
 ---
 
 
 ---
-
-
 # Header Guards
 
 ### Introduction
 
-Consider the following headers and source file (initially **without** header guards to illustrate the problem).
+Consider the following headers and source file
 
 **`Person.h`**
+
 ```c
 typedef struct {
     char name[32];  /* fixed-size character array for C */
@@ -47,12 +46,12 @@ This `struct` stores a set of parents. Since a parent is a person, we reuse the 
 
 int main(void) {
     Person best_friend;
-    strcpy(best_friend.name, "John");
+    strcpy(best_friend.name, "Alex");
     printf("My best friend is %s.\n", best_friend.name);
 
     Parents my_parents;
-    strcpy(my_parents.father.name, "William");
-    strcpy(my_parents.mother.name, "Susan");
+    strcpy(my_parents.father.name, "Miles");
+    strcpy(my_parents.mother.name, "Rey");
     printf("My parents are called %s and %s.\n",
            my_parents.father.name, my_parents.mother.name);
 
@@ -62,7 +61,7 @@ int main(void) {
 
 This code creates a `Person` used to hold the details of our best friend and also creates an instance of `Parents` to hold details of our parents. Note that we include the header files we use in `main.c`. We also include `<stdio.h>` for `printf` and `<string.h>` for `strcpy`.
 
-> **Note:** To keep the focus on header guards, the examples use `strcpy` for simplicity. In production or safety‑critical embedded code, prefer `snprintf` or `strncpy` with explicit bounds checks.
+> **Note:** These examples use `strcpy` for simplicity. In reality we would prefer `snprintf` or `strncpy` with explicit bounds checks.
 
 ---
 
@@ -114,12 +113,12 @@ typedef struct {
 
 int main(void) {
     Person best_friend;
-    strcpy(best_friend.name, "John");
+    strcpy(best_friend.name, "Alex");
     printf("My best friend is %s.\n", best_friend.name);
 
     Parents my_parents;
-    strcpy(my_parents.father.name, "William");
-    strcpy(my_parents.mother.name, "Susan");
+    strcpy(my_parents.father.name, "Miles");
+    strcpy(my_parents.mother.name, "Rey");
     printf("My parents are called %s and %s.\n",
            my_parents.father.name, my_parents.mother.name);
     return 0;
@@ -135,6 +134,7 @@ Since both `main.c` and `Parents.h` include `Person.h`, the definition of `Perso
 We use **header guards** in header files to prevent them being included multiple times.
 
 **`Person.h` (with header guards)**
+
 ```c
 #ifndef PERSON_H
 #define PERSON_H
@@ -147,6 +147,7 @@ typedef struct {
 ```
 
 **`Parents.h` (with header guards)**
+
 ```c
 #ifndef PARENTS_H
 #define PARENTS_H
@@ -172,8 +173,8 @@ A common naming convention for the guard macro is the uppercase file name with u
 After adding header guards to our header files, the code will compile successfully. When the program runs, we will see the following output in the terminal:
 
 ```bash
-My best friend is John.
-My parents are called William and Susan.
+My best friend is Alex.
+My parents are called Miles and Rey.
 ```
 
-In summary, **always use header guards!**
+To summarise the summary, **always use header guards!**

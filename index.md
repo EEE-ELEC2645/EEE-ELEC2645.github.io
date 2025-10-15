@@ -8,9 +8,9 @@ description: "ELEC2645 Overview"
 
 # Welcome to ELEC2645 - Embedded Systems Project
 
-This is the reference website for the lab work during the ELEC2645 module. It covers the basics of `C` programming and the concepts we will use throughout the course.
+This is the reference website for the lab work during the ELEC2645 module. It covers the basics of `C` programming and the concepts we will use throughout the course. Use the *Search* function at the top of the page to find the parts relevant to the program you are currently writing.
 
-The page will be updated as we go through to the course 
+The page will be updated as we go through to the course so as to not be too overwhelming!
 
 ## C Programming
 
@@ -28,8 +28,8 @@ The page will be updated as we go through to the course
 ## Cheatsheets - Covering the basics
 
 - Markdown, for writing readmes and documentation
+- GitHub Codespaces
 - Git and Version Control
-
 
 
 ## Further Reading
