@@ -84,7 +84,7 @@ This improves readability (you write `Apple` instead of `0`), but exposes this c
 
 To limit the chances of errors when accidentally comparing two different `enums` there are a couple of approaches we can take:
 
-1) **Prefix enumerators** so their domain is obvious, i.e. `FRUIT_APPLE` makes it clear it is part of an `enum` called fruit
+- 1  **Prefix enumerators** so their domain is obvious, i.e. `FRUIT_APPLE` makes it clear it is part of an `enum` called fruit
 
 ```c
 #include <stdio.h>
@@ -102,7 +102,7 @@ int main(void) {
 }
 ```
 
-2) **Wrap the enum in a struct** to create truly distinct types that won’t compare directly. This also prevents "direct assignment" i.e. we cannot do something like `myEnum =5`. We will look at structs and `typedef` more closely later in the course. This approach is more complicated, but worth it for safety reasons if you think it might happen in your code:
+- 2 **Wrap the enum in a struct** to create truly distinct types that won’t compare directly. This also prevents "direct assignment" i.e. we cannot do something like `myEnum =5`. We will look at structs and `typedef` more closely later in the course. This approach is more complicated, but worth it for safety reasons if you think it might happen in your code:
 
 ```c
 #include <stdio.h>

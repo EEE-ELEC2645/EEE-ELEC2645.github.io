@@ -36,5 +36,6 @@ The page will be updated as we go through to the course
 
 All the material needed for assessment will be described on this site, but no one resource can teach you all of `C` or how best to use it in all situations. The following are other places you can look that I have gone through myself
 
-- [w3schools](https://www.w3schools.com/c/index.php) - covers the basics well and you can run the code online
-- [learn-c](https://www.learn-c.org/) - has short exercises after each topic which I like
+- [w3schools](https://www.w3schools.com/c/index.php) - covers the basics well and you can run the code online, but the explanations can be a bit limited
+- [learn-c](https://www.learn-c.org/) - has short exercises after each topic which I like, some it is not so relevant for Embedded
+- [tutorials point C standard library](https://www.tutorialspoint.com/c_standard_library/index.htm) - Has detailed examples for each function. Note their online C compiler has problems with using `math.h`, their [general C course](https://www.tutorialspoint.com/cprogramming/index.htm) I personally find a bit too wordy and some of the explanations are a bit confusing
