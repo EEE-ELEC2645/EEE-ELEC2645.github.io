@@ -8,6 +8,15 @@ layout: default
 
 # Arrays in C
 
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
+
 ## Introduction
 
 A single variable represents one location in memory. An **array** is a collection of variables of the same type, stored in **contiguous memory**, meaning each element is stored one after another, with no gaps. Arrays let you store and process multiple values under one name, using an **index** to access each element.
@@ -40,6 +49,8 @@ We create an array by first specifying the type e.g. `int`, give the array a nam
 type arrayName[size];
 ```
 
+This creates the memory for the array `arrayName` but it does not set any values, they could be zero or whatever junk values which were already there before the program was run. Telling the compiler what values should be in the array at the start is what is known as *initialisation*, it is good practice to always do this! 
+
 ### Example: create and print an array
 
 Here we are creating an array specifying both the size and initialising each of the values:
@@ -59,16 +70,15 @@ int main(void) {
 }
 ```
 
-### Create all 
+### Create all
 
-- If you provide initial values, you can omit the size:
+If you provide initial values, you can omit the size:
 
   ```c
   int array[] = { 100, 101, 102, 103, 104 };
   ```
 
-
-
+This will make an array of 5 elements.
 
 ### Initialise all values to zero
 
@@ -80,50 +90,64 @@ int zeros[10] = { 0 };  // all elements set to 0
 
 ---
 
-### Compute length using `sizeof` (at the point of declaration)
+## Indexing arrays
+
+**Indexing** an array means accessing elements by their position, starting from index `0`. For an array `arr[n]`, the first element is `arr[0]` and the last is `arr[n-1]`.
+
+For example:
 
 ```c
 #include <stdio.h>
 
 int main(void) {
-  int nums[] = { 1, 2, 3, 4, 5 };
-  size_t length = sizeof(nums) / sizeof(nums[0]);
-  printf("Array length = %zu\n", length);
-  return 0;
+    int numbers[] = {10, 20, 30, 40, 50};
+
+    printf("First element: %d\n", numbers[0]); // 10
+    printf("Third element: %d\n", numbers[2]); // 30
+    printf("Last element: %d\n", numbers[4]);  // 50
+
+    return 0;
 }
 ```
 
-The variable `length` is calculated using the `sizeof` operator. `sizeof(nums)` gives the total number of bytes used by the entire array, while `sizeof(nums[0])` gives the number of bytes used by a single element. Dividing these gives the number of elements in the array:
+*Note* We have to keep track ourselves what the index to the final element of the array is!
 
-- `sizeof(nums)` returns the size in bytes of the whole array (for 5 `int`s, typically 20 bytes if `int` is 4 bytes).
-- `sizeof(nums[0])` returns the size in bytes of one element (typically 4 bytes for `int`).
-- So, `sizeof(nums) / sizeof(nums[0])` = total bytes / bytes per element = number of elements.
+---
 
-This method only works for arrays whose size is known at compile time (i.e., not for pointers or function parameters).
+## Determining the Number of Elements in an Array Using `sizeof`
 
+Sometimes we need to know how many elements an array contains. For arrays whose size is known at **compile time**, we can use the `sizeof` operator. This operator returns the size of a variable **in bytes**.
 
-The variable length in your code represents the number of elements in the array nums.
-Here’s why:
+```c
+#include <stdio.h>
 
-sizeof(nums) gives the total size of the array in bytes.
-sizeof(nums[0]) gives the size of one element (in this case, an int).
-Dividing the two gives the count of elements:
+int main(void) {
+    int nums[] = { 1, 2, 3, 4, 5 };
+    size_t length = sizeof(nums) / sizeof(nums[0]);
+    printf("Array length = %zu\n", length); // prints "Array length = 5"
+    return 0;
+}
+```
 
-length=total size of arraysize of one element=sizeof(nums)sizeof(nums[0])\text{length} = \frac{\text{total size of array}}{\text{size of one element}} = \frac{\text{sizeof(nums)}}{\text{sizeof(nums[0])}}length=size of one elementtotal size of array​=sizeof(nums[0])sizeof(nums)​
-For your array:
+### How it works
 
-nums[] = {1, 2, 3, 4, 5} → 5 elements.
-On most systems, sizeof(int) = 4 bytes.
-So sizeof(nums) = 5×4=205 \times 4 = 205×4=20 bytes.
-sizeof(nums[0]) = 4 bytes.
-Therefore, length = 20 / 4 = 5.
+- `sizeof(nums)` gives the total size of the array in bytes (e.g., 5 `int`s × 4 bytes = 20 bytes on most systems).
+- `sizeof(nums[0])` gives the size of one element (e.g., 4 bytes for an `int`).
+- Dividing these values gives the number of elements:  
+  `sizeof(nums) / sizeof(nums[0])`.
 
-The size_t type is used because sizeof returns an unsigned integral type suitable for representing sizes.
+#### Important notes
 
+- This method **only works for arrays in the same scope where they are declared**.  
+  If you pass the array to a function, it decays to a pointer, and `sizeof` will return the size of the pointer instead.
+- It does **not** work for dynamically allocated memory (e.g., arrays created with `malloc`), because those are accessed through pointers.
+- The type `size_t` is the correct type for sizes returned by `sizeof`. Use `%zu` in `printf` when printing `size_t` values.
 
+---
 
+## 2D array (matrix)
 
-### 2D array (matrix)
+A 2D array in C is essentially an array of arrays, often used to represent a matrix or table of values. The example below creates a 2×3 matrix and prints its elements using nested loops.
 
 ```c
 #include <stdio.h>
@@ -144,52 +168,90 @@ int main(void) {
 }
 ```
 
+In C, **2D arrays are stored in row-major order**, which means all elements of the first row are stored consecutively in memory, followed by all elements of the second row, and so on. For example, in a `2x3` array:
 
-### 4) Arrays are **not assignable** (except at initialisation)
+```c
+matrix[2][3] = { {1, 2, 3}, {4, 5, 6} };
+```
+
+the memory layout is:
+
+```c
+1  2  3  4  5  6
+```
+
+This is why `matrix[i][j]` is actually accessed internally in the code with some pointer magic like this: `*(matrix[i] + j)` . The entire array is a single contiguous block of memory, so you can also treat it as a flat array if needed.
+
+---
+
+## Common pitfalls with Arrays
+
+
+### 1) Arrays are **not assignable** (except at initialisation)
 
 ```c
 int a[3] = {1,2,3};
 int b[3];
 b = a;              // BUG: invalid in C
 ```
+
 **Fix**: Copy with a loop or `memcpy` (for POD types).
+
 ```c
-for (int i = 0; i < 3; i++) b[i] = a[i];
+for (int i = 0; i < 3; i++) b[i] = a[i]; // this is essentially what happens in the background anyway
 /* or: memcpy(b, a, sizeof a); */
 ```
 
+### 2) Hard coded lengths
 
-### 8) Signed/unsigned index mismatches
-
-`sizeof` yields a `size_t` (unsigned). Mixing `int i` with `size_t length` can raise warnings or logic
-issues.
-
-```c
-size_t length = 5;
-for (int i = length - 1; i >= 0; i--) {  // BUG: i >= 0 is always true after wrap
-  /* ... */
-}
-```
-**Fix**: Use `size_t` for indices, or structure the loop differently.
-```c
-for (size_t i = 0; i < length; i++) { /* ... */ }
-```
-
-
-### 10) Magic lengths sprinkled in code
-
-Hard-coding lengths (e.g., `for (i=0; i<5; i++)`) makes maintenance risky.
+Hard-coding lengths (e.g., `for (i=0; i<5; i++)`) makes maintenance risky. What happens if we decide to change the length of the array? If we had lots of for loops We could easily forget to change all of them.
 
 **Fix**: Compute or name the length once and reuse it.
+
 ```c
 int a[] = { 2, 3, 5, 7, 11 };
-const size_t LEN = sizeof a / sizeof a[0];
+const size_t LEN = sizeof a / sizeof a[0]; // const here means that LEN can never be changed, use uppercase for this
 for (size_t i = 0; i < LEN; i++) { /* ... */ }
 ```
 
 ---
 
-## Things to remember
+### 3) Indexing beyond the array bounds
+
+In C, **there is no automatic bounds checking**. If you access an index outside the valid range (e.g., `arr[5]` in an array of length 5), the compiler won’t stop you, but the behaviour is **undefined**. This can lead to corrupted data, crashes, or subtle bugs.
+
+```c
+int a[3] = {1, 2, 3};
+printf("%d\n", a[5]); // Undefined behaviour, we don't know what this could be reading
+a[10] = 0 ; // even worse! We could be overwriting something very important
+```
+
+---
+
+### 4) Arrays decay to pointers in functions
+
+When you pass an array to a function, it **decays to a pointer** to its first element. This means the function does not know the array’s length unless you pass it explicitly.
+
+Example:
+
+```c
+void printArray(int arr[], size_t len) {
+    for (size_t i = 0; i < len; i++) {
+        printf("%d ", arr[i]);
+    }
+}
+
+int main(void) {
+    int nums[] = {1, 2, 3, 4};
+    printArray(nums, sizeof nums / sizeof nums[0]); // must pass length
+}
+```
+
+*(We’ll look at this in more detail later when we look at pointers)*
+
+---
+
+### Things to remember
 
 - Arrays in C have **fixed size**; you cannot resize them after creation.
 - Array names often **decay** to pointers in expressions and function parameters.
