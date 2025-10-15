@@ -14,7 +14,6 @@ Loops let you repeat actions in your program. They're essential for tasks like c
 
 In C, the two main loop types for condition-based repetition are `while` and `do...while`.
 
-
 ---
 
 ## Why Loops Matter
