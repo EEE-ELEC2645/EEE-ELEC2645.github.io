@@ -7,7 +7,7 @@ layout: default
 
 ---
 
-## What is a function?
+# Functions in C
 
 A **function** is a named block of code that:
 

@@ -1,11 +1,9 @@
 ---
 title: Conditionals
 parent: C Basics
-nav_order: 2
+nav_order: 3
 layout: default
 ---
-
-
 
 # C Conditionals: `if`, `else`, and `switch`
 

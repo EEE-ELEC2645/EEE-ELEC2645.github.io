@@ -6,7 +6,6 @@ layout: default
 ---
 
 
----
 # Header Guards
 
 ### Introduction

@@ -5,7 +5,7 @@ nav_order: 10
 layout: default
 ---
 
-## Struct
+# Struct
 
 A `struct` lets us create a **custom data structure** by grouping variables of (possibly) different
 types into a single unit. This is especially useful for returning multiple, related values from a

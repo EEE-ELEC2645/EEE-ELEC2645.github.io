@@ -5,7 +5,6 @@ nav_order: 6
 layout: default
 ---
 
-
 # Arrays in C
 
 <details markdown="block">

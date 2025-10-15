@@ -5,10 +5,6 @@ nav_order: 1
 layout: default
 ---
 
-
-
----
-
 # What is `gcc`?
 
 `gcc` stands for **GNU Compiler Collection**. For C programs, it’s the tool that:

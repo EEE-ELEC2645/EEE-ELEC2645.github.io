@@ -1,11 +1,11 @@
 ---
 title: Operators
 parent: C Basics
-nav_order: 12
+nav_order: 2
 layout: default
 ---
 
-## Common Operators in C
+# Common Operators in C
 
 This guide covers the most frequently used operators in C, especially relevant for embedded systems programming. For a full reference, see: [GeeksforGeeks: Operators in C](https://www.geeksforgeeks.org/c/operators-in-c/)
 
