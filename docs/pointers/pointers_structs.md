@@ -5,7 +5,7 @@ nav_order: 3
 layout: default
 ---
 
-## Pointers to `struct`s
+## Pointers and `struct`
 
 C doesn’t have classes, but it does have `struct`.  
 When you have a `struct` **object**, use `.` to access members
