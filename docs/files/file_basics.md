@@ -5,12 +5,9 @@ nav_order: 1
 layout: default
 ---
 
+# C file handling basics
 
----
-
-## C file handling (the essentials)
-
-### 1) General Pattern
+## 1) General Pattern
 
 - A `FILE *` is a **handle** the C library gives you so you can read from or write to a file.
 - Typical pattern is: **open -> use -> close**.
@@ -23,24 +20,24 @@ layout: default
 
 - If `fopen` fails (e.g., file missing or no permission), it returns **`NULL`**. Always check using something like `if(!f) {error}`
 
-### 2) Common modes you’ll use
+## 2) Common modes you’ll use
 
 - `"r"`  – open for **reading** (must already exist).
 - `"w"`  – open for **writing** (creates or **truncates** existing).
 - `"a"`  – **append** to end (creates if missing).
 - Add `"b"` for binary (e.g., `"rb"`, `"wb"`); on Linux/macOS it’s the same as text; on Windows it matters.
 
-### 3) Reading lines
+## 3) Reading lines
 
 - `fgets(buf, buf_size, file)` reads **one line** (or up to `buf_size-1` chars), including the newline if it fits.
 - It returns `NULL` on **EOF** or **error**, which makes it perfect for a `while` loop.
 
-### 4) Writing
+## 4) Writing
 
 - `fprintf(file, "format", ...)` works like `printf`, but the **first argument is the file**.
 - Great for CSV or logs.
 
-### 5) Always close
+## 5) Always close
 
 - `fclose(file)` flushes buffers and releases the handle. Do this for **every** file you open, can cause problems if not done correctly.
 

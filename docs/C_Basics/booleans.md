@@ -5,10 +5,7 @@ nav_order: 11
 layout: default
 ---
 
-
----
-
-## Boolean Basics in C
+# Booleans in C
 
 C doesn't have a built-in `bool` type in its original standard (C89/C90), but since C99, you can include `<stdbool.h>` for a more readable `bool` type.
 

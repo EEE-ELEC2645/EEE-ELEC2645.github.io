@@ -5,8 +5,6 @@ nav_order: 1
 layout: default
 ---
 
----
-
 # Functions in C
 
 A **function** is a named block of code that:
@@ -39,7 +37,7 @@ int main(void) {
 
 ## What is a function *prototype*?
 
-A **function prototype** is a **declaration** that tells the compiler - *before the function is used* -the function’s:
+A **function prototype** is a **declaration** that tells the compiler—*before the function is used*—the function’s:
 
 - **name**
 - **return type**
@@ -61,6 +59,14 @@ int add(int a, int b) {
     return a + b;
 }
 ```
+
+---
+
+## Why use prototypes at all?
+
+- **Guarantee correct calls**: If functions call each other, prototypes ensure the compiler knows their signatures before any call happens. This prevents mismatched arguments or return types.
+- **Separate compilation**: In multi‑file projects, you often compile `.c` files separately. Prototypes in headers (`.h`) make it clear what functions belong to a library and allow other files to call them without seeing the full definition.
+- **Type safety**: The compiler can check argument types and return types early, avoiding subtle bugs.
 
 ---
 
@@ -144,12 +150,12 @@ int main(void) {
 
 Compile:
 ```bash
-gcc -std=c17 -Wall -Wextra -Wpedantic main.c math_utils.c -o app
+gcc -Wall -Wextra -Wpedantic main.c math_utils.c -o app
 ```
 
 ---
 
-## Quick checklist
+## Summary
 
 - Use **functions** to organise, reuse, and test code.  
 - The compiler must know a function’s **signature before the first call**.  

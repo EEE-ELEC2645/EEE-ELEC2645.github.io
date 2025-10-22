@@ -9,7 +9,6 @@ layout: default
 
 Covering the basics of how to write C programs
 
-
 ```c
 #include <stdio.h>
 
