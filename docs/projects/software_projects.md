@@ -5,8 +5,6 @@ nav_order: 2
 layout: default
 ---
 
----
-
 # Working with Multiple Files in C
 
 <details markdown="block">
