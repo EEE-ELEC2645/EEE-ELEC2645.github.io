@@ -263,7 +263,7 @@ int main(void) {
 - Arrays store multiple values of the same type in contiguous memory.
 - Use loops to process arrays, and pass length explicitly to functions.
 - Watch out for common pitfalls: off-by-one, `sizeof` on parameters, string terminators, non-assignable
-  arrays, `memset` misuse, 2D parameter shapes, VLAs, signed/unsigned issues, and returning arrays.
+  arrays and returning arrays.
 
 ---
 
