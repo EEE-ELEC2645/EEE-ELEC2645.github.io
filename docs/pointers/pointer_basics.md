@@ -215,6 +215,19 @@ int main(void)
 }
 ```
 
+Sample output:
+
+```
+Value = 0xABCDEF89
+Size of value = 4 bytes
+Address of value = 0x7ffd43688a6c
+-----------------------
+0x7ffd43688a6c  0x89
+0x7ffd43688a6d  0xEF
+0x7ffd43688a6e  0xCD
+0x7ffd43688a6f  0xAB
+-----------------------
+
 **Interpretation**
 
 If you see the first printed byte as `0x89` at the lowest address, your system is little-endian. If it begins with `0xAB`, it’s big-endian.
