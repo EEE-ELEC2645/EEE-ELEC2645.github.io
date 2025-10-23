@@ -44,7 +44,7 @@ int main(void)
     int *p = &x;        // p stores the address of x
 
     printf("x = %d\n", x);
-    printf("&x = %p, p = %p\n", (void *)&x, (void *)p);
+    printf("&x = %p, p = %p\n", &x, p);
 
     *p = 42;            // write to x via the pointer
     printf("x after *p = 42 -> %d\n", x);
