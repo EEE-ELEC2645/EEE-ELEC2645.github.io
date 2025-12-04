@@ -1,7 +1,7 @@
 ---
 title: Debug vs Release
 parent: Debugging
-nav_order: 2
+nav_order: 3
 layout: default
 ---
 
