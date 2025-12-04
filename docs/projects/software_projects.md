@@ -1,7 +1,7 @@
 ---
 title: Software Projects
 parent: C Projects
-nav_order: 2
+nav_order: 3
 layout: default
 ---
 
@@ -116,7 +116,7 @@ main.exe: main.c maths.c
 
 ### Faster rebuilds with object files
 
-For larger projects, compile each source to an object (`.o`) and **link** them. Then, only the **changed** `.c` files rebuild. `make` can also use variables so you dont have to keep repeating the compiler and flags and filenames. 
+For larger projects, compile each source to an object (`.o`) and **link** them. Then, only the **changed** `.c` files rebuild. `make` can also use variables so you don't have to keep repeating the compiler and flags and filenames. 
 
 ```make
 # Makefile (object-based)
@@ -214,7 +214,7 @@ gcc -std=c11 -Wall -Wextra -Werror -c extern_demo.c
 gcc main.o extern_demo.o -o extern_demo
 ```
 
-> Why not put `int global_variable = 99;` in a header? Because every `.c` that includes it would get its **own** definition → the linker sees **duplicate symbols**. `extern` in the header declares the name; one `.c` file provides the single definition.
+> Why not put `int global_variable = 99;` in a header? Because every `.c` that includes it would get its **own** definition so the the linker sees **duplicate symbols**. `extern` in the header declares the name then one `.c` file provides the single definition.
 
 ---
 
@@ -240,5 +240,3 @@ gcc -std=c11 -Wall -Wextra -Werror -c maths.c
 gcc main.o maths.o -o main.exe
 ```
 (Use `-I.` if headers live in the current directory and gcc can’t find them.)
-
----

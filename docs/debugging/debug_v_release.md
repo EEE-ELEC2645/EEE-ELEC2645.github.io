@@ -60,7 +60,7 @@ The best practice is to define `DEBUG` **at compile time**, not in the source co
 We can define a variable at compile time using the `-D MACRO` flag. For example, to define `DEBUG`, compile with:
 
 ```bash
-gcc -std=c11 -Wall -g -D DEBUG -o main.exe main.c
+gcc -Wall -g -D DEBUG -o main.exe main.c
 ```
 
 This is the same as having `#define DEBUG` at the top of your source file, but it keeps your source code cleaner. The `-g` flag includes debug information for use with debuggers like `gdb` (more on that later).
@@ -70,7 +70,7 @@ This is the same as having `#define DEBUG` at the top of your source file, but i
 For release builds we omit the `-D DEBUG` and `-g`flags and  also optionally add optimization flags like `-O2`:
 
 ```bash
-gcc -std=c11 -Wall -O2 -o main.exe main.c
+gcc -Wall -O2 -o main.exe main.c
 ```
 
 ## Using a Debug Flag - Fibonacci Example 
