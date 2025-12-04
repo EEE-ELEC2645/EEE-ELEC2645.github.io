@@ -6,7 +6,7 @@ layout: default
 
 # Introduction to Debugging
 
-Code rarely works perfectly the first time—and that’s normal. Even major companies release updates to fix mistakes. Debugging is not optional; it’s a core part of programming. Bugs in your code can lead to incorrect results, crashes, or security vulnerabilities, or in extreme cases [exploding rockets](https://en.wikipedia.org/wiki/Ariane_flight_V88#Launch_failure), [lost spacecraft](https://en.wikipedia.org/wiki/Mars_Climate_Orbiter#Cause_of_failure), or [radiation overdose](https://en.wikipedia.org/wiki/Therac-25).
+Code rarely works perfectly the first time - and that’s normal. Even major companies release updates to fix mistakes. Debugging is not optional; it’s a core part of programming. Bugs in your code can lead to incorrect results, crashes, or security vulnerabilities, or in extreme cases [exploding rockets](https://en.wikipedia.org/wiki/Ariane_flight_V88#Launch_failure), [lost spacecraft](https://en.wikipedia.org/wiki/Mars_Climate_Orbiter#Cause_of_failure), or [radiation overdose](https://en.wikipedia.org/wiki/Therac-25).
 
 If your code doesn’t work, **you made a mistake**. Learning to find and fix errors yourself is essential. Developing the problem-solving skills needed to understand why your code isn't working and to fix it is crucial to succeed as an engineer.
 
