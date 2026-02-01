@@ -7,6 +7,15 @@ layout: default
 
 # Joystick Data Processing Pipeline
 
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
+
 This guide explains the complete data flow from raw ADC readings to usable coordinate systems and directional output.
 
 ## Overview
@@ -145,8 +154,8 @@ This transformation stretches the corners of the square outward to meet the unit
 |----------|---------------|---------------|------------------|
 | North (0, 1) | (0.0, 1.0) | (0.0, 1.0) | 1.0 → 1.0 (unchanged) |
 | East (1, 0) | (1.0, 0.0) | (1.0, 0.0) | 1.0 → 1.0 (unchanged) |
-| NE Corner (1, 1) | (0.707, 0.707) | (0.835, 0.835) | 1.0 → 1.18 |
 | Full Diagonal (1, 1) | (1.0, 1.0) | (0.707, 0.707) | 1.414 → 1.0 |
+| Half Diagonal (0.5, 0.5) | (0.5, 0.5) | (0.612, 0.612) | 0.707 → 0.866 |
 
 **Output:**
 - `data->coord_mapped.x`: -1.0 to 1.0
@@ -155,7 +164,7 @@ This transformation stretches the corners of the square outward to meet the unit
 **Benefit:**
 Now all directions feel equal when using magnitude for speed control. A player doesn't get an advantage by moving diagonally.
 
-**Reference:** http://mathproofs.blogspot.co.uk/2005/07/mapping-square-to-circle.html
+**Reference:** [http://mathproofs.blogspot.co.uk/2005/07/mapping-square-to-circle.html](http://mathproofs.blogspot.co.uk/2005/07/mapping-square-to-circle.html)
 
 ## Stage 5: Polar Coordinate Conversion
 
@@ -228,10 +237,10 @@ Polar Joystick_GetPolar(Joystick_t* data)
 The final stage converts the continuous angle into a discrete 8-direction output, useful for games with grid-based movement or simple controls.
 
 ```c
-Direction Joystick_GetDirection(float angle)
+Direction Joystick_GetDirection(float angle, float magnitude)
 {
     // Special case: centred
-    if (angle == 0.0f || angle < 0.0f) {
+    if (angle < 0.0f || magnitude < 0.05f) {
         return CENTRE;
     }
     
@@ -251,7 +260,7 @@ Direction Joystick_GetDirection(float angle)
 
 | Direction | Angle Range |
 |-----------|-------------|
-| CENTRE | angle = -1 |
+| CENTRE | angle < 0 or magnitude < 0.05 |
 | N (North) | 337.5° - 22.5° |
 | NE (North-East) | 22.5° - 67.5° |
 | E (East) | 67.5° - 112.5° |

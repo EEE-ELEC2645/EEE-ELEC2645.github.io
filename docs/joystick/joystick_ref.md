@@ -5,7 +5,17 @@ nav_order: 2
 layout: default
 ---
 
-# Joystick Library Reference
+
+# Joystick Library API Reference
+
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
 Complete reference for all functions, structures, and constants in the joystick library.
 
@@ -226,23 +236,24 @@ Circle-mapped coordinates (-1.0 to 1.0).
 **Description:**  
 Transforms square input range to circular output for uniform control feel. Algorithm: x' = x*sqrt(1 - y²/2), y' = y*sqrt(1 - x²/2). This ensures equal force is needed in all directions and maximises effective range.
 
-**Reference:** http://mathproofs.blogspot.co.uk/2005/07/mapping-square-to-circle.html
+**Reference:** [http://mathproofs.blogspot.co.uk/2005/07/mapping-square-to-circle.html](http://mathproofs.blogspot.co.uk/2005/07/mapping-square-to-circle.html)
 
 ### `Joystick_GetDirection()`
 ```c
-Direction Joystick_GetDirection(float angle);
+Direction Joystick_GetDirection(float angle, float magnitude);
 ```
 
-Get 8-direction output from angle.
+Get 8-direction output from angle and magnitude.
 
 **Parameters:**
 - `angle` - Raw angle in degrees (0-360°, or -1 for centred)
+- `magnitude` - Magnitude 0.0→1.0
 
 **Returns:**  
 `Direction` enum (N, NE, E, SE, S, SW, W, NW, or CENTRE).
 
 **Description:**  
-Maps continuous angle to discrete 8-direction output. Compass orientation: 0°=N, 45°=NE, 90°=E, 135°=SE, etc. Special case: angle = -1 returns CENTRE (for centred joystick).
+Maps continuous angle to discrete 8-direction output. Compass orientation: 0°=N, 45°=NE, 90°=E, 135°=SE, etc. Returns CENTRE if angle is invalid or magnitude < 0.05 (within deadzone).
 
 Used internally by `Joystick_Read()` but available for custom angle inputs.
 
