@@ -17,7 +17,9 @@ layout: default
 {:toc}
 </details>
 
-This guide explains the Hardware Abstraction Layer (HAL) functions used in the Unit 3 LCD Test project. HAL functions provide easy access to the microcontroller's hardware without needing to know low-level register details.
+This guide explains the Hardware Abstraction Layer (HAL) functions used in the Unit 3 LCD Test project. HAL functions provide easy access to the microcontroller's hardware without needing to know low-level register details. You'll find explanations of the most commonly used HAL functions, their syntax, parameters, and examples of how they work in your project.
+
+You are not expected to memorise all these functions! Instead, this guide serves as a reference to understand what each function does and how it fits into your project. The key takeaway is that HAL functions allow you to control the hardware (GPIO, ADC, UART, etc.) in a simple and consistent way.
 
 ## What is HAL?
 
@@ -47,7 +49,7 @@ void HAL_Init(void);
 
 **What it does:**
 - Sets up the Systick timer (for `HAL_GetTick()` and `HAL_Delay()`)
-- Initializes priority grouping which handles interupts 
+- Initializes priority grouping which handles interrupts
 - Prepares the HAL for general use
 
 **Example:**
@@ -322,6 +324,317 @@ This is why `printf()` works and prints to the serial monitor!
 
 ---
 
+## ADC (Analog-to-Digital Converter) Functions
+
+ADC functions allow you to read analog voltages from the joystick and convert them to digital values.
+
+### HAL_ADC_Start()
+
+**Purpose:** Start ADC conversion in polling mode (blocking).
+
+**Syntax:**
+```c
+HAL_StatusTypeDef HAL_ADC_Start(ADC_HandleTypeDef *hadc);
+```
+
+**Parameters:**
+- `hadc` - ADC handle (in your case, `&hadc1`)
+
+**Returns:** HAL_OK if successful, HAL_ERROR otherwise
+
+**Example:**
+```c
+if (HAL_ADC_Start(&hadc1) != HAL_OK) {
+    printf("ADC failed to start\n");
+    while(1);  // Error
+}
+```
+
+**In your project:** Used to start reading analog values from joystick pins (X and Y axes).
+
+---
+
+### HAL_ADC_PollForConversion()
+
+**Purpose:** Wait for ADC conversion to complete (blocking call).
+
+**Syntax:**
+```c
+HAL_StatusTypeDef HAL_ADC_PollForConversion(ADC_HandleTypeDef *hadc, uint32_t Timeout);
+```
+
+**Parameters:**
+- `hadc` - ADC handle
+- `Timeout` - Maximum time to wait in milliseconds (use `HAL_MAX_DELAY` for infinite)
+
+**Returns:** HAL_OK if conversion completed, HAL_TIMEOUT if timeout occurred
+
+**Example: Read joystick X axis**
+```c
+HAL_ADC_Start(&hadc1);  // Start conversion
+
+// Wait for conversion to finish
+if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK) {
+    uint32_t adc_value = HAL_ADC_GetValue(&hadc1);
+    printf("X-axis: %lu\n", adc_value);
+} else {
+    printf("Conversion timeout\n");
+}
+```
+
+**In your project:** Essential for reading joystick analog values in the main game loop.
+
+---
+
+### HAL_ADC_GetValue()
+
+**Purpose:** Retrieve the last ADC conversion result.
+
+**Syntax:**
+```c
+uint32_t HAL_ADC_GetValue(const ADC_HandleTypeDef *hadc);
+```
+
+**Returns:** The ADC conversion result (typically 0-4095 for 12-bit ADC)
+
+**Example: Read and normalize joystick value**
+```c
+uint32_t raw_value = HAL_ADC_GetValue(&hadc1);
+
+// Normalize to -1.0 to 1.0 range
+float normalized = (raw_value - 2048.0f) / 2048.0f;
+printf("Normalized X: %.2f\n", normalized);
+```
+
+**In your project:** Called after `HAL_ADC_PollForConversion()` to get the actual analog reading.
+
+---
+
+### HAL_ADC_Stop()
+
+**Purpose:** Stop ADC conversion.
+
+**Syntax:**
+```c
+HAL_StatusTypeDef HAL_ADC_Stop(ADC_HandleTypeDef *hadc);
+```
+
+**Returns:** HAL_OK if successful
+
+**Example:**
+```c
+HAL_ADC_Stop(&hadc1);  // Stop reading ADC
+```
+
+**In your project:** Called during shutdown or when you want to stop reading joystick input.
+
+---
+
+### MX_ADC1_Init()
+
+**Purpose:** Initialize ADC1 peripheral with CubeMX settings.
+
+**Syntax:**
+```c
+void MX_ADC1_Init(void);
+```
+
+**What it does:**
+- Enables ADC1 clock
+- Configures analog input pins for joystick
+- Sets ADC resolution (12-bit)
+- Configures sampling time and conversion rate
+
+**Auto-generated:** CubeMX creates this function based on your `.ioc` configuration.
+
+**In your project:** Called during initialization to set up the ADC for reading joystick X, Y, and button values.
+
+---
+
+## RNG (Random Number Generator) Functions
+
+RNG functions provide hardware-based random number generation for better randomness than software-based `rand()`.
+
+### HAL_RNG_Init()
+
+**Purpose:** Initialize the RNG peripheral.
+
+**Syntax:**
+```c
+HAL_StatusTypeDef HAL_RNG_Init(RNG_HandleTypeDef *hrng);
+```
+
+**Parameters:**
+- `hrng` - RNG handle (in your case, `&hrng`)
+
+**Returns:** HAL_OK if successful
+
+**Example:**
+```c
+if (HAL_RNG_Init(&hrng) != HAL_OK) {
+    printf("RNG initialization failed\n");
+    while(1);
+}
+```
+
+**In your project:** Called during system initialization to enable hardware random number generation.
+
+---
+
+### HAL_RNG_GenerateRandomNumber()
+
+**Purpose:** Generate a 32-bit random number using the hardware RNG.
+
+**Syntax:**
+```c
+HAL_StatusTypeDef HAL_RNG_GenerateRandomNumber(RNG_HandleTypeDef *hrng, uint32_t *random32bit);
+```
+
+**Parameters:**
+- `hrng` - RNG handle
+- `random32bit` - Pointer to store the generated random number
+
+**Returns:** HAL_OK if successful
+
+**Example: Generate random number in range [0, max]**
+```c
+uint32_t random_value;
+
+if (HAL_RNG_GenerateRandomNumber(&hrng, &random_value) == HAL_OK) {
+    uint16_t random_in_range = random_value % max;  // 0 to max-1
+    printf("Random number: %u\n", random_in_range);
+}
+```
+
+**In your project:** Used in the Joystick Game to randomly generate game events, AI behaviour, or puzzle elements.
+
+**Advantage over `rand()`:** Hardware RNG provides better randomness and is less predictable than software pseudorandom number generators.
+
+---
+
+### MX_RNG_Init()
+
+**Purpose:** Initialize RNG peripheral with CubeMX settings.
+
+**Syntax:**
+```c
+void MX_RNG_Init(void);
+```
+
+**What it does:**
+- Enables RNG clock
+- Configures RNG for maximum randomness
+
+**Auto-generated:** CubeMX creates this function.
+
+**In your project:** Called during system initialization.
+
+---
+
+## Expanded System Clock Configuration
+
+Beyond `SystemClock_Config()`, you may need to understand the underlying RCC functions for advanced configurations.
+
+### HAL_RCC_OscConfig()
+
+**Purpose:** Configure RCC oscillators (crystal oscillator or PLL).
+
+**Syntax:**
+```c
+HAL_StatusTypeDef HAL_RCC_OscConfig(RCC_OscInitTypeDef *RCC_OscInitStruct);
+```
+
+**What it does:**
+- Configures HSI (Internal clock) or HSE (External crystal)
+- Sets up PLL multiplier and divider
+- Enables/disables oscillators
+
+**Note:** This is typically called by the auto-generated `SystemClock_Config()` function and you won't need to call it directly.
+
+---
+
+### HAL_RCC_ClkConfig()
+
+**Purpose:** Configure system clock distribution and prescalers.
+
+**Syntax:**
+```c
+HAL_StatusTypeDef HAL_RCC_ClkConfig(RCC_ClkInitTypeDef *RCC_ClkInitStruct, uint32_t FLatency);
+```
+
+**What it does:**
+- Selects clock source (HSI, HSE, or PLL)
+- Sets AHB prescaler (affects CPU speed)
+- Sets APB1 and APB2 prescalers (affects peripheral speeds)
+
+**Note:** Called by `SystemClock_Config()` to set your system to 80 MHz.
+
+---
+
+### HAL_RCCEx_PeriphCLKConfig()
+
+**Purpose:** Configure peripheral-specific clock sources.
+
+**Syntax:**
+```c
+HAL_StatusTypeDef HAL_RCCEx_PeriphCLKConfig(RCC_PeriphCLKInitTypeDef *PeriphClkInit);
+```
+
+**What it does:**
+- Configures ADC clock source and prescaler
+- Configures RNG clock
+- Configures UART/SPI clock sources
+
+**In your project:** Used to set ADC and RNG clock frequencies.
+
+---
+
+### PeriphCommonClock_Config()
+
+**Purpose:** Initialize common peripheral clocks (auto-generated by CubeMX).
+
+**Syntax:**
+```c
+void PeriphCommonClock_Config(void);
+```
+
+**What it does:**
+- Enables clocks for ADC, RNG, and other peripherals
+- Calls `HAL_RCCEx_PeriphCLKConfig()` internally
+
+**In your project:** Called during system initialization to set up clocks for ADC and RNG.
+
+---
+
+## Power Management Functions
+
+### HAL_PWREx_ControlVoltageScaling()
+
+**Purpose:** Control the internal voltage regulator output level.
+
+**Syntax:**
+```c
+HAL_StatusTypeDef HAL_PWREx_ControlVoltageScaling(uint32_t VoltageScaling);
+```
+
+**Parameters:**
+- `VoltageScaling` - Voltage level (PWR_REGULATOR_VOLTAGE_SCALE1 for 80 MHz operation)
+
+**Returns:** HAL_OK if successful
+
+**Example:**
+```c
+if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK) {
+    printf("Voltage scaling failed\n");
+}
+```
+
+**In your project:** Called by `SystemClock_Config()` to set the correct voltage for 80 MHz operation. Higher clock speeds require higher voltage.
+
+**Important:** Must be called before increasing the system clock frequency.
+
+---
+
 ## Common HAL Status Values
 
 Many HAL functions return a status to indicate success or failure:
@@ -459,4 +772,12 @@ void LCD_Draw_Circle(...) {
 | `HAL_Delay()` | Wait in milliseconds | `HAL_Delay(500);` |
 | `HAL_GetTick()` | Get elapsed milliseconds | `uint32_t ms = HAL_GetTick();` |
 | `HAL_UART_Transmit()` | Send serial data | `HAL_UART_Transmit(&huart2, data, len, HAL_MAX_DELAY);` |
+| `HAL_ADC_Start()` | Start ADC conversion | `HAL_ADC_Start(&hadc1);` |
+| `HAL_ADC_PollForConversion()` | Wait for ADC conversion | `HAL_ADC_PollForConversion(&hadc1, 100);` |
+| `HAL_ADC_GetValue()` | Get ADC result | `uint32_t val = HAL_ADC_GetValue(&hadc1);` |
+| `HAL_ADC_Stop()` | Stop ADC conversion | `HAL_ADC_Stop(&hadc1);` |
+| `HAL_RNG_Init()` | Initialize RNG | `HAL_RNG_Init(&hrng);` |
+| `HAL_RNG_GenerateRandomNumber()` | Generate random number | `HAL_RNG_GenerateRandomNumber(&hrng, &rand);` |
+| `MX_ADC1_Init()` | Initialize ADC1 | `MX_ADC1_Init();` |
+| `MX_RNG_Init()` | Initialize RNG | `MX_RNG_Init();` |
 
