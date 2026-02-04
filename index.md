@@ -22,7 +22,19 @@ The page will be updated as we go through to the course so as to not be too over
 - Strings
 - Enums
 
+## Embedded Systems - STM32 Microcontrollers and Hardware Abstraction Layer (HAL)
 
+- STM32 Overview
+- LCD Display
+- Joystick
+- Buzzer
+- Buttons
+- LEDs
+- GPIO General Purpose Input Output
+- ADC Analog to Digital Converter
+- UART Universal Asynchronous Receiver
+- RNG Random Number Generator
+- Timers and Interrupts
 
 
 ## Cheatsheets - Covering the basics
