@@ -1,5 +1,5 @@
 ---
-title: LCD Functions
+title: LCD Functions Reference
 parent: LCD
 nav_order: 2
 layout: default

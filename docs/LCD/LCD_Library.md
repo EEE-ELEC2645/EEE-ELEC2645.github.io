@@ -1,5 +1,5 @@
 ---
-title: LCD Library Reference Guide
+title: LCD Library Overview
 parent: LCD
 nav_order: 1
 layout: default
