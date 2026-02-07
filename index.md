@@ -32,7 +32,7 @@ The page will be updated as we go through to the course so as to not be too over
 - LEDs
 - GPIO General Purpose Input Output
 - ADC Analog to Digital Converter
-- UART Universal Asynchronous Receiver
+- UART Universal Asynchronous Receiver-Transmitter
 - RNG Random Number Generator
 - Timers and Interrupts
 
