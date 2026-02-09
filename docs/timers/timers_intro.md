@@ -3,6 +3,7 @@ title: Timers Introduction
 parent: Timers
 nav_order: 1
 layout: default
+math: katex
 ---
 
 # Introduction to Timers
@@ -77,10 +78,10 @@ The prescaler divides the timer's input clock frequency to slow it down. Think o
 - **High prescaler** = slower counting (like an easy gear going uphill)  
 - **Low prescaler** = faster counting (like a hard gear for speed)
 
-For example, if your timer is connected to a 48 MHz clock:
-- Prescaler = 1: Timer counts at 48 million times per second
-- Prescaler = 48: Timer counts at 1 million times per second  
-- Prescaler = 48000: Timer counts at 1000 times per second (1 kHz)
+For example, if your timer is connected to an 80 MHz clock:
+- Prescaler = 1: Timer counts at 80 million times per second
+- Prescaler = 80: Timer counts at 1 million times per second  
+- Prescaler = 80000: Timer counts at 1000 times per second (1 kHz)
 
 The formula is simple:
 
@@ -109,7 +110,7 @@ $$
 
 Let's say we want an LED to blink every 500ms, and our timer is connected to an 80 MHz clock:
 
-1. **Prescaler**: 79 (gives us 1 MHz timer frequency: $\frac{80,000,000}{79 + 1} = 1,000,000$ Hz)
+1. **Prescaler**: 79 (gives us 1 MHz timer frequency: 80,000,000 ÷ 80 = 1,000,000 Hz)
 2. **ARR (Period)**: 499,999 (for 500ms interval at 2 Hz output frequency)
 
 Let's verify the calculation using the ARR formula:
