@@ -3,6 +3,7 @@ title: Timers in HAL
 parent: Timers
 nav_order: 2
 layout: default
+math: katex
 ---
 
 # Practical Timer Implementation with STM32 HAL
