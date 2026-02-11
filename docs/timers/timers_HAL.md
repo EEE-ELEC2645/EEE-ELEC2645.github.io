@@ -123,6 +123,18 @@ HAL_TIM_Base_Init(&htim6);
 HAL_TIM_Base_Start_IT(&htim6);
 ```
 
+**Changing the timer update rate at runtime:**
+
+When you change `htim6.Init.Period` after the timer is running, you must stop the timer, re-initialise it, and then start it again. Otherwise the new period will not take effect.
+
+```c
+// Change timer interval safely while running
+HAL_TIM_Base_Stop_IT(&htim6);
+htim6.Init.Period = get_timer_period(100);  // or get_timer_period(500)
+HAL_TIM_Base_Init(&htim6);
+HAL_TIM_Base_Start_IT(&htim6);
+```
+
 ## Complete Working Example
 
 Here's a complete example that toggles an LED every 100ms using TIM6:
