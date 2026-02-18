@@ -23,8 +23,8 @@ When building multi‑file projects, compiler flags help enforce good habits and
 
 ## **`-lm`**
 
-- Links your program against the math library (`libm`), which provides functions from <math.h> and <complex.h> like `sin`, `cos`, `sqrt`, `pow`, `exp`, `log`, `erf`, `hypot`, `isnan`, `isfinite` etc.
-- Why? On many Unix-like systems (such as the Codepsaces) the math functions live in a separate library (`libm`) that the linker in gcc doesn’t include automatically. If you call any of these functions without -lm, you’ll typically get `“undefined reference”` linker errors.
+- Links your program against the maths library (`libm`), which provides functions from <math.h> and <complex.h> like `sin`, `cos`, `sqrt`, `pow`, `exp`, `log`, `erf`, `hypot`, `isnan`, `isfinite` etc.
+- Why? On many Unix-like systems (such as the Codepsaces) the maths functions live in a separate library (`libm`) that the linker in gcc doesn’t include automatically. If you call any of these functions without -lm, you’ll typically get `“undefined reference”` linker errors.
 
 ---
 
