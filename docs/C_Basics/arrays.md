@@ -16,8 +16,6 @@ layout: default
 {:toc}
 </details>
 
-# Arrays in C
-
 An array stores several values of the same type under one name. Each value is called an **element** and is accessed using its position, known as its **index**.
 
 For example, rather than creating five separate variables:

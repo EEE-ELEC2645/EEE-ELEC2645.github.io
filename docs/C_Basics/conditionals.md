@@ -7,6 +7,15 @@ layout: default
 
 # Conditionals in C
 
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
+
 Conditionals allow different parts of a program to run depending on whether a condition is true or false.
 
 For example, we might turn on a warning if a temperature is too high:
