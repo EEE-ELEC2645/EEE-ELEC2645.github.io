@@ -16,126 +16,419 @@ layout: default
 {:toc}
 </details>
 
-## Introduction
 
-Frankly speaking, strings in `C` are a hassle compared to other more modern programming languages...Have fun! :D
+Frankly speaking, strings in C are a hassle compared with most modern programming languages. Have fun! :D
 
-In `C`, a **string** is a sequence of characters stored in a **`char` array** that ends with a special terminator character `\0` (often called **NUL**). Unlike many languages, C has **no built-in string type**—strings are just arrays of `char` with a trailing `\0`. When other functions manipulate strings they look for the `\0` to know the end of the string has been reached.
+C does not have a built-in string type. Instead, a string is stored as an array of `char` values ending with a special character called the **null terminator**:
 
----
+```c
+'\0'
+```
+
+For example, the string `"Hello"` is stored as:
+
+```text
+'H'  'e'  'l'  'l'  'o'  '\0'
+```
+
+The null terminator tells functions such as `printf` where the string ends. Without it, a function may continue reading beyond the end of the array.
 
 ## Declaring and initialising strings
 
-### Using a string literal
-
-This works similar to arrays where we can skip the size and the compiler will figure it out. Remember compiler adds the terminator, so `greeting` will be 6 long.
-
-Things between `""` are known as *literals*
+We can create a string using a **string literal**:
 
 ```c
-char greeting[] = "Hello";   // 'H' 'e' 'l' 'l' 'o' '\0'
+char greeting[] = "Hello";
 ```
 
-### Specifying the size explicitly
+The compiler automatically adds the null terminator, so `greeting` contains six elements:
 
-You can set the size, useful if you want to be clear, but you must leave room for `\0`
+```text
+Index:       0     1     2     3     4      5
+Character:  'H'   'e'   'l'   'l'   'o'   '\0'
+```
+
+Although `"Hello"` contains five visible characters, the array needs six elements because of the null terminator.
+
+## Specifying the array size
+
+We can specify the size explicitly:
 
 ```c
-char name[5] = "Goku";      // 4 letters + '\0'
-char kanji[3] = "悟空";     // 2 letters + '\0' non ASCII characters work *to an extent*
+char name[5] = "Goku";
 ```
 
-### Manual initialisation
+This array contains:
 
-`C` Also lets you specify each element separately and you **must** put the `\0` at the end yourself if you want to use the array with other string functions. Note that as each element is a `char` we need to put each one between `''`.
+```text
+'G'  'o'  'k'  'u'  '\0'
+```
+
+We must leave enough room for the null terminator. This is too small:
+
+```c
+char name[4] = "Goku";
+```
+
+The four visible characters fill the entire array, leaving no room for `'\0'`. The result is an array of characters, but not a correctly terminated C string.
+
+## Be careful with non-ASCII text
+
+Characters outside basic ASCII can take more than one byte to store. For example, this looks as though it contains two characters:
+
+```c
+char kanji[] = "悟空";
+```
+
+However, in UTF-8, each kanji normally requires three bytes. The array therefore needs seven elements:
+
+```text
+悟        空        \0
+3 bytes  3 bytes  1 byte
+```
+
+The compiler can work out the required size when we use empty square brackets:
+
+```c
+char kanji[] = "悟空";    // Compiler chooses the array size
+```
+
+Be careful if you specify the size yourself:
+
+```c
+char kanji[3] = "悟空";   // Much too small in UTF-8!
+```
+
+A `char` stores one **byte**, not necessarily one displayed character. This also affects accented characters, emoji and many other writing systems.
+
+For now, it is safest to let the compiler determine the array size when initialising non-ASCII strings:
+
+```c
+char greeting[] = "こんにちは";
+```
+
+Working properly with different text encodings is a much larger topic, but the main point here is not to assume that one character on screen takes one byte.
+
+## Initialising a string manually
+
+We can specify each character separately:
 
 ```c
 char word[4] = { 'C', 'a', 't', '\0' };
 ```
 
-This is typically used to create an empty buffer or store `chars` when you are *certain* you are not going to print directly
+When doing this, we must add the null terminator ourselves.
+
+Notice the difference between single and double quotation marks:
 
 ```c
-char buf[1024]={0}; // same as {'\0'}
-char keypad[4][3] = {
-    {'1','2','3'},
-    {'4','5','6'},
-    {'7','8','9'},
-    {'*','0','#'}
-};
-printf("Button pushed:%c \n",keypad[1][2]);
+char letter = 'C';       // One character
+char word[] = "Cat";     // A string
 ```
 
----
+Single quotation marks represent one character. Double quotation marks represent a string literal.
+
+## Creating an empty string
+
+This creates an array where every element is initially zero:
+
+```c
+char buffer[32] = { 0 };
+```
+
+Since zero is the value used for the null terminator, `buffer` initially contains an empty string.
+
+This is useful when creating space that will be filled with text later.
+
+## Character arrays that are not strings
+
+Not every `char` array is a string.
+
+For example, this keypad stores individual characters:
+
+```c
+char keypad[4][3] = {
+    { '1', '2', '3' },
+    { '4', '5', '6' },
+    { '7', '8', '9' },
+    { '*', '0', '#' }
+};
+```
+
+We can access and print one character using `%c`:
+
+```c
+printf("Button pushed: %c\n", keypad[1][2]);
+```
+
+This prints:
+
+```text
+Button pushed: 6
+```
+
+The rows are not strings because they do not end with `'\0'`. That is fine because we are treating the elements as individual characters rather than printing each row using `%s`.
 
 ## Printing strings
 
-Use `printf` with `%s` or `puts`:
+Use `%s` with `printf` to print a string:
 
 ```c
 #include <stdio.h>
 
-int main(void) {
-  char msg[] = "Hello, C!";
-  printf("%s\n", msg);
-  puts(msg);  // adds a newline automatically
-  return 0;
+int main(void)
+{
+    char message[] = "Hello, C!";
+
+    printf("%s\n", message);
+
+    return 0;
 }
 ```
 
----
+The `%s` format tells `printf` to start at the first character and continue until it finds `'\0'`.
 
-## Reading strings unsafely - Bad!
-
-We can use scanf("%s", ...) to read a string, similar to how we read numbers previously. It stops reading when it encounters a space, so it is only suitable for single words.
-
-Notice that, unlike `%d` for integers, we do not need to use the `&` argument because the name of the string already represents its address.
+We can also use `puts`:
 
 ```c
-char name[5];
-scanf("%s", name);  // DANGEROUS: no width limit, input could exceed buffer size
+puts(message);
 ```
 
-However, this is **extremely** bad practice because it does not prevent the input from exceeding the buffer size—a problem known as [buffer overflow](https://en.wikipedia.org/wiki/Buffer_overflow#). Buffer overflows can cause undefined behaviour, crashes, and are a common source of [security exploits](https://www.youtube.com/watch?v=1S0aBV-Waeo).
+`puts` prints the string and adds a newline automatically.
 
-## Reading strings safely - Good!
+## Accessing individual characters
 
-Thankfully there are some safer ways we can read strings from user input.
-
-First is by giving `scanf` a width limit, remembering to leave space for the `\0` in the string we are saving to:
+Because a string is an array, we can access each character using an index:
 
 ```c
-char name[5];
-scanf("%4s", name);  // width limit must be 1 less than string length
+char word[] = "Hello";
+
+printf("%c\n", word[0]);    // H
+printf("%c\n", word[1]);    // e
+printf("%c\n", word[4]);    // o
 ```
 
-The downside of this is that if we change the size of `name` we also need to remember to change the width limit in the `scanf`.
+We can also change individual characters:
 
-A better approach is to use the function `fgets`, which can read multiple words from the user. `fgets` reads a whole line (up to the Enter key), and you need to tell it where to store the text (the char array), how many characters to read at most, and where to read from. Usually, we use "standard input" (`stdin`), which in this case means what we have typed into the terminal.
+```c
+char word[] = "Cat";
+
+word[0] = 'B';
+
+printf("%s\n", word);       // Bat
+```
+
+Be careful not to overwrite the null terminator unless you add another one later.
+
+## Looping through a string
+
+We often process a string one character at a time:
 
 ```c
 #include <stdio.h>
 
-int main(void) {
-  char buffer[32];
+int main(void)
+{
+    char message[] = "Hello";
 
-  printf("Enter your name: ");
-  fgets(buffer, sizeof(buffer), stdin);
-  printf("Hello %s\n",buffer);
+    for (size_t i = 0; message[i] != '\0'; i++) {
+        printf("message[%zu] = %c\n", i, message[i]);
+    }
 
-  return 0;
+    return 0;
 }
 ```
 
-> `fgets` also keeps the newline i.e. the `\n` for Linux\Mac or `\r\n` for Windows (this difference is a constant source of annoyance!)
+The loop continues until it reaches the null terminator.
 
-> So if you typed "hello" in the codespace, and hit enter `fgets` would return `h e l l o \n`, this is helpful sometimes but often not!. You can loop through and find them and replace the `\n` with a NUL `\0` or you can use the `strcspn` function, which we will explain later
+We do not print `'\0'` because the loop condition becomes false when it reaches that element.
 
-## Summary
+## Reading a string with `scanf`
 
-- A C string is a **`char` array ending with `\0`**.
-- Always allocate space for the terminator and keep track of buffer sizes.
-- Prefer `fgets` (or width-limited `scanf`) for input
-- We can use `<string.h>` functions, as we will see later
+We can use `%s` with `scanf` to read a single word:
 
----
+```c
+char name[16];
+
+scanf("%15s", name);
+```
+
+Unlike reading an integer, we do not use `&` before `name`:
+
+```c
+scanf("%15s", name);
+```
+
+The array name already gives `scanf` the address of its first element.
+
+The number in `%15s` limits the input to 15 characters, leaving one element for the null terminator.
+
+This would be unsafe:
+
+```c
+char name[16];
+
+scanf("%s", name);
+```
+
+There is no limit on how many characters `scanf` may try to store. If the input is longer than the array, it writes beyond the end of the buffer. This is known as a **buffer overflow**.
+
+There is another limitation: `%s` stops at whitespace. If the user enters:
+
+```text
+James Avery
+```
+
+only `"James"` is stored.
+
+For reading a complete line, `fgets` is normally a better choice.
+
+## Reading a line with `fgets`
+
+The `fgets` function reads a line of text while respecting the size of the array:
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    char buffer[32];
+
+    printf("Enter your name: ");
+
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL) {
+        return 1;
+    }
+
+    printf("Hello %s", buffer);
+
+    return 0;
+}
+```
+
+The arguments are:
+
+```c
+fgets(buffer, sizeof(buffer), stdin);
+```
+
+- `buffer` is the array where the text will be stored
+- `sizeof(buffer)` is the amount of space available
+- `stdin` means the text is read from standard input, which is normally the terminal
+
+Unlike `%s`, `fgets` can read spaces.
+
+## The newline left by `fgets`
+
+If there is enough room in the array, `fgets` keeps the newline produced when the user presses Enter.
+
+If the user enters:
+
+```text
+Hello
+```
+
+the array will normally contain:
+
+```text
+'H'  'e'  'l'  'l'  'o'  '\n'  '\0'
+```
+
+This is why the previous example uses:
+
+```c
+printf("Hello %s", buffer);
+```
+
+rather than:
+
+```c
+printf("Hello %s\n", buffer);
+```
+
+The string already contains a newline.
+
+Sometimes we want to remove it. One approach is to search through the string:
+
+```c
+for (size_t i = 0; buffer[i] != '\0'; i++) {
+    if (buffer[i] == '\n') {
+        buffer[i] = '\0';
+        break;
+    }
+}
+```
+
+When the loop finds `'\n'`, it replaces it with `'\0'`, ending the string at that position.
+
+The `<string.h>` library provides another way to do this using `strcspn`, which we will cover on the next page.
+
+## Buffer size and long input
+
+`fgets` reads at most one fewer character than the size supplied. The remaining element is used for the null terminator.
+
+For example:
+
+```c
+char buffer[8];
+
+fgets(buffer, sizeof(buffer), stdin);
+```
+
+This can store at most seven characters plus `'\0'`.
+
+If the user enters more text than will fit, `fgets` stores only the part that fits. The remaining characters stay in the input stream and may be read by the next input operation.
+
+This can cause confusing behaviour when several inputs are read one after another, so make sure the buffer is large enough for the input you expect.
+
+## Common mistakes
+
+### Forgetting the null terminator
+
+This is an array of characters, but it is not a valid C string:
+
+```c
+char word[3] = { 'C', 'a', 't' };
+```
+
+Printing it with `%s` produces undefined behaviour because `printf` keeps looking for a null terminator beyond the end of the array.
+
+This is a valid string:
+
+```c
+char word[4] = { 'C', 'a', 't', '\0' };
+```
+
+### Not leaving enough space
+
+A five-character word needs an array with at least six elements:
+
+```c
+char word[6] = "Hello";
+```
+
+The extra element stores `'\0'`.
+
+### Using `==` to compare strings
+
+This does not compare the contents of two strings:
+
+```c
+if (word_1 == word_2) {
+    // ...
+}
+```
+
+Arrays and strings cannot be compared this way. The `<string.h>` library provides `strcmp` for comparing strings, which we will cover on the next page.
+
+### Writing beyond the end of the array
+
+C does not check whether an index is valid:
+
+```c
+char word[5] = "Cat";
+
+word[10] = 'X';    // Invalid index
+```
+
+Writing beyond the end of an array produces undefined behaviour and may overwrite other data.
