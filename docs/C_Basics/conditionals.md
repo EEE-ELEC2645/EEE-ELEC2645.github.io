@@ -5,276 +5,479 @@ nav_order: 3
 layout: default
 ---
 
-# C Conditionals: `if`, `else`, and `switch`
+# Conditionals in C
 
-## Introduction
+Conditionals allow different parts of a program to run depending on whether a condition is true or false.
 
-In C programming, **conditionals** let your program make decisions. They control which parts of your
-code run based on values or logic. This is essential for tasks like checking user input, handling
-errors, or choosing between actions.
+For example, we might turn on a warning if a temperature is too high:
 
----
+```c
+if (temperature > 50) {
+    printf("Warning: high temperature\n");
+}
+```
 
-## Why conditionals matter
+The expression inside the parentheses `()` is evaluated first. If it is true, the code inside the braces `{}` runs.
 
-Without conditionals, your program would run the same way every time. Conditionals let you:
+## `if`
 
-- Respond to different inputs
-- Branch into different logic paths
-- Make your program interactive and robust
-
-They keep code clear, testable, and efficient - especially when combined with good naming and small functions.
-
----
-
-## `if`, `else if`, and `else`
-
-### Syntax
+The simplest conditional uses an `if` statement:
 
 ```c
 if (condition) {
-  // do stuff if condition is true
-} else if (another_condition) {
-  // do stuff if another_condition is true
-} else {
-  // do stuff if none of the above are true
+    // Run this code if the condition is true
 }
 ```
 
-**Rules of thumb**
-
-- Conditions are evaluated **top to bottom**; the first true branch runs, the rest are skipped.
-- Always use braces `{}` even for one-line statements after e.g. `if (x >1) y=1` but its not good practice as its easy to get confused when adding more lines later.
-- Keep conditions simple; extract complex checks into well-named helper functions. i.e. better use `if (CheckInput(input,limits) == 1 )` than `if ( input < X && X < Y and input >= Z .......... )`
-- Enable warnings (`-Wall -Wextra -Werror`) to catch mistakes like `=` vs `==`. I promise you will make this mistake at least once! :D
-
-### Example 1 — Simple `if`
+For example:
 
 ```c
 #include <stdio.h>
 
-int main(void) {
-  int score = 85;
-  if (score >= 50) {
-    printf("Pass\n");
-  }
-  return 0;
-}
-```
+int main(void)
+{
+    int score = 85;
 
-### Example 2 — `if...else`
-
-```c
-#include <stdio.h>
-
-int main(void) {
-  int score = 45;
-  if (score >= 50) {
-    printf("Pass\n");
-  } else {
-    printf("Fail\n");
-  }
-  return 0;
-}
-```
-
-### Example 3 — `if...else if...else` chain
-
-```c
-#include <stdio.h>
-
-int main(void) {
-  int grade = 72;
-  if (grade >= 70) {
-    printf("Class I\n");
-  } else if (grade >= 60) {
-    printf("Class II.i\n");
-  } else if (grade >= 50) {
-    printf("Class II.ii\n");
-  } else if (grade >= 40) {
-    printf("Class III\n");
-  } else {
-    printf("Fail\n");
-  }
-  return 0;
-}
-```
-
-### Example 4 — Nested `if` (use sparingly)
-
-```c
-#include <stdio.h>
-
-int main(void) {
-  int x = 15;
-  if (x > 0) {
-    if (x % 2 == 0) {
-      printf("positive even\n");
-    } else {
-      printf("positive odd\n");
+    if (score >= 50) {
+        printf("Pass\n");
     }
-  } else {
-    printf("non-positive\n");
-  }
-  return 0;
+
+    return 0;
 }
 ```
 
+If `score` is greater than or equal to `50`, the message is printed. Otherwise, the program skips the contents of the `if` statement.
 
- Notice things can get complicated quickly with many nested if statements! If you find yourself in this situation it might be better to reconsider the approach.
+Although C allows the braces to be omitted when there is only one statement, I recommend always including them:
 
----
+```c
+if (score >= 50) {
+    printf("Pass\n");
+}
+```
 
-## `switch` statement
+This is clearer and avoids problems when more lines are added later.
 
-A more readable way to handle multiple branches is with a `switch` statement, which allow you to choose between several possible values of a single variable:
+## `if` and `else`
 
-### Syntax
+Use `else` when you want one block of code to run if the condition is true and another block to run if it is false:
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    int score = 45;
+
+    if (score >= 50) {
+        printf("Pass\n");
+    } else {
+        printf("Fail\n");
+    }
+
+    return 0;
+}
+```
+
+Only one of the two blocks will run.
+
+## `else if`
+
+Use `else if` when there are several possible conditions:
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    int grade = 72;
+
+    if (grade >= 70) {
+        printf("First\n");
+    } else if (grade >= 60) {
+        printf("2:1\n");
+    } else if (grade >= 50) {
+        printf("2:2\n");
+    } else if (grade >= 40) {
+        printf("Third\n");
+    } else {
+        printf("Fail\n");
+    }
+
+    return 0;
+}
+```
+
+The conditions are checked from top to bottom. As soon as one condition is true, its block runs and the remaining conditions are skipped.
+
+The order therefore matters. This version would not work:
+
+```c
+if (grade >= 40) {
+    printf("Pass\n");
+} else if (grade >= 70) {
+    printf("First\n");
+}
+```
+
+A grade of `75` satisfies the first condition, so the second condition is never reached.
+
+## Conditions
+
+Conditions are usually created using relational and logical operators:
+
+```c
+if (temperature > 30) {
+    // ...
+}
+
+if (button_pressed == true) {
+    // ...
+}
+
+if (temperature > 20 && button_pressed) {
+    // ...
+}
+
+if (mode == MODE_ERROR || timeout) {
+    // ...
+}
+```
+
+You can also use a Boolean variable directly:
+
+```c
+bool button_pressed = true;
+
+if (button_pressed) {
+    printf("Button pressed\n");
+}
+```
+
+To check that a Boolean value is false, use the logical NOT operator `!`:
+
+```c
+if (!button_pressed) {
+    printf("Button not pressed\n");
+}
+```
+
+## Assignment and comparison
+
+Remember that `=` assigns a value, while `==` compares two values:
+
+```c
+x = 5;      // Assign 5 to x
+x == 5;     // Check whether x is equal to 5
+```
+
+This is a very common mistake:
+
+```c
+if (x = 5) {
+    // ...
+}
+```
+
+This assigns `5` to `x`. Since `5` is non-zero, C treats the condition as true.
+
+The comparison should be:
+
+```c
+if (x == 5) {
+    // ...
+}
+```
+
+Compiler warnings can help catch this, so do not ignore them!
+
+## Keeping conditions readable
+
+A condition can contain several comparisons:
+
+```c
+if (temperature >= 20 && temperature <= 30 && system_enabled) {
+    // ...
+}
+```
+
+However, conditions can quickly become difficult to understand. It may be clearer to calculate and name part of the condition first:
+
+```c
+bool temperature_ok = temperature >= 20 && temperature <= 30;
+
+if (temperature_ok && system_enabled) {
+    // ...
+}
+```
+
+For more complicated checks, you can move the logic into a function:
+
+```c
+if (input_is_valid(input)) {
+    // ...
+}
+```
+
+The name should explain what the condition means without requiring the reader to work through every comparison.
+
+## Nested `if` statements
+
+An `if` statement can contain another `if` statement:
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    int value = 15;
+
+    if (value > 0) {
+        if (value % 2 == 0) {
+            printf("Positive and even\n");
+        } else {
+            printf("Positive and odd\n");
+        }
+    } else {
+        printf("Zero or negative\n");
+    }
+
+    return 0;
+}
+```
+
+Nested conditionals are sometimes useful, but several levels of nesting can make code difficult to follow.
+
+Where possible, combine related conditions:
+
+```c
+if (value > 0 && value % 2 == 0) {
+    printf("Positive and even\n");
+}
+```
+
+Alternatively, move part of the logic into a separate function.
+
+## `switch`
+
+A `switch` statement selects between several fixed values of one expression.
+
+This can be clearer than a long chain of `else if` statements when checking menu choices, states or enumerations:
 
 ```c
 switch (expression) {
-  case VALUE_1:
-    // statements
-    break;
-  case VALUE_2:
-    // statements
-    break;
-  default:
-    // statements if no case matches
-    break;
+    case VALUE_1:
+        // Run when expression equals VALUE_1
+        break;
+
+    case VALUE_2:
+        // Run when expression equals VALUE_2
+        break;
+
+    default:
+        // Run when no case matches
+        break;
 }
 ```
 
-- `expression` is evaluated once; control jumps to the matching `case` label.
-- `case` labels must be **integer constant expressions** (e.g., literals, enum constants).
-- Add `break;` to avoid the program continuing on to the next case, in some *extremely rare* cases you might want this but probably not!
-- Use `default` for unexpected values. Here you might log or handle the errors
-
-### Example 1 — Switch-based menu
+For example:
 
 ```c
 #include <stdio.h>
 
-int main(void) {
-  int choice = 0;
-  printf("Menu:\n1. Start\n2. Stop\n3. Exit\nEnter choice: ");
-  if (scanf("%d", &choice) != 1) return 1;
+int main(void)
+{
+    int choice = 2;
 
-  switch (choice) {
-    case 1:
-      printf("Starting...\n");
-      break;
-    case 2:
-      printf("Stopping...\n");
-      break;
-    case 3:
-      printf("Exiting...\n");
-      break;
-    default:
-      printf("Invalid choice.\n");
-      break;
-  }
-  return 0;
+    switch (choice) {
+        case 1:
+            printf("Starting\n");
+            break;
+
+        case 2:
+            printf("Stopping\n");
+            break;
+
+        case 3:
+            printf("Exiting\n");
+            break;
+
+        default:
+            printf("Unknown choice\n");
+            break;
+    }
+
+    return 0;
 }
 ```
 
-### Example 2 — Switch with `enum`
+The expression is evaluated once, then control jumps to the matching `case`.
 
-Switch statements are useful when combined with `enums` especially when using finite state machines in Semester 2. For example if we had a program that could be in three states, we can use a switch statement using our enum variables: 
+The `default` case runs if none of the listed values match. It is useful for handling unexpected values.
 
+## Remember `break`
+
+A `case` does not automatically stop at the next case. Without `break`, execution continues into the code below:
+
+```c
+int choice = 1;
+
+switch (choice) {
+    case 1:
+        printf("One\n");
+
+    case 2:
+        printf("Two\n");
+        break;
+}
+```
+
+This prints both:
+
+```text
+One
+Two
+```
+
+This behaviour is called **fall-through**.
+
+Occasionally fall-through is intentional, but most of the time it is a mistake. Add `break` unless you deliberately want execution to continue into the next case.
+
+If you do use intentional fall-through, add a comment to make it clear:
+
+```c
+switch (choice) {
+    case 1:
+        printf("Option 1 selected\n");
+        // Fall through intentionally
+
+    case 2:
+        printf("Running shared code\n");
+        break;
+
+    default:
+        break;
+}
+```
+
+## Using `switch` with an `enum`
+
+A `switch` works particularly well with an `enum`. We will use this combination when implementing finite-state machines.
 
 ```c
 #include <stdio.h>
 
 typedef enum {
-  MODE_IDLE = 0,
-  MODE_RUN  = 1,
-  MODE_ERR  = 2
+    MODE_IDLE,
+    MODE_RUNNING,
+    MODE_ERROR
 } mode_t;
 
-int main(void) {
-  mode_t m = MODE_RUN;
+int main(void)
+{
+    mode_t mode = MODE_RUNNING;
 
-  switch (m) {
-    case MODE_IDLE:
-      printf("idle\n");
-      break;
-    case MODE_RUN:
-      printf("run\n");
-      break;
-    case MODE_ERR:
-      printf("error\n");
-      break;
-    default:
-      printf("unknown mode\n");
-      break;
-  }
-  return 0;
+    switch (mode) {
+        case MODE_IDLE:
+            printf("Idle\n");
+            break;
+
+        case MODE_RUNNING:
+            printf("Running\n");
+            break;
+
+        case MODE_ERROR:
+            printf("Error\n");
+            break;
+
+        default:
+            printf("Unknown mode\n");
+            break;
+    }
+
+    return 0;
 }
 ```
 
-### Example 3 — Declaring variables in a `switch` case safely
+Using named enumeration values makes the cases much clearer than using unexplained numbers such as `0`, `1` and `2`.
 
-This is something I personally have got wrong many times! Each case within `{}` creates its own scope so that variables declared in the case are local to that case only. 
+## Declaring variables inside a `case`
+
+A `case` label does not create a new scope by itself.
+
+If you want to declare local variables inside a case, surround the contents of that case with braces:
 
 ```c
 #include <stdio.h>
 
-int main(void) {
-  int x = 2;
-  switch (x) {
-    case 1: {
-      int a = 10;  // this 'a' belongs to the scope within {}
-      printf("case 1: a = %d\n", a);
-      break;
+int main(void)
+{
+    int choice = 2;
+
+    switch (choice) {
+        case 1: {
+            int value = 10;
+            printf("Value: %d\n", value);
+            break;
+        }
+
+        case 2: {
+            int value = 20;
+            printf("Value: %d\n", value);
+            break;
+        }
+
+        default:
+            printf("Unknown choice\n");
+            break;
     }
-    case 2: {
-      int a = 20;  // this is ok as we are in a separate scope to case 1
-      printf("case 2: a = %d\n", a);
-      break;
-    }
-    default:
-      printf("default\n");
-      break;
-  }
-  return 0;
+
+    return 0;
 }
 ```
 
----
+The braces create a separate scope for each `value` variable.
 
-## When to use which?
+This is something that is easy to get wrong (I say from experience!), particularly when adding variables to an existing `switch`.
 
-- Use **`if` / `else if` / `else`** for:
-  - Ranges or relational logic (e.g., `x < 10`, `a <= b && b < c`)
-  - Complex boolean expressions
-  - Situations where conditions are not small, fixed constants
+## Choosing between `if` and `switch`
 
-- Use **`switch`** for:
-  - **Discrete values** (menu options, key codes, protocol IDs)
-  - Cleaner, flatter code when there are many exact-match branches
-  - Enums, where each constant maps to a branch
+Use `if`, `else if` and `else` when:
 
----
+- checking ranges, such as `temperature > 30`
+- combining several conditions
+- comparing values using `<`, `>`, `<=` or `>=`
+- the conditions involve different variables
 
-## Summary table
+Use `switch` when:
 
-| Feature                | `if` / `else if` / `else`            | `switch`                                  |
-|------------------------|---------------------------------------|-------------------------------------------|
-| Best for               | Ranges, complex conditions            | Discrete values, enums                     |
-| Readability            | Great for few branches                | Great for many exact matches               |
-| Fall-through           | Not applicable                        | Possible; requires `break` or comment      |
-| Expression types       | Any expression yielding boolean truth | Integral types / enums                     |
-| Maintenance            | Can grow nested                        | Scales well with many cases                |
+- comparing one expression against several fixed values
+- working with menu choices
+- handling enumeration values
+- implementing a finite-state machine
 
----
+For example, use `if` for a range:
 
-## Quick tips
+```c
+if (temperature >= 20 && temperature <= 30) {
+    printf("Temperature is within range\n");
+}
+```
 
-- Prefer clear, simple conditions; extract complicated logic into helper functions.
-- Always use braces `{}` for consistency and safety.
-- In `switch`, **break each case** unless you intentionally fall through.
-- Consider enabling `-Wswitch` and `-Wswitch-enum` to catch unhandled enum values.
-- Compile with strict warnings: `-Wall -Wextra -Werror`.
+Use `switch` for fixed states:
 
----
+```c
+switch (mode) {
+    case MODE_IDLE:
+        break;
+
+    case MODE_RUNNING:
+        break;
+
+    case MODE_ERROR:
+        break;
+
+    default:
+        break;
+}
+```
