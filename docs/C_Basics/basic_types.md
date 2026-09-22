@@ -5,198 +5,453 @@ nav_order: 1
 layout: default
 ---
 
-# C Data Types
+# Basic data types in C
 
-## Introduction
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
-In C programming, **data types** define the kind of data a variable can hold. Choosing the right type
-helps ensure your program uses memory efficiently and behaves correctly.
 
----
+Every variable in C has a **type**. The type tells the compiler what kind of value the variable stores and what operations can be performed on it.
 
-## Why Data Types Matter
-
-Every variable in C has a type, which determines:
-
-- **How much memory** it uses
-- **What operations** are allowed
-- **How it's printed** or displayed
-
-Using the correct type helps avoid bugs, saves memory, and improves performance - this especially important
-in embedded systems where you might have *kB* of RAM rather than *GB* on a PC!
-
----
-
-## Common C Data Types
-
-In some ways `C` makes it easy for us, in that there are actually very few in built data types.
-We will see how this makes it hard for us in other ways later!
-
-Numeric types can be either:
-
-- `signed`: Can represent both positive and negative numbers. One bit is used for the sign, so the range is roughly half negative and half positive.
-
-- `unsigned`: Can only represent non-negative numbers (zero and positive). All bits are used for the value, so the maximum value is about twice as large as the signed type of the same size.
-
-### `char`
-
-- Stores a single character or byte.
-- Typically **1 byte**.
-- `printf` format: `%c` (as char), `%hhd` (as signed int)
+For example:
 
 ```c
-char ch = 'A';
-printf("char: %c, as int: %hhd\n", ch, (signed char)ch);
+int score = 42;
+float temperature = 21.5f;
+char grade = 'A';
 ```
 
----
+Here:
 
-### `int` and `unsigned int`
+- `score` stores an integer
+- `temperature` stores a number with a fractional part
+- `grade` stores one character
 
-- Typically **4 bytes** on modern systems.
-- `printf` format: `%d` (signed), `%u` (unsigned)
+## Declaring a variable
+
+A variable declaration normally contains a type, a name and an initial value:
 
 ```c
-int i = -42;
-unsigned int ui = 42u;
-printf("int: %d, unsigned int: %u\n", i, ui);
+int count = 0;
 ```
 
----
+The parts are:
 
-### `long` and `unsigned long`
+```text
+type      name        initial value
+int       count       = 0;
+```
 
-- Size varies: often 4 bytes on 32-bit, 8 bytes on 64-bit.
-- `printf` format: `%ld` (signed), `%lu` (unsigned)
+You can declare a variable without giving it an initial value:
 
 ```c
-long l = -123456L;
-unsigned long ul = 123456UL;
-printf("long: %ld, unsigned long: %lu\n", l, ul);
+int count;
 ```
 
----
+However, a local variable declared this way contains an indeterminate value until something is assigned to it. Using it before setting a value produces undefined behaviour.
 
-### `long long` and `unsigned long long`
-
-- Typically **8 bytes**.
-- `printf` format: `%lld` (signed), `%llu` (unsigned)
+Where possible, initialise variables when they are declared:
 
 ```c
-long long ll = -1234567890123LL;
-unsigned long long ull = 1234567890123ULL;
-printf("long long: %lld, unsigned long long: %llu\n", ll, ull);
+int count = 0;
 ```
 
----
+## Integer types
 
-### Floating Point Types
-
-
-
-- `float`: usually 4 bytes, `printf` with `%f` (promoted to double)
-- `double`: usually 8 bytes, `%f`
-- `long double`: 8–16 bytes, `%Lf`
+The `int` type stores a whole number:
 
 ```c
-float f = 3.14f;
-double d = 2.71828;
-long double ld = 1.0L / 3.0L;
-
-printf("float: %f, double: %f, long double: %Lf\n", f, d, ld);
+int score = 42;
+int temperature = -5;
 ```
 
----
-
-### `bool` (from `<stdbool.h>`)
-
-- Typically 1 byte.
-- `printf` as integer: `%d`
-
-```c
-#include <stdbool.h>
-bool ok = true;
-printf("bool: %d\n", ok);
-```
-
----
-
-### `size_t`
-- Unsigned type for sizes, matches pointer width.
-- `printf` format: `%zu`
-
-```c
-size_t n = 1024;
-printf("size_t: %zu\n", n);
-```
-
----
-
-### Pointers
-
-- Size depends on architecture (4 bytes on 32-bit, 8 bytes on 64-bit).
-- `printf` format: `%p` (cast to `(void*)`)
-
-```c
-int x = 42;
-printf("pointer: %p\n", (void*)&x);
-```
-
----
-
-## Summary Table
-
-| Type                     | Typical Size | `printf` Format      |
-|-------------------------|-------------:|----------------------|
-| `char`                  | 1 byte       | `%c`, `%hhd`         |
-| `int`                   | 4 bytes      | `%d`                 |
-| `unsigned int`          | 4 bytes      | `%u`                 |
-| `long`                  | 4 or 8       | `%ld`                |
-| `unsigned long`         | 4 or 8       | `%lu`                |
-| `long long`             | 8 bytes      | `%lld`               |
-| `unsigned long long`    | 8 bytes      | `%llu`               |
-| `float`                 | 4 bytes      | `%f`                 |
-| `double`                | 8 bytes      | `%f`                 |
-| `long double`           | 8–16 bytes   | `%Lf`                |
-| `bool`                  | ~1 byte      | `%d`                 |
-| `size_t`                | 4 or 8       | `%zu`                |
-| `pointer`               | 4 or 8       | `%p`                 |
-
-> **Note on Sizes:** Sizes vary by platform and compiler. Always verify with `sizeof(type)` for your
-> target system.
-
----
-
-## Print sizes on *your* platform
-
-Use this tiny program to print the actual sizes your compiler uses. This will likely be different between your PC and the Nucleo boards in Semester 2!
+Print an `int` using `%d`:
 
 ```c
 #include <stdio.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <inttypes.h>
 
-int main(void) {
-  printf("char:                  %zu\n", sizeof(char));
-  printf("signed char:           %zu\n", sizeof(signed char));
-  printf("unsigned char:         %zu\n", sizeof(unsigned char));
-  printf("int:                   %zu\n", sizeof(int));
-  printf("unsigned int:          %zu\n", sizeof(unsigned int));
-  printf("long:                  %zu\n", sizeof(long));
-  printf("unsigned long:         %zu\n", sizeof(unsigned long));
-  printf("long long:             %zu\n", sizeof(long long));
-  printf("unsigned long long:    %zu\n", sizeof(unsigned long long));
-  printf("size_t:                %zu\n", sizeof(size_t));
-  printf("ptrdiff_t:             %zu\n", sizeof(ptrdiff_t));
-  printf("intmax_t:              %zu\n", sizeof(intmax_t));
-  printf("intptr_t:              %zu\n", sizeof(intptr_t));
-  printf("float:                 %zu\n", sizeof(float));
-  printf("double:                %zu\n", sizeof(double));
-  printf("long double:           %zu\n", sizeof(long double));
-  printf("void *:                %zu\n", sizeof(void *));
-  printf("_Bool/bool:            %zu\n", sizeof(_Bool));
-  return 0;
+int main(void)
+{
+    int score = 42;
+
+    printf("Score: %d\n", score);
+
+    return 0;
 }
 ```
+
+An `int` cannot store a fractional part:
+
+```c
+int value = 3.7;
+```
+
+The value is converted to `3`, so the fractional part is lost.
+
+## Signed and unsigned integers
+
+Integer types can be **signed** or **unsigned**.
+
+A signed integer can store positive and negative values:
+
+```c
+int temperature = -10;
+```
+
+An unsigned integer stores only zero and positive values:
+
+```c
+unsigned int count = 10;
+```
+
+Print an `unsigned int` using `%u`:
+
+```c
+unsigned int count = 10;
+
+printf("Count: %u\n", count);
+```
+
+You can make the unsigned type explicit in the value using the `u` suffix:
+
+```c
+unsigned int count = 10u;
+```
+
+Do not use an unsigned type merely because a value should not normally be negative. Unsigned arithmetic behaves differently around zero:
+
+```c
+unsigned int count = 0;
+
+count--;
+
+printf("%u\n", count);
+```
+
+This does not produce `-1`. The value wraps around to the largest value the type can represent.
+
+Unsigned types are useful when we specifically need their range or behaviour, but signed integers are often simpler for ordinary counting and calculations.
+
+## Other integer types
+
+C provides several integer types:
+
+```c
+char
+short
+int
+long
+long long
+```
+
+Each also has signed and unsigned forms:
+
+```c
+signed int
+unsigned int
+
+signed long
+unsigned long
+```
+
+The exact size of these types can vary between systems. The C standard only guarantees that:
+
+```text
+sizeof(char) <= sizeof(short) <= sizeof(int) <= sizeof(long) <= sizeof(long long)
+```
+
+In practice, `int` is usually the sensible choice for ordinary whole-number calculations.
+
+Use `long` or `long long` when you know that the range of `int` is not sufficient:
+
+```c
+long distance = 123456L;
+long long population = 8000000000LL;
+```
+
+The suffixes identify the type of the literal:
+
+```c
+123456L          // long
+8000000000LL     // long long
+42U              // unsigned int
+42UL             // unsigned long
+```
+
+The fixed-width types from `<stdint.h>`, such as `uint8_t` and `int32_t`, are covered on the next page.
+
+## Characters
+
+The `char` type stores one byte. It is commonly used to store an ASCII character:
+
+```c
+char grade = 'A';
+char response = 'y';
+char symbol = '#';
+```
+
+A character uses single quotation marks:
+
+```c
+char letter = 'A';
+```
+
+Double quotation marks create a string instead:
+
+```c
+char word[] = "A";
+```
+
+These are not the same. The string contains both the character `'A'` and the null terminator `'\0'`.
+
+Print a character using `%c`:
+
+```c
+char grade = 'A';
+
+printf("Grade: %c\n", grade);
+```
+
+A `char` is also an integer type, so the underlying numeric value can be printed:
+
+```c
+char letter = 'A';
+
+printf("Character: %c\n", letter);
+printf("Numeric value: %d\n", letter);
+```
+
+On a system using ASCII, this prints:
+
+```text
+Character: A
+Numeric value: 65
+```
+
+Whether plain `char` behaves as signed or unsigned is implementation-defined. If your code specifically needs a small number rather than a character, use `signed char`, `unsigned char`, or one of the fixed-width types from `<stdint.h>`.
+
+## Floating-point types
+
+Floating-point types store numbers with a fractional part.
+
+The two types you will use most often are:
+
+```c
+float
+double
+```
+
+For example:
+
+```c
+float temperature = 21.5f;
+double pi = 3.141592653589793;
+```
+
+A floating-point literal such as `21.5` has type `double` by default. Add `f` when you want a `float` literal:
+
+```c
+float temperature = 21.5f;
+```
+
+Both `float` and `double` use `%f` with `printf`:
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    float temperature = 21.5f;
+    double pi = 3.141592653589793;
+
+    printf("Temperature: %f\n", temperature);
+    printf("Pi: %f\n", pi);
+
+    return 0;
+}
+```
+
+We can control the number of digits printed after the decimal point:
+
+```c
+printf("Temperature: %.1f\n", temperature);
+printf("Pi: %.3f\n", pi);
+```
+
+This prints:
+
+```text
+Temperature: 21.5
+Pi: 3.142
+```
+
+Be careful with `scanf`, where the formats for `float` and `double` are different:
+
+```c
+float value_f;
+double value_d;
+
+scanf("%f", &value_f);
+scanf("%lf", &value_d);
+```
+
+The more detailed problems with reading and validating input are covered on the User Input Handling page.
+
+## Floating-point values are approximate
+
+Many decimal values cannot be represented exactly using binary floating point, see the [Computerphile Classic](https://www.youtube.com/watch?v=PZRI1IfStY0):
+
+```c
+float value = 0.1f;
+```
+
+The value stored is a close approximation to `0.1`, rather than the exact decimal fraction.
+
+This means direct equality checks can be unreliable after calculations:
+
+```c
+float value = 0.1f + 0.2f;
+
+if (value == 0.3f) {
+    // This may not run
+}
+```
+
+For measured values, it is normally better to check whether the difference is sufficiently small:
+
+```c
+#include <math.h>
+
+float difference = fabsf(value - 0.3f); // get the absolute value
+
+if (difference < 0.0001f) {
+    printf("The values are close enough\n");
+}
+```
+
+The acceptable difference depends on the values being measured and the accuracy required.
+
+## Integer and floating-point division
+
+When both operands are integers, C performs integer division:
+
+```c
+int result = 10 / 3;
+```
+
+The result is `3`, not `3.333`. I guarantee this will cause a bug in your program at some point! :D
+
+If at least one operand is floating point, the result is floating point:
+
+```c
+float result = 10.0f / 3.0f;
+```
+
+Be careful with this:
+
+```c
+float result = 10 / 3;
+```
+
+The division happens first using integers, producing `3`. That value is then converted to `3.0f`.
+
+You could also convert one operand explicitly:
+
+```c
+float result = (float)10 / 3;
+```
+
+The `(float)` is known as a **cast**. It converts the value to `float` before the division takes place.
+
+## Finding the size of a type
+
+The `sizeof` operator gives the size of a type or variable in bytes:
+
+```c
+sizeof(int)
+sizeof(float)
+sizeof(char)
+```
+
+It returns a value of type `size_t`, which is printed using `%zu`:
+
+```c
+#include <stdio.h>
+
+int main(void)
+{
+    printf("char: %zu byte(s)\n", sizeof(char));
+    printf("int: %zu byte(s)\n", sizeof(int));
+    printf("float: %zu byte(s)\n", sizeof(float));
+    printf("double: %zu byte(s)\n", sizeof(double));
+
+    return 0;
+}
+```
+
+The size of `char` is always one byte by definition:
+
+```c
+sizeof(char) == 1
+```
+
+However, a C byte is not required to contain exactly eight bits on every possible system. For the PCs and STM32 boards used in this module, a byte contains eight bits.
+
+The sizes of the other basic types depend on the compiler and target system. Do not write code that assumes `int` is always four bytes.
+
+## Format specifiers
+
+The format supplied to `printf` must match the type of the argument:
+
+| Type | `printf` format |
+|:-----|:----------------|
+| `char` as a character | `%c` |
+| `int` | `%d` |
+| `unsigned int` | `%u` |
+| `long` | `%ld` |
+| `unsigned long` | `%lu` |
+| `long long` | `%lld` |
+| `unsigned long long` | `%llu` |
+| `float` or `double` | `%f` |
+| `long double` | `%Lf` |
+| `size_t` | `%zu` |
+
+For example:
+
+```c
+int score = 42;
+unsigned int count = 10u;
+float temperature = 21.5f;
+
+printf("Score: %d\n", score);
+printf("Count: %u\n", count);
+printf("Temperature: %.1f\n", temperature);
+```
+
+Using the wrong format specifier can produce incorrect output or undefined behaviour. Compiler warnings will often catch a mismatch:
+
+```bash
+-Wall -Wextra -Wpedantic
+```
+
+Pay attention to these warnings rather than assuming that the program is correct because it compiled.
+
+## Choosing a type
+
+For the moment, these are useful starting points:
+
+- use `int` for ordinary whole-number calculations
+- use `float` when you need a fractional value and its precision is sufficient
+- use `double` when you need more precision
+- use `char` for individual characters
+- use `bool` for true-or-false values
+- use `size_t` for sizes and array indices based on `sizeof`
+- use the `<stdint.h>` types when the exact width matters
+
+There is no need to choose the smallest possible type for every local variable. The type should first make the meaning of the variable clear and provide the range required by the calculation.
