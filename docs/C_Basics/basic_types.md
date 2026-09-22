@@ -16,7 +16,6 @@ layout: default
 {:toc}
 </details>
 
-
 Every variable in C has a **type**. The type tells the compiler what kind of value the variable stores and what operations can be performed on it.
 
 For example:
