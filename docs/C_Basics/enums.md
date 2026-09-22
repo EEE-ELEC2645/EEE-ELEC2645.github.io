@@ -7,130 +7,321 @@ layout: default
 
 # Enums
 
-## Introduction
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
-An enum, or *enumerated type*, is a data type that consists of a list of **named integer constants**.
-By default, the first value is `0`, the second is `1`, and so on (unless you assign explicit values).
-Enums make code more readable than raw integers.
+An `enum`, short for **enumerated type**, gives names to a set of integer values.
 
-For instance, you might want to represent different directions on a gamepad. You *could* use a bunch of integers `(0 = up, 1 = down , …)`, and just remember which number corresponds to which. But that’s hard to read and easy to forget! An `enum` makes the intent clear:
+For example, we could use integers to represent directions:
 
 ```c
-// by default starts at 0 and increments by 1
-enum direction {up, down, left, right}; 
+int direction = 0;    // 0 means up
+```
 
-// Enum starting at 1, each subsequent value increments by 1
-enum pokemon {Bulbasaur =1, Ivysaur , Venusaur, Charmander  , Charmeleon , Charizard };
+This works, but we have to remember what each number means. An enum makes the code clearer:
 
-// Enum with specific values
-enum ansi_color {
-  ANSI_BLACK  = 40,
-  ANSI_WHITE  = 47,
-  ANSI_BLUE   = 44,
-  ANSI_GREEN  = 42,
-  ANSI_RED    = 41
+```c
+enum direction {
+    DIRECTION_UP,
+    DIRECTION_DOWN,
+    DIRECTION_LEFT,
+    DIRECTION_RIGHT
 };
 ```
 
-These are also handy when you want to ensure that only certain values are possible. If you were storing "Direction" as an `int` from 1 to 4 you might accidentally set it to a different which could cause unexpected behaviour later. Using an enum prevents this mistake from happening with a compiler error:
+We can then create a variable using the enum:
+
+```c
+enum direction player_direction = DIRECTION_UP;
+```
+
+It is much easier to understand `DIRECTION_UP` than an unexplained value such as `0`.
+
+## Enum values
+
+By default, the first item in an enum has the value 0. Each item after it increases by one:
+
+```c
+enum direction {
+    DIRECTION_UP,       // 0
+    DIRECTION_DOWN,     // 1
+    DIRECTION_LEFT,     // 2
+    DIRECTION_RIGHT     // 3
+};
+```
+
+You can assign the values explicitly:
+
+```c
+enum direction {
+    DIRECTION_UP = 0,
+    DIRECTION_DOWN = 1,
+    DIRECTION_LEFT = 2,
+    DIRECTION_RIGHT = 3
+};
+```
+
+Both versions create the same values.
+
+If you assign a value to one item, the following items continue counting from that value:
+
+```c
+enum pokemon {
+    POKEMON_BULBASAUR = 1,
+    POKEMON_IVYSAUR,       // 2
+    POKEMON_VENUSAUR,      // 3
+    POKEMON_CHARMANDER,    // 4
+    POKEMON_CHARMELEON,    // 5
+    POKEMON_CHARIZARD      // 6
+};
+```
+
+You can also give each item a particular value:
+
+```c
+enum ansi_background_colour {
+    ANSI_BACKGROUND_BLACK = 40,
+    ANSI_BACKGROUND_RED = 41,
+    ANSI_BACKGROUND_GREEN = 42,
+    ANSI_BACKGROUND_BLUE = 44,
+    ANSI_BACKGROUND_WHITE = 47
+};
+```
+
+This is useful when the numbers are defined by hardware, a communication protocol or another standard.
+
+## Using an enum variable
+
+Once an enum has been declared, we can use it as a type:
 
 ```c
 #include <stdio.h>
 
-enum DIR {UP=0, DOWN=1, LEFT=2, RIGHT=3}; 
-int main(void) {
-  enum DIR mydir = UP;
+enum direction {
+    DIRECTION_UP,
+    DIRECTION_DOWN,
+    DIRECTION_LEFT,
+    DIRECTION_RIGHT
+};
 
-  mydir = DOWN; // This is fine
-  mydir = SIDEWAYS; // This will give a compiler error as SIDEWAYS is not part of the enum
-  mydir = 5; // This is allowed as enums are really just integers in the background, but is bad practice to assign enums like this
+int main(void)
+{
+    enum direction player_direction = DIRECTION_UP;
 
-  printf("Direction is %d\n", mydir);
- 
-return 0;
+    player_direction = DIRECTION_LEFT;
+
+    if (player_direction == DIRECTION_LEFT) {
+        printf("Moving left\n");
+    }
+
+    return 0;
 }
-
 ```
 
-## Problems with comparing Enums
+The variable still stores an integer, but the named values make its intended purpose clearer.
 
-If you had two `enums` for different things, say fruits and vegetables, you might expect that comparing two variables of different enum types might give you an error. However, as `enums` are really integers in the background comparisons are allowed and can get confusing:
+## Using enums with `switch`
+
+Enums are particularly useful with `switch` statements:
 
 ```c
 #include <stdio.h>
 
-// Constants in the list are assigned integers: 0, 1, 2 …
-enum Fruit { Apple, Banana, Pear };
-enum Vegetable { Potato, Carrot, Onion };
+enum direction {
+    DIRECTION_UP,
+    DIRECTION_DOWN,
+    DIRECTION_LEFT,
+    DIRECTION_RIGHT
+};
 
-int main(void) {
-  enum Fruit myfruit = Apple;          // 0
-  enum Vegetable myveg = Potato;       // 0
+int main(void)
+{
+    enum direction player_direction = DIRECTION_RIGHT;
 
-  // In C, different enum types are still just integers under the hood.
-  // This comparison is allowed and will be true here because both are 0.
-  if (myfruit == myveg) {
-    printf("The types are the same!\n");   // prints (numeric equality, not semantic)
-  }
-  return 0;
+    switch (player_direction) {
+        case DIRECTION_UP:
+            printf("Moving up\n");
+            break;
+
+        case DIRECTION_DOWN:
+            printf("Moving down\n");
+            break;
+
+        case DIRECTION_LEFT:
+            printf("Moving left\n");
+            break;
+
+        case DIRECTION_RIGHT:
+            printf("Moving right\n");
+            break;
+
+        default:
+            printf("Unknown direction\n");
+            break;
+    }
+
+    return 0;
 }
 ```
 
-This improves readability (you write `Apple` instead of `0`), but exposes this classic pitfall: because `C` enums are essentially integers, **comparing values from different enums can succeed by accident**.
+This is easier to read than using unexplained numbers in each `case`.
 
----
-
-## Avoiding problems with Enums
-
-To limit the chances of errors when accidentally comparing two different `enums` there are a couple of approaches we can take:
-
-- 1  **Prefix enumerators** so their domain is obvious, i.e. `FRUIT_APPLE` makes it clear it is part of an `enum` called fruit
+We will also use this pattern later when writing finite-state machines. Each enum value can represent one possible state:
 
 ```c
-#include <stdio.h>
-
-enum fruit_t { FRUIT_APPLE, FRUIT_BANANA, FRUIT_PEAR } ;
-enum vegetable_t { VEG_POTATO,  VEG_CARROT,  VEG_ONION   } ;
-
-int main(void) {
-  enum fruit_t fItem = FRUIT_APPLE;
-  enum vegetable_t vItem = VEG_POTATO;
-
-  // if (fItem == vItem) { ... } // Still legal in C, but prefixing makes the mistake obvious.
-  (void)fItem; (void)vItem; // suppress compiler warnings that the variables haven't been used
-  return 0;
-}
+enum system_state {
+    STATE_IDLE,
+    STATE_RUNNING,
+    STATE_ERROR
+};
 ```
 
-- 2 **Wrap the enum in a struct** to create truly distinct types that won’t compare directly. This also prevents "direct assignment" i.e. we cannot do something like `myEnum =5`. We will look at structs and `typedef` more closely later in the course. This approach is more complicated, but worth it for safety reasons if you think it might happen in your code:
+## Naming enum values
+
+Enum values share their names with other identifiers in the same scope. It is therefore useful to give related values a common prefix:
 
 ```c
-#include <stdio.h>
+enum direction {
+    DIRECTION_UP,
+    DIRECTION_DOWN,
+    DIRECTION_LEFT,
+    DIRECTION_RIGHT
+};
+```
 
-// typedef is just a way to create a new type name for an existing type, in this case an enum
-typedef enum { FRUIT_APPLE, FRUIT_BANANA, FRUIT_PEAR } fruit_e;
-typedef enum { VEG_POTATO,  VEG_CARROT,  VEG_ONION   } vegetable_e;
+Rather than:
 
-typedef struct { fruit_e value; } fruit_t;
-typedef struct { vegetable_e value; } vegetable_t;
+```c
+enum direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
+```
 
-int main(void) {
-  fruit_t f = { .value = FRUIT_APPLE };
-  vegetable_t v = { .value = VEG_POTATO };
-  // if (f == v) { }   // compile error (different types)
+The prefix makes it clear which enum the value belongs to and reduces the chance of a name conflicting with something else.
 
-  if (f.value == FRUIT_APPLE) { // == VEG_POTATO would give compiler error
-    printf("apple\n");
-  }
-  if (v.value == VEG_POTATO) {
-    printf("potato\n");
-  }
-  return 0;
+For example:
+
+```c
+enum fruit {
+    FRUIT_APPLE,
+    FRUIT_BANANA,
+    FRUIT_PEAR
+};
+
+enum vegetable {
+    VEGETABLE_POTATO,
+    VEGETABLE_CARROT,
+    VEGETABLE_ONION
+};
+```
+
+## Enums are still integers
+
+In C, enum values are represented using integers. This means the compiler does not completely prevent you from assigning an unrelated number:
+
+```c
+enum direction player_direction = DIRECTION_UP;
+
+player_direction = 20;
+```
+
+Depending on the compiler options, this may compile without an error even though `20` is not one of the named directions.
+
+For this reason, enums do not guarantee that a variable contains only one of the listed values. They mainly make the intended values easier to understand and help the compiler produce useful warnings in some situations.
+
+A `default` case can handle an unexpected value:
+
+```c
+switch (player_direction) {
+    case DIRECTION_UP:
+        printf("Moving up\n");
+        break;
+
+    case DIRECTION_DOWN:
+        printf("Moving down\n");
+        break;
+
+    case DIRECTION_LEFT:
+        printf("Moving left\n");
+        break;
+
+    case DIRECTION_RIGHT:
+        printf("Moving right\n");
+        break;
+
+    default:
+        printf("Invalid direction\n");
+        break;
 }
 ```
 
----
+## Comparing different enum types
 
-## Summary
+Different enum types may use the same underlying integer values:
 
-- **Enums** replace magic numbers with names, improving readability. Remember: different enums can still return equal when comparing in `C` because they’re integers - write code carefully to avoid these comparisons or use a wrapper.
+```c
+enum fruit {
+    FRUIT_APPLE,       // 0
+    FRUIT_BANANA       // 1
+};
+
+enum vegetable {
+    VEGETABLE_POTATO,  // 0
+    VEGETABLE_CARROT   // 1
+};
+```
+
+This makes the following comparison possible in C:
+
+```c
+enum fruit fruit = FRUIT_APPLE;
+enum vegetable vegetable = VEGETABLE_POTATO;
+
+if (fruit == vegetable) {
+    printf("The integer values are equal\n");
+}
+```
+
+Both values happen to be zero, so the comparison may be true even though an apple is obviously not a potato!
+
+There is normally no reason to compare values from unrelated enums. Using clear variable names and prefixes makes this sort of mistake easier to spot.
+
+## When to use an enum
+
+Use an enum when a variable has a small, fixed set of meaningful options, such as:
+
+```c
+enum direction {
+    DIRECTION_UP,
+    DIRECTION_DOWN,
+    DIRECTION_LEFT,
+    DIRECTION_RIGHT
+};
+```
+
+```c
+enum system_state {
+    STATE_IDLE,
+    STATE_RUNNING,
+    STATE_ERROR
+};
+```
+
+```c
+enum menu_option {
+    MENU_START,
+    MENU_SETTINGS,
+    MENU_EXIT
+};
+```
+
+An enum is usually clearer than scattering unexplained numbers throughout the program.

@@ -16,7 +16,6 @@ layout: default
 {:toc}
 </details>
 
-
 Handling strings in C is not always user friendly, but the standard library provides functions for common jobs such as measuring, comparing and searching strings.
 
 This page introduces some of the functions from:
@@ -409,4 +408,5 @@ Functions such as `strlen()`, `strcmp()` and `strchr()` expect a correctly null-
 - the newline added by `fgets()`
 - converting text into numbers
 
-These are covered on the [User Input Handling](docs/menus/user_input.md)
+These are covered on the [User Input Handling]({% link docs/menus/user_input.md %}) page. 
+
