@@ -16,8 +16,6 @@ layout: default
 {:toc}
 </details>
 
-# Function prototypes
-
 A function prototype tells the compiler about a function before the function is called.
 
 For example:
