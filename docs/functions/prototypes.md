@@ -1,165 +1,361 @@
 ---
-title: Prototypes
+title: Function Prototypes
 parent: Functions
-nav_order: 1
+nav_order: 2
 layout: default
 ---
 
-# Functions in C
+# Function prototypes
 
-A **function** is a named block of code that:
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
-- can **take inputs** (parameters),
-- **does some work**, and
-- optionally **returns a result**.
+# Function prototypes
 
-Think of it as a **reusable tool** you can call whenever you need that job done.
+A function prototype tells the compiler about a function before the function is called.
 
-```c
-int add(int a, int b) {     // function definition
-    return a + b;
-}
-
-int main(void) {
-    int sum = add(2, 3);    // function call
-    // sum == 5
-}
-```
-
-### Why use functions?
-
-- **Readability**: Breaks a big problem into clear steps with names.
-- **Reusability**: Write it once, use it many times.
-- **Testing**: Easy to test pieces in isolation.
-- **Abstraction**: Hide low‑level details behind a clean interface (great for embedded drivers).
-
----
-
-## What is a function *prototype*?
-
-A **function prototype** is a **declaration** that tells the compiler—*before the function is used*—the function’s:
-
-- **name**
-- **return type**
-- **parameter types (and order)**
-
-It’s like a **contract**: *“You can call this function now. The rest of it will come later.”*
+For example:
 
 ```c
-// === Prototype (declaration) ===
 int add(int a, int b);
-
-int main(void) {
-    int s = add(10, 20); // OK: the compiler already knows the signature
-    // ...
-}
-
-// === Definition (the body) ===
-int add(int a, int b) {
-    return a + b;
-}
 ```
 
----
+This tells the compiler that `add()`:
 
-## Why use prototypes at all?
+- takes two `int` parameters
+- returns an `int`
 
-- **Guarantee correct calls**: If functions call each other, prototypes ensure the compiler knows their signatures before any call happens. This prevents mismatched arguments or return types.
-- **Separate compilation**: In multi‑file projects, you often compile `.c` files separately. Prototypes in headers (`.h`) make it clear what functions belong to a library and allow other files to call them without seeing the full definition.
-- **Type safety**: The compiler can check argument types and return types early, avoiding subtle bugs.
+The prototype ends with a semicolon because it does not contain the function body.
 
----
+## The compiler needs to see the function first
 
-## Why put prototypes at the top?
-
-C is compiled **top-to‑bottom**. When the compiler sees a call like `add(10, 20);`, it must already know:
-
-- what `add` returns (so it can type‑check and generate correct calling code), and
-- what types its parameters are (so it can check your arguments).
-
-Without a prior declaration *or* a definition above the call, modern C (C99 and later) treats this as a **compile error** (or at least a strong diagnostic). Prototypes **solve this** by declaring the function **before** it’s called.
-
-> **Rule of thumb**  
-> Either **define** the function *above* its first use, **or** put a **prototype** at the top (or in a header that you `#include`).
-
----
-
-## Minimal examples
-
-### 1) Calling a function *before* it’s defined → needs a prototype
+Consider this program:
 
 ```c
 #include <stdio.h>
 
-int add(int a, int b);   // <-- prototype at the top
+int main(void)
+{
+    int total = add(10, 20);
 
-int main(void) {
-    printf("%d\n", add(2, 3)); // OK
+    printf("Total: %d\n", total);
+
+    return 0;
 }
 
-int add(int a, int b) {  // definition later
+int add(int a, int b)
+{
     return a + b;
 }
 ```
 
-### 2) If you define first, you can skip the prototype (for single file)
+The function definition for `add()` appears below `main()`.
+
+When the compiler reaches:
+
+```c
+int total = add(10, 20);
+```
+
+it has not seen `add()` yet, so it does not know:
+
+- whether the function exists
+- which parameters it takes
+- which type it returns
+
+Modern C compilers will produce an error or warning because the function has been called before it was declared.
+
+## Moving the function above `main()`
+
+One solution is to move the complete function definition above `main()`:
 
 ```c
 #include <stdio.h>
 
-int add(int a, int b) {     // definition appears before any call
+int add(int a, int b)
+{
     return a + b;
 }
 
-int main(void) {
-    printf("%d\n", add(2, 3)); // OK
+int main(void)
+{
+    int total = add(10, 20);
+
+    printf("Total: %d\n", total);
+
+    return 0;
 }
 ```
 
-### 3) Multi‑file projects: put prototypes in a header
+This now compiles because the compiler sees the definition of `add()` before the function is called.
 
-`math_utils.h`
+For a small program with one function, this approach works fine.
+
+## The problem with several functions
+
+Moving every function above its caller becomes awkward as a program grows.
+
+For example, suppose `print_total()` calls `add()`:
+
+```c
+#include <stdio.h>
+
+void print_total(int a, int b)
+{
+    int total = add(a, b);
+
+    printf("Total: %d\n", total);
+}
+
+int add(int a, int b)
+{
+    return a + b;
+}
+
+int main(void)
+{
+    print_total(10, 20);
+
+    return 0;
+}
+```
+
+This does not compile correctly because `print_total()` calls `add()` before the compiler has seen it.
+
+We could move `add()` above `print_total()`:
+
+```c
+int add(int a, int b)
+{
+    return a + b;
+}
+
+void print_total(int a, int b)
+{
+    int total = add(a, b);
+
+    printf("Total: %d\n", total);
+}
+```
+
+However, functions may call several other functions. Constantly rearranging their definitions to keep the compiler happy quickly becomes inconvenient.
+
+It can also make the file harder to read. We may want `main()` near the top so that we can quickly see the overall order of the program.
+
+## Solving the problem with prototypes
+
+Instead of moving the complete definitions, we can place function prototypes near the top of the file:
+
+```c
+#include <stdio.h>
+
+// Function prototypes
+int add(int a, int b);
+void print_total(int a, int b);
+
+int main(void)
+{
+    print_total(10, 20);
+
+    return 0;
+}
+
+void print_total(int a, int b)
+{
+    int total = add(a, b);
+
+    printf("Total: %d\n", total);
+}
+
+int add(int a, int b)
+{
+    return a + b;
+}
+```
+
+The compiler sees both prototypes before it reaches `main()`:
+
+```c
+int add(int a, int b);
+void print_total(int a, int b);
+```
+
+It therefore knows how both functions should be called, even though their definitions appear later in the file.
+
+This allows us to keep:
+
+- the prototypes near the top
+- `main()` near the start of the program
+- the complete function definitions underneath
+
+## Prototype, call and definition
+
+These three pieces look similar but do different jobs.
+
+The prototype tells the compiler about the function:
+
+```c
+int add(int a, int b);
+```
+
+The call runs the function:
+
+```c
+int total = add(10, 20);
+```
+
+The definition contains the code that the function runs:
+
+```c
+int add(int a, int b)
+{
+    return a + b;
+}
+```
+
+The prototype ends with a semicolon:
+
+```c
+int add(int a, int b);
+```
+
+The definition contains braces and does not need a semicolon after the closing brace:
+
+```c
+int add(int a, int b)
+{
+    return a + b;
+}
+```
+
+## The prototype must match the definition
+
+The return type and parameter types in the prototype must match the function definition.
+
+This prototype:
+
+```c
+float calculate_average(float a, float b);
+```
+
+matches this definition:
+
+```c
+float calculate_average(float a, float b)
+{
+    return (a + b) / 2.0f;
+}
+```
+
+This prototype would not match:
+
+```c
+int calculate_average(int a, int b);
+```
+
+The return type and parameter types are different.
+
+Compiler errors about conflicting function types often mean that the prototype and definition do not match.
+
+## Functions with no parameters
+
+A prototype for a function with no parameters should use `void` inside the parentheses:
+
+```c
+void print_title(void);
+```
+
+The matching definition is:
+
+```c
+void print_title(void)
+{
+    printf("Function example\n");
+}
+```
+
+For the code in this module, use:
+
+```c
+void print_title(void);
+```
+
+rather than:
+
+```c
+void print_title();
+```
+
+Using `void` makes it clear that the function does not take any parameters.
+
+## Parameter names in prototypes
+
+A prototype can include parameter names:
+
+```c
+int add(int a, int b);
+```
+
+The names can also be omitted:
+
+```c
+int add(int, int);
+```
+
+Both prototypes mean the same thing to the compiler.
+
+I recommend including the names because they help explain what each parameter represents:
+
+```c
+void print_position(int x, int y);
+```
+
+The parameter names in the prototype and definition do not have to match, but using consistent names normally makes the code easier to follow.
+
+## Prototypes in header files
+
+In larger projects, prototypes are normally placed in header files.
+
+For example, `math_utils.h` might contain:
+
 ```c
 #ifndef MATH_UTILS_H
 #define MATH_UTILS_H
 
-int add(int a, int b);     // prototypes live in headers
-int mul(int a, int b);
+int add(int a, int b);
+int multiply(int a, int b);
 
 #endif
 ```
 
-`math_utils.c`
+Any source file that needs these functions can include the header:
+
+```c
+#include "math_utils.h"
+```
+
+The function definitions remain in a `.c` file:
+
 ```c
 #include "math_utils.h"
 
-int add(int a, int b) { return a + b; }
-int mul(int a, int b) { return a * b; }
-```
+int add(int a, int b)
+{
+    return a + b;
+}
 
-`main.c`
-```c
-#include <stdio.h>
-#include "math_utils.h"   // bring in the prototypes
-
-int main(void) {
-    printf("%d\n", add(2, 3));
-    printf("%d\n", mul(4, 5));
+int multiply(int a, int b)
+{
+    return a * b;
 }
 ```
 
-Compile:
-```bash
-gcc -Wall -Wextra -Wpedantic main.c math_utils.c -o app
-```
+The source file containing the definitions should include its own header. This allows the compiler to check that the prototypes and definitions match.
 
----
-
-## Summary
-
-- Use **functions** to organise, reuse, and test code.  
-- The compiler must know a function’s **signature before the first call**.  
-- Put **prototypes at the top** or in a **header** included by any file that calls them.  
-- Keep **definitions** in `.c` files; **declarations (prototypes)** in `.h` files for sharing.  
-
----
+Header files, header guards and projects containing several `.c` files are covered in more detail later.
