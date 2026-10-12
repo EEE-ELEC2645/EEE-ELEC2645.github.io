@@ -5,124 +5,197 @@ nav_order: 1
 layout: default
 ---
 
-# C file handling basics
+# Using files
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
-## 1) General Pattern
+C provides functions through the `<stdio.h>` library for reading data from files and writing data to files.
 
-- A `FILE *` is a **handle** the C library gives you so you can read from or write to a file.
-- Typical pattern is: **open -> use -> close**.
+The usual sequence is:
 
-  ```c
-  FILE *f = fopen("path.txt", "r");  // open
-  /* read/write using f */
-  fclose(f);                         // close
-  ```
+1. Open the file.
+2. Check that it opened successfully.
+3. Read from it or write to it.
+4. Close it when finished.
 
-- If `fopen` fails (e.g., file missing or no permission), it returns **`NULL`**. Always check using something like `if(!f) {error}`
+## Opening a file
 
-## 2) Common modes you’ll use
-
-- `"r"`  – open for **reading** (must already exist).
-- `"w"`  – open for **writing** (creates or **truncates** existing).
-- `"a"`  – **append** to end (creates if missing).
-- Add `"b"` for binary (e.g., `"rb"`, `"wb"`); on Linux/macOS it’s the same as text; on Windows it matters.
-
-## 3) Reading lines
-
-- `fgets(buf, buf_size, file)` reads **one line** (or up to `buf_size-1` chars), including the newline if it fits.
-- It returns `NULL` on **EOF** or **error**, which makes it perfect for a `while` loop.
-
-## 4) Writing
-
-- `fprintf(file, "format", ...)` works like `printf`, but the **first argument is the file**.
-- Great for CSV or logs.
-
-## 5) Always close
-
-- `fclose(file)` flushes buffers and releases the handle. Do this for **every** file you open, can cause problems if not done correctly.
-
----
-
-## Step‑by‑step example
-
-> **Goal:** Read numbers from `numbers.txt` (with a header line), compute **average**, and write results to `average.txt` in CSV.
+The `fopen()` function opens a file:
 
 ```c
-#include <stdio.h>  // fopen, fgets, fprintf, fclose, printf
-#include <stdlib.h> // atof
+FILE *file = fopen("data.txt", "r");
+```
 
-#define MAX_LINE    100   // max length of one input line
-#define MAX_NUMBERS 100   // max numbers we’ll store
+The first argument is the path to the file:
 
-int main(void) {
-    // 1) Open files
-    FILE *input  = fopen("numbers.txt", "r");  // read text
-    FILE *output = fopen("stats.txt",   "w");  // write text (truncate/create)
+```c
+"data.txt"
+```
 
-    // 2) Check they opened OK
-    if (!input || !output) {
-        printf("Error opening file.\n");
-        return 1;
-    }
+The second argument is the mode, which tells C how we want to use the file:
 
-    // 3) Prepare storage
-    float numbers[MAX_NUMBERS];  // fixed-size array for numbers
-    char  line[MAX_LINE];        // line buffer for fgets
+```c
+"r"
+```
 
-    // 4) Skip the header line (we won’t use it)
-    fgets(line, MAX_LINE, input);
+`FILE *` is the type used by the C library to keep track of an open file. The `*` means that it is a pointer, which we will cover properly in Unit 1.4. For now, treat `FILE *` as the type used for an open file.
 
-    // 5) Read number lines until EOF or capacity reached
-    int count = 0;
-    while (fgets(line, MAX_LINE, input) && count < MAX_NUMBERS) {
-        numbers[count] = atof(line);  // convert text line → float
-        count++;
-    }
+## Checking that the file opened
 
-    // 6) Compute sum, min, max across what we read
-    float sum = 0.0f;
-    for (int i = 0; i < count; i++) {
-        sum += numbers[i];
+Opening a file can fail. For example, the file might not exist or the path might be incorrect.
 
-    }
+If `fopen()` cannot open the file, it returns `NULL`.
 
-    // 7) Compute average
-    float average = sum / count;
+Always check the result before trying to use the file:
 
-    // 8) Write results as CSV
-    fprintf(output, "statistic,value\n");
-    fprintf(output, "average,%.2f\n", average);
+```c
+FILE *file = fopen("data.txt", "r");
 
-    // 9) Close files
-    fclose(input);
-    fclose(output);
-    return 0;
+if (file == NULL) {
+    printf("Could not open data.txt\n");
+    return 1;
 }
 ```
 
-### Why each piece is there
+## File modes
 
-- **Two `FILE*`s**: one for input, one for output—so you can read and write independently.
-- **`fgets`**: safe, line‑oriented reading; it stops at newline or buffer limit and NUL‑terminates the string.
-- **`atof`**: converts the line (text) into a `float`. This is a simple way to do this, there are nicer ways 
-- **CSV output**: using `fprintf` so spreadsheet apps can read it directly.
-- **`fclose`**: finishes the job cleanly and ensures data is flushed to disk.
+The mode supplied to `fopen()` controls how the file is opened.
 
----
+Use `"r"` to open an existing file for reading:
 
-## Compile & run
-
-
-```bash
-gcc -Wall -Wextra -Wpedantic stats.c -o stats.out
-./stats.out
+```c
+FILE *file = fopen("data.txt", "r");
 ```
 
-### Example files
+The file must already exist.
 
-**`numbers.txt` (input)**  
+Use `"w"` to open a file for writing:
+
+```c
+FILE *file = fopen("results.txt", "w");
 ```
-value
+
+If the file does not exist, it is created.
+
+Be careful! If the file already exists, opening it with `"w"` removes its current contents.
+
+Use `"a"` to append data to the end of a file:
+
+```c
+FILE *file = fopen("log.txt", "a");
+```
+
+If the file already exists, its contents are kept and the new output is added at the end.
+
+A `b` can be added for binary files:
+
+```c
+"rb"
+"wb"
+"ab"
+```
+
+The examples on this page use text files.
+
+## Writing to a file
+
+The `fprintf()` function works like `printf()`, except that its first argument specifies the file:
+
+```c
+fprintf(file, "Hello!\n");
+```
+
+We can use the usual format specifiers:
+
+```c
+int score = 42;
+
+fprintf(file, "Score: %d\n", score);
+```
+
+The text is written to the file instead of the terminal.
+
+## Reading from a file
+
+The `fgets()` function reads one line from a file:
+
+```c
+char line[100];
+
+fgets(line, sizeof(line), file);
+```
+
+Its arguments are:
+
+- the character array where the line will be stored
+- the size of that array
+- the file to read from
+
+If a line is read successfully, `fgets()` returns a non-`NULL` value.
+
+If there is nothing left to read, or an error occurs, it returns `NULL`.
+
+This means we can use it as the condition of a `while` loop:
+
+```c
+while (fgets(line, sizeof(line), file) != NULL) {
+    printf("%s", line);
+}
+```
+
+The loop stops when there are no more lines to read.
+
+`fgets()` normally keeps the newline from the file, so we use:
+
+```c
+printf("%s", line);
+```
+
+rather than adding another `\n`.
+
+## Converting a line into a number
+
+A line read by `fgets()` is a string, even if it contains a number.
+
+For a simple example, we can use `sscanf()` to extract a floating-point value:
+
+```c
+float value;
+
+if (sscanf(line, "%f", &value) == 1) {
+    printf("Value: %.2f\n", value);
+}
+```
+
+The return value tells us whether one value was successfully converted.
+
+More detailed input conversion and validation are covered on the [User Input Handling]({% link docs/menus/user_input.md %}) page.
+
+## Closing a file
+
+Every file opened using `fopen()` should be closed using `fclose()`:
+
+```c
+fclose(file);
+```
+
+Closing the file finishes any pending writes and releases the resources used by the file.
+
+Do not continue using the `FILE *` after the file has been closed.
+
+## Complete example
+
+This program reads numbers from `numbers.txt`, calculates their average and writes the result to `stats.txt`.
+
+The input file contains one number on each line:
+
+```text
 12.5
 3.0
 7.25
@@ -130,10 +203,89 @@ value
 10
 ```
 
-**`stats.txt` (output)**
-```
-statistic,value
-average,6.65
+The program is:
+
+```c
+#include <stdio.h>
+
+#define MAX_LINE_LENGTH 100
+
+int main(void)
+{
+    // Open the input file
+    FILE *input = fopen("numbers.txt", "r");
+
+    if (input == NULL) {
+        printf("Could not open numbers.txt\n");
+        return 1;
+    }
+
+    // Open the output file
+    FILE *output = fopen("stats.txt", "w");
+
+    if (output == NULL) {
+        printf("Could not open stats.txt\n");
+        fclose(input);
+        return 1;
+    }
+
+    char line[MAX_LINE_LENGTH];
+    float sum = 0.0f;
+    int count = 0;
+
+    // Read and process each line
+    while (fgets(line, sizeof(line), input) != NULL) {
+        float value;
+
+        if (sscanf(line, "%f", &value) == 1) {
+            sum = sum + value;
+            count = count + 1;
+        }
+    }
+
+    // Make sure at least one number was read
+    if (count == 0) {
+        printf("No numbers were found\n");
+
+        fclose(input);
+        fclose(output);
+
+        return 1;
+    }
+
+    float average = sum / count;
+
+    // Write the result
+    fprintf(output, "statistic,value\n");
+    fprintf(output, "average,%.2f\n", average);
+
+    // Close both files
+    fclose(input);
+    fclose(output);
+
+    printf("Average written to stats.txt\n");
+
+    return 0;
+}
 ```
 
----
+The output file contains:
+
+```text
+statistic,value
+average,6.25
+```
+
+The main things to notice are:
+
+- both files are checked after opening
+- each line is read using `fgets()`
+- `sscanf()` converts the line into a number
+- the average is only calculated if at least one number was found
+- both files are closed before the program finishes
+
+A useful pattern to remember is:
+
+```text
+open → check → use → close
+```
