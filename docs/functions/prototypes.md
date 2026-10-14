@@ -40,10 +40,8 @@ Consider this program:
 
 int main(void)
 {
-    int total = add(10, 20);
-
+    int total = add(10, 20); // we dont know anything about add() yet!
     printf("Total: %d\n", total);
-
     return 0;
 }
 
@@ -84,9 +82,7 @@ int add(int a, int b)
 int main(void)
 {
     int total = add(10, 20);
-
     printf("Total: %d\n", total);
-
     return 0;
 }
 ```
@@ -107,7 +103,6 @@ For example, suppose `print_total()` calls `add()`:
 void print_total(int a, int b)
 {
     int total = add(a, b);
-
     printf("Total: %d\n", total);
 }
 
@@ -119,7 +114,6 @@ int add(int a, int b)
 int main(void)
 {
     print_total(10, 20);
-
     return 0;
 }
 ```
@@ -137,14 +131,11 @@ int add(int a, int b)
 void print_total(int a, int b)
 {
     int total = add(a, b);
-
     printf("Total: %d\n", total);
 }
 ```
 
-However, functions may call several other functions. Constantly rearranging their definitions to keep the compiler happy quickly becomes inconvenient.
-
-It can also make the file harder to read. We may want `main()` near the top so that we can quickly see the overall order of the program.
+However, functions may call several other functions. Constantly rearranging their definitions to keep the compiler happy quickly becomes a real hassle and makes our code a mess to read! Quite often we want `main()` near the top so that we can quickly see the overall order of the program.
 
 ## Solving the problem with prototypes
 
@@ -160,14 +151,12 @@ void print_total(int a, int b);
 int main(void)
 {
     print_total(10, 20);
-
     return 0;
 }
 
 void print_total(int a, int b)
 {
     int total = add(a, b);
-
     printf("Total: %d\n", total);
 }
 
@@ -191,6 +180,7 @@ This allows us to keep:
 - the prototypes near the top
 - `main()` near the start of the program
 - the complete function definitions underneath
+- our sanity
 
 ## Prototype, call and definition
 
@@ -199,7 +189,7 @@ These three pieces look similar but do different jobs.
 The prototype tells the compiler about the function:
 
 ```c
-int add(int a, int b);
+int add(int a, int b); // ends with a semi colon
 ```
 
 The call runs the function:
@@ -208,25 +198,10 @@ The call runs the function:
 int total = add(10, 20);
 ```
 
-The definition contains the code that the function runs:
+The definition contains the code between `{}` that the function runs:
 
 ```c
-int add(int a, int b)
-{
-    return a + b;
-}
-```
-
-The prototype ends with a semicolon:
-
-```c
-int add(int a, int b);
-```
-
-The definition contains braces and does not need a semicolon after the closing brace:
-
-```c
-int add(int a, int b)
+int add(int a, int b) // no semi colon
 {
     return a + b;
 }
@@ -259,7 +234,7 @@ int calculate_average(int a, int b);
 
 The return type and parameter types are different.
 
-Compiler errors about conflicting function types often mean that the prototype and definition do not match.
+Compiler errors about conflicting function types often mean that the prototype and definition do not match. Some of these you have seen in the debugging exercises in Unit 1. 
 
 ## Functions with no parameters
 
@@ -290,31 +265,7 @@ rather than:
 void print_title();
 ```
 
-Using `void` makes it clear that the function does not take any parameters.
-
-## Parameter names in prototypes
-
-A prototype can include parameter names:
-
-```c
-int add(int a, int b);
-```
-
-The names can also be omitted:
-
-```c
-int add(int, int);
-```
-
-Both prototypes mean the same thing to the compiler.
-
-I recommend including the names because they help explain what each parameter represents:
-
-```c
-void print_position(int x, int y);
-```
-
-The parameter names in the prototype and definition do not have to match, but using consistent names normally makes the code easier to follow.
+Using `void` makes it clear that the function *intentionally* has no inputs, rather than you forgot to add them.
 
 ## Prototypes in header files
 
