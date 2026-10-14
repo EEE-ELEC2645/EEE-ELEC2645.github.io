@@ -44,15 +44,15 @@ The second argument is the mode, which tells C how we want to use the file:
 "r"
 ```
 
-`FILE *` is the type used by the C library to keep track of an open file. The `*` means that it is a pointer, which we will cover properly in Unit 1.4. For now, treat `FILE *` as the type used for an open file.
+`FILE *` is the type used by the C library to keep track of an open file. The `*` means that it is a pointer, which we will cover properly in Unit 1.4. For now, we can treat `FILE *` as a special data type used for an open file.
 
 ## Checking that the file opened
 
-Opening a file can fail. For example, the file might not exist or the path might be incorrect.
+Opening a file can fail, as the file might not exist or the path might be incorrect.
 
 If `fopen()` cannot open the file, it returns `NULL`.
 
-Always check the result before trying to use the file:
+To avoid weird bugs, *always* check the result before trying to use the file:
 
 ```c
 FILE *file = fopen("data.txt", "r");
@@ -83,7 +83,7 @@ FILE *file = fopen("results.txt", "w");
 
 If the file does not exist, it is created.
 
-Be careful! If the file already exists, opening it with `"w"` removes its current contents.
+Be careful! If the file already exists, opening it with `"w"` removes its current contents. I have forgotten this and lost important stuff!
 
 Use `"a"` to append data to the end of a file:
 
@@ -93,15 +93,7 @@ FILE *file = fopen("log.txt", "a");
 
 If the file already exists, its contents are kept and the new output is added at the end.
 
-A `b` can be added for binary files:
-
-```c
-"rb"
-"wb"
-"ab"
-```
-
-The examples on this page use text files.
+You can also add `b` for binary files like `"rb"` or `"wb"` but we will stick with text files for now. 
 
 ## Writing to a file
 
@@ -123,7 +115,7 @@ The text is written to the file instead of the terminal.
 
 ## Reading from a file
 
-The `fgets()` function reads one line from a file:
+We can use our friend `fgets()` to reads one line from a file, just like we did with the string examples:
 
 ```c
 char line[100];
@@ -278,7 +270,7 @@ average,6.25
 
 The main things to notice are:
 
-- both files are checked after opening
+- both files are checked after opening - *always* do this ;)
 - each line is read using `fgets()`
 - `sscanf()` converts the line into a number
 - the average is only calculated if at least one number was found
