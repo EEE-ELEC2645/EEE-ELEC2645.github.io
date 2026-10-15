@@ -4,6 +4,7 @@ parent: Pointers
 nav_order: 4
 layout: default
 ---
+
 # Structs and pointers
 
 <details markdown="block">
