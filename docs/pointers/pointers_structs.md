@@ -1,128 +1,217 @@
 ---
-title: Structs with Pointers
+title: Structs with pointers
 parent: Pointers
-nav_order: 3
+nav_order: 4
 layout: default
 ---
+# Structs and pointers
 
-# Pointers and `struct`
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
-C doesn’t have classes, but it does have `struct`.  
-When you have a `struct` **object**, use `.` to access members
-When you have a **pointer to a struct**, use `->`.
+A struct can be passed to a function like any other variable.
 
-Below we model a very small Pokémon record and show:
-
-- a direct (stack) object,
-- a pointer to that existing object,
-- how to pass a pointer to a function to modify the original object,
-- and how passing **by value** differs from passing **by pointer**.
-
-> **Note:** In C, **arrays** decay to pointers when passed to functions, but **structs do not decay**. You either pass a *copy* of the struct (by value), or you pass a *pointer* to it (e.g., `&obj`). This example demonstrates both.
-
----
-
-### Example
+When passed normally, the function receives a copy:
 
 ```c
-// struct_pointer_pokemon_stack.c
-#include <stdio.h>
-#include <string.h>
+typedef struct {
+    int level;
+    int hp;
+} pokemon_t;
 
-#define MAX_NAME  16
-#define MAX_TYPE  12
+void heal_copy(pokemon_t pokemon)
+{
+    pokemon.hp = 50;
+}
+```
 
-struct Pokemon {
-    char name[MAX_NAME];  // e.g. "Pikachu"
-    char type[MAX_TYPE];  // e.g. "Electric"
-    unsigned level;       // e.g. 25
-    unsigned hp;          // current HP
+Calling this function does not change the original struct:
+
+```c
+pokemon_t pikachu = {
+    .level = 12,
+    .hp = 35
 };
 
-static void print_pokemon(const struct Pokemon *p)
-{
-    if (!p) return;
-    printf("Pokemon{name=\"%s\", type=\"%s\", level=%u, hp=%u}\n",
-           p->name, p->type, p->level, p->hp);
-}
+heal_copy(pikachu);
+```
 
-/* Mutates the original via pointer */
-static void level_up(struct Pokemon *p, unsigned delta)
-{
-    if (!p) return;
-    p->level += delta;  // uses '->' because p is a pointer
-}
+Only the local copy inside `heal_copy()` is changed.
 
-/* Mutates a temporary copy (caller won't see changes) */
-static void level_up_by_value(struct Pokemon p, unsigned delta)
+## Passing a pointer to a struct
+
+If the function needs to change the original struct, pass its address:
+
+```c
+void heal_pokemon(pokemon_t *pokemon)
 {
-    p.level += delta;   // uses '.' because p is a struct (a copy)
-    print_pokemon(&p);  // show the change only inside this function
+    pokemon->hp = 50;
 }
+```
+
+The caller uses `&` to pass the address:
+
+```c
+heal_pokemon(&pikachu);
+```
+
+The function now has a pointer to the original `pikachu` struct.
+
+## The `->` operator
+
+We use `.` when working directly with a struct variable:
+
+```c
+pikachu.hp = 35;
+```
+
+We use `->` when working through a pointer to a struct:
+
+```c
+pokemon->hp = 50;
+```
+
+This:
+
+```c
+pokemon->hp
+```
+
+is equivalent to:
+
+```c
+(*pokemon).hp
+```
+
+The `->` form is much easier to read, and its nearly always used.
+
+So basically what we need to keep in mind is:
+
+```text
+struct variable     use .
+pointer to struct   use ->
+```
+
+## Complete example
+
+```c
+#include <stdio.h>
+
+typedef struct {
+    char name[16];
+    int level;
+    int hp;
+} pokemon_t;
+
+void heal_pokemon(pokemon_t *pokemon);
 
 int main(void)
 {
-    // 1) Direct object use '.'
-    struct Pokemon pika = {0};
-    strcpy(pika.name, "Pikachu");
-    strcpy(pika.type, "Electric");
-    pika.level = 12;
-    pika.hp    = 34;
-    print_pokemon(&pika);
+    pokemon_t pikachu = {
+        .name = "Pikachu",
+        .level = 12,
+        .hp = 35
+    };
 
-    // 2) Pointer to existing object: use '->'
-    struct Pokemon *ptr = &pika; // take the address with '&'
-    ptr->level += 1;             // Pikachu levels up
-    ptr->hp    += 6;             // small heal
-    print_pokemon(ptr);
+    printf(
+        "%s HP before healing: %d\n",
+        pikachu.name,
+        pikachu.hp
+    );
 
-    // 3) Pass pointer to a function to mutate (change) the original
-    level_up(&pika, 3);          // modifies pika in place
-    print_pokemon(&pika);
+    heal_pokemon(&pikachu);
 
-    // 4) Pass by value (copy): caller won't see the change
-    level_up_by_value(pika, 10); // changes only the local copy
-    print_pokemon(&pika);        // unchanged relative to previous line
+    printf(
+        "%s HP after healing: %d\n",
+        pikachu.name,
+        pikachu.hp
+    );
 
     return 0;
 }
 
+void heal_pokemon(pokemon_t *pokemon)
+{
+    pokemon->hp = 50;
+}
 ```
 
-This code produces:
+This produces:
 
-```
-Pokemon{name="Pikachu", type="Electric", level=12, hp=34}
-Pokemon{name="Pikachu", type="Electric", level=13, hp=40}
-Pokemon{name="Pikachu", type="Electric", level=16, hp=40}
-Pokemon{name="Pikachu", type="Electric", level=26, hp=40}
-Pokemon{name="Pikachu", type="Electric", level=16, hp=40}
+```text
+Pikachu HP before healing: 35
+Pikachu HP after healing: 50
 ```
 
-## Key Points
+The caller passes the address of the struct:
 
-- **Member access**
-  - `obj.field` uses `.` because `obj` is **not** a pointer.
-  - `ptr->field` uses `->` because `ptr` **is** a pointer (e.g., `ptr = &obj`).
+```c
+heal_pokemon(&pikachu);
+```
 
-- **Passing to functions**
-  - `void f(struct Pokemon p)` receives a **copy**. Modifications affect only the local copy.
-  - `void f(struct Pokemon *p)` receives a **pointer**. Modifications via `p->...` affect the **original** object in the caller.
+The function changes the original struct using:
 
-- **No “decay” for structs**
-  - Unlike arrays, **structs do not decay to pointers** automatically. You must explicitly pass `&obj` to functions that take a pointer.
+```c
+pokemon->hp = 50;
+```
 
-- **Arrays inside the struct**
-  - Fields like `char name[MAX_NAME]` are arrays. When you pass `p->name` to functions expecting a C‑string (e.g., `printf("%s", ...)`), that expression **does** decay to pointer `char *`, like we saw with normal arrays.
+## Read-only struct pointers
 
-- **Designated initializers (optional)**
-  - As we saw previously, you can avoid string copies entirely using string literals:
+If a function only needs to read the struct, use `const`:
 
-    ```c
-    struct Pokemon pika = {
-        .name  = "Pikachu",
-        .type  = "Electric",
-        .level = 12,
-        .hp    = 34
-    };
-    ```
+```c
+void print_pokemon(const pokemon_t *pokemon)
+{
+    printf(
+        "%s, level %d, HP %d\n",
+        pokemon->name,
+        pokemon->level,
+        pokemon->hp
+    );
+}
+```
+
+The function can read the members, but the compiler prevents it from changing them:
+
+```c
+pokemon->hp = 50;    // Compiler error
+```
+
+The caller still passes the address:
+
+```c
+print_pokemon(&pikachu);
+```
+
+Using a pointer avoids copying the complete struct. Using `const` makes it clear that the function will not modify the original.
+
+## Checking for `NULL`
+
+A function can check that the pointer is valid before dereferencing it:
+
+```c
+void heal_pokemon(pokemon_t *pokemon)
+{
+    if (pokemon == NULL) {
+        return;
+    }
+
+    pokemon->hp = 50;
+}
+```
+
+This prevents the function from attempting to use a null pointer.
+
+The main points to remember are:
+
+- passing a struct normally gives the function a copy
+- pass the struct's address when the function needs to modify the original
+- use `.` with a struct variable
+- use `->` with a pointer to a struct
+- use `const` when the function should only read the struct

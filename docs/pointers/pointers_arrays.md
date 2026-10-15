@@ -1,181 +1,192 @@
 ---
-title: Arrays with Pointers
+title: Arrays with pointers
 parent: Pointers
-nav_order: 2
+nav_order: 3
 layout: default
 ---
+# Arrays and pointers
 
-# Arrays and Pointers
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
-## Introduction
+Arrays and pointers are closely related in C.
 
-A variable represents a single location in memory. A collection of variables in a **contiguous** address space (i.e no gaps) is known as an **array**. Arrays and pointers are closely related in C because array names frequently **decay** to pointers (more on this below).
+Consider this array:
 
-A conceptual diagram of an `int` array with 7 elements named `array`:
-
+```c
+int values[] = {10, 20, 30, 40, 50};
 ```
-array:
-[ array[0] ][ array[1] ][ array[2] ][ array[3] ][ array[4] ][ array[5] ][ array[6] ]
-      ^         ^           ^           ^           ^           ^           ^
-   &array[0] &array[1]   &array[2]   &array[3]   &array[4]   &array[5]   &array[6]
+
+In most expressions, the array name gives the address of its first element:
+
+```c
+values
 ```
 
-Arrays are **zero‑indexed**: the first element is `array[0]`.
+This is the same address as:
 
----
+```c
+&values[0]
+```
 
-## Arrays and pointers
+We can therefore use the array name to initialise a pointer:
 
-Arrays and pointers are linked because array names **often convert to** pointers to their first element in expressions. You can index arrays with `[]` or use pointer arithmetic with `*` and `+`.
+```c
+int *value_pointer = values;
+```
+
+The pointer now targets the first element of the array.
+
+## Accessing array elements
+
+Dereferencing the pointer accesses the first element:
+
+```c
+*value_pointer
+```
+
+This is equivalent to:
+
+```c
+values[0]
+```
+
+Adding one to the pointer moves it to the next element:
+
+```c
+*(value_pointer + 1)
+```
+
+This accesses:
+
+```c
+values[1]
+```
+
+In general:
+
+```c
+values[index]
+```
+
+is equivalent to:
+
+```c
+*(values + index)
+```
+
+Square brackets are normally easier to read and what we will focus on in the course, but the pointer form helps explain how array indexing actually works.
+
+## Passing an array to a function
+
+When an array is passed to a function, the function receives a pointer to its first element.
+
+For example:
+
+```c
+int sum_array(const int values[], size_t length)
+```
+
+The parameter:
+
+```c
+const int values[]
+```
+
+can also be written as:
+
+```c
+const int *values
+```
+
+The function does not receive the complete array as a copy.
+
+## Passing the length
+
+A pointer tells the function where the array begins, but not how many elements it contains. We must pass the length separately:
 
 ```c
 #include <stdio.h>
 
-int main(void) {
-    int array[5] = {100, 101, 102, 103, 104};
-    // Print values and their addresses
-    for (int i = 0; i < 5; i++) {
-        printf("array[%d] = %d\n", i, array[i]);
-    }
-    for (int i = 0; i < 5; i++) {
-        printf("address of array[%d] = %p\n", i, &array[i]);
-    }
-    // 'array' in an expression is equivalent to &array[0]
-    printf("array (decays to &array[0]) = %p\n", array);
-    printf("&array[0]                  = %p\n", &array[0]);
-    // Use pointers to access array elements
-    for (int i = 0; i < 5; i++) {
-        printf("*(array + %d) = %d\n", i, *(array + i));
-    }
+int sum_array(const int values[], size_t length);
+
+int main(void)
+{
+    int values[] = {10, 20, 30, 40, 50};
+    size_t length = sizeof(values) / sizeof(values[0]);
+
+    int total = sum_array(values, length);
+
+    printf("Total: %d\n", total);
+
     return 0;
+}
+
+int sum_array(const int values[], size_t length)
+{
+    int total = 0;
+
+    for (size_t i = 0; i < length; i++) {
+        total = total + values[i];
+    }
+
+    return total;
 }
 ```
 
-**What to notice**
-
-- Consecutive element addresses increase by `sizeof(int)`.
-- `array` (in most expressions) is the same address as `&array[0]`.
-- `array[i]` is the same as `*(array + i)`.
-
-**Important exceptions (no decay):**
-
-- `sizeof array` gives the **total bytes** of the array object (e.g., `5 * sizeof(int)`), not a pointer size.
-- `&array` gives type **pointer to the entire array** (e.g., `int (*)[5]`), not `int *`.
-- In the **declaration** itself, `int array[5];` is an array, not a pointer.
-
----
-
-## Passing arrays to functions
-
-Functions can accept arrays and can modify them. However, in a function parameter list, `int array[]` is **rewritten** by the compiler as `int *array`. That means the function receives a pointer, so you must pass the length separately if needed.
+The caller calculates and passes the length:
 
 ```c
-#include <stdio.h>
-
-// Read-only access (note 'const')
-int sum_of_array(const int array[], int n) {
-    int sum = 0;
-    for (int i = 0; i < n; i++) {
-        sum += array[i];
-    }
-    return sum;
-}
-
-// Modifying access (no 'const')
-void square_array(int array[], int n) {
-    for (int i = 0; i < n; i++) {
-        array[i] = array[i] * array[i];
-    }
-}
-
-int main(void) {
-    int array[5] = {1, 2, 3, 4, 5};
-
-    int sum = sum_of_array(array, 5); // 'array' decays to &array[0]
-    printf("Sum = %d\n", sum);
-
-    square_array(array, 5);            // modifies the original array
-    for (int i = 0; i < 5; i++) {
-        printf("array[%d] = %d\n", i, array[i]);
-    }
-
-    sum = sum_of_array(array, 5);
-    printf("New sum = %d\n", sum);
-
-    return 0;
-}
+sum_array(values, length);
 ```
 
-**Key points**
-
-- Inside `sum_of_array` and `square_array`, the parameter `array` is actually a pointer (`int *array`).
-- Therefore, `sizeof array` **inside the function** would give the pointer size (e.g., 8 on 64‑bit), **not** the number of elements.
-- Use `const` to make read‑only intent explicit and enforced by the compiler.
-
-**Sample output**
-```
-Sum = 15
-array[0] = 1
-array[1] = 4
-array[2] = 9
-array[3] = 16
-array[4] = 25
-New sum = 55
-```
-
----
-
-## (Optional) Multi‑dimensional arrays
-
-For `int m[R][C];`, the array decays **one level**: `m` decays to `int (*)[C]` (pointer to an array of `C` ints). The **rightmost dimension must be known** at the call site to index correctly.
+Inside `sum_array()`, `values` is a pointer. This means that:
 
 ```c
-#include <stdio.h>
+sizeof(values)
+```
 
-void zero2d(int (*mat)[4], int rows) {     // pointer to array of 4 ints
-    for (int r = 0; r < rows; r++) {
-        for (int c = 0; c < 4; c++) {
-            mat[r][c] = 0;
-        }
+would give the size of the pointer, *not* the size of the original array!
+
+## Modifying an array
+
+A function can modify the original array:
+
+```c
+void double_array(int values[], size_t length)
+{
+    for (size_t i = 0; i < length; i++) {
+        values[i] = values[i] * 2;
     }
-}
-
-int main(void) {
-    int m[3][4] = { {1,2,3,4}, {5,6,7,8}, {9,10,11,12} };
-    zero2d(m, 3);  // 'm' decays to pointer to row (int (*)[4])
-
-    for (int r = 0; r < 3; r++) {
-        for (int c = 0; c < 4; c++) {
-            printf("%d ", m[r][c]);
-        }
-        printf("\n");
-    }
-    return 0;
 }
 ```
 
----
+Calling:
 
-## Common pitfalls
+```c
+double_array(values, length);
+```
 
-- **`sizeof` trap in callees:**  
-  Inside a function parameter declared as `int a[]` (really `int *a`), `sizeof a` is pointer size, **not** the array length. Compute lengths in the caller:
-  ```c
-  #define LEN(x) (sizeof(x)/sizeof((x)[0]))
-  ```
-- **Confusing `a` vs `&a`:**  
-  `a` (in expressions) → pointer to first element (`T*`).  
-  `&a` → pointer to the **entire array** (`T (*)[N]`).
-- **Pointer arithmetic off‑by‑one:**  
-  End pointer is `a + N`. Valid indices are `0..N-1`; never dereference `a + N`.
-- **Const correctness:**  
-  Use `const T *` parameters for read‑only functions to prevent accidental modification.
+changes the elements in the caller's array.
 
----
+If the function should only read the array, use `const`:
 
-## Summary
+```c
+int sum_array(const int values[], size_t length)
+```
 
-- An array is a contiguous block of elements with a fixed size; a pointer is a variable holding an address.  
-- In **most expressions** (including function calls), an array name **decays** to a pointer to its first element.  
-- Because of decay, functions that take “arrays” actually receive pointers—so also pass the **length** (or otherwise provide it).  
-- `sizeof a` and `&a` are the two primary places you’ll see **no decay** and different types/values.
+This allows the function to read the elements but prevents it from changing them. Not essential, but it is good practice. 
+
+The main points to remember are:
+
+- an array name normally gives the address of its first element
+- array indexing is closely related to pointer arithmetic
+- a function receiving an array does not know its length
+- pass the array length as a separate parameter
+- use `const` when the function should not modify the array

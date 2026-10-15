@@ -15,7 +15,6 @@ layout: default
 1. TOC
 {:toc}
 </details>
-# Static functions
 
 We previously used `static` with a local variable:
 

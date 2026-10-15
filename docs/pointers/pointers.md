@@ -6,25 +6,44 @@ layout: default
 
 # Pointers
 
-Pointers are one of the most powerful features in C, and also the feature most likely to break something if misused!
+Pointers are one of the most useful features in C, and also one of the easiest ways to break something if used incorrectly!
+
+What makes a pointer special is that it stores the *address* of another variable. We can use this address to access or change the original value:
 
 ```c
 #include <stdio.h>
+
 int main(void)
 {
-    const char *choc_cake = "Chocolate Cake";   // a string literal
-    const char *fork = choc_cake;               // fork points to cake
+    int pikachu_hp = 35;
+    int eevee_hp = 28;
 
-    printf("Fork is pointing at: %s\n", fork);
+    // Initially target Pikachu's HP
+    int *target_hp = &pikachu_hp;
 
-    // Now fork points to something else
-    const char *carrot_cake = "Carrot Cake";
-    fork = carrot_cake; 
-    printf("Fork moved! Now pointing at: %s\n", fork);
+    *target_hp = 50;
 
+    // Change the target to Eevee's HP
+    target_hp = &eevee_hp;
+
+    *target_hp = 45;
+
+    printf("Pikachu HP: %d\n", pikachu_hp);
+    printf("Eevee HP: %d\n", eevee_hp);
     return 0;
 }
 ```
+
+This produces:
+
+```text
+Pikachu HP: 50
+Eevee HP: 45
+```
+
+The pointer initially targets `pikachu_hp`, so the first assignment changes Pikachu's HP. The pointer is then changed to target `eevee_hp`, so the second assignment changes Eevee's HP.
+
+Do not worry if the syntax looks strange at first. Everyone finds pointers confusing when they first meet them. And probably the second time. And sometimes the twentieth time! :D
 
 Me when I first tried learning pointers
 
