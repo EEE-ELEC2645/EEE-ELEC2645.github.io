@@ -126,24 +126,14 @@ A C function can return only one value directly. Pointer parameters allow it to 
 ```c
 #include <stdio.h>
 
-void divide_with_remainder(
-    int numerator,
-    int denominator,
-    int *quotient,
-    int *remainder
-);
+void divide_with_remainder(int numerator, int denominator, int *quotient, int *remainder);
 
 int main(void)
 {
     int quotient;
     int remainder;
 
-    divide_with_remainder(
-        17,
-        5,
-        &quotient,
-        &remainder
-    );
+    divide_with_remainder(17, 5, &quotient, &remainder);
 
     printf("Quotient: %d\n", quotient);
     printf("Remainder: %d\n", remainder);
@@ -151,12 +141,7 @@ int main(void)
     return 0;
 }
 
-void divide_with_remainder(
-    int numerator,
-    int denominator,
-    int *quotient,
-    int *remainder
-)
+void divide_with_remainder(int numerator, int denominator, int *quotient, int *remainder)
 {
     *quotient = numerator / denominator;
     *remainder = numerator % denominator;

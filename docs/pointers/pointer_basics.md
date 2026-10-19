@@ -193,7 +193,6 @@ int main(void)
     printf("Current target HP: %d\n", *target_hp);
 
     *target_hp = 50;
-
     target_hp = &eevee_hp;
 
     printf("Current target HP: %d\n", *target_hp);
@@ -202,7 +201,6 @@ int main(void)
 
     printf("Pikachu HP: %d\n", pikachu_hp);
     printf("Eevee HP: %d\n", eevee_hp);
-
     return 0;
 }
 ```
@@ -242,7 +240,6 @@ int main(void)
 
     printf("Address of pikachu_hp: %p\n", (void *)&pikachu_hp);
     printf("Address in target_hp:   %p\n", (void *)target_hp);
-
     return 0;
 }
 ```

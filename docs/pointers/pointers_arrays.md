@@ -124,7 +124,6 @@ int main(void)
     int total = sum_array(values, length);
 
     printf("Total: %d\n", total);
-
     return 0;
 }
 
@@ -135,7 +134,6 @@ int sum_array(const int values[], size_t length)
     for (size_t i = 0; i < length; i++) {
         total = total + values[i];
     }
-
     return total;
 }
 ```

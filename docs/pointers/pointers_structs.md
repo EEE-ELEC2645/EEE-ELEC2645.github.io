@@ -35,10 +35,7 @@ void heal_copy(pokemon_t pokemon)
 Calling this function does not change the original struct:
 
 ```c
-pokemon_t pikachu = {
-    .level = 12,
-    .hp = 35
-};
+pokemon_t pikachu = {.level = 12,.hp = 35};
 
 heal_copy(pikachu);
 ```
@@ -114,26 +111,13 @@ void heal_pokemon(pokemon_t *pokemon);
 
 int main(void)
 {
-    pokemon_t pikachu = {
-        .name = "Pikachu",
-        .level = 12,
-        .hp = 35
-    };
+    pokemon_t pikachu = {.name = "Pikachu", .level = 12, .hp = 35 };
 
-    printf(
-        "%s HP before healing: %d\n",
-        pikachu.name,
-        pikachu.hp
-    );
+    printf("%s HP before healing: %d\n", pikachu.name, pikachu.hp);
 
     heal_pokemon(&pikachu);
 
-    printf(
-        "%s HP after healing: %d\n",
-        pikachu.name,
-        pikachu.hp
-    );
-
+    printf("%s HP after healing: %d\n", pikachu.name, pikachu.hp);
     return 0;
 }
 
@@ -169,12 +153,7 @@ If a function only needs to read the struct, use `const`:
 ```c
 void print_pokemon(const pokemon_t *pokemon)
 {
-    printf(
-        "%s, level %d, HP %d\n",
-        pokemon->name,
-        pokemon->level,
-        pokemon->hp
-    );
+    printf("%s, level %d, HP %d\n", pokemon->name, pokemon->level, pokemon->hp);
 }
 ```
 
