@@ -1,244 +1,157 @@
 ---
 title: Printf Debugging
 parent: Debugging
-nav_order: 1
+nav_order: 2
 layout: default
 ---
 
-# Debugging in C Using `printf`
+# Printf debugging
 
-## Introduction
+One of the simplest debugging techniques is to print information while the program is running.
 
-The simplest way to track down run-time bugs in C is by printing variable values to the terminal using `printf()`. Watching the output as the program runs can help spot unexpected values.
+This is known as **printf debugging**.
 
-***
+The idea is simple:
 
-## Example: Fibonacci Sequence
+1. Find the area where you think the bug might be.
+2. Print the values of important variables.
+3. Compare the program's behaviour with what you expected.
 
-Let’s write a program to print the Fibonacci sequence (0, 1, 1, 2, 3, 5, 8, …).
+Once the bug has been fixed, the temporary debug output can be removed.
 
-Unfortunately, our initial implementation has a bug. We’ll use `printf` debugging to find and fix it.
+## Example
 
-```c
-// fib_seed_bug.c
-#include <stdio.h>
-
-int main(void) {
-    int n = 0;
-    printf("Enter the number of terms in the Fibonacci sequence to print: ");
-    scanf("%d", &n);
-
-    int fn_minus1 = 1;
-    int fn_minus2 = 0;
-
-    printf("%d\n%d\n", fn_minus1, fn_minus2);
-
-    for (int i = 2; i <= n; i++) {
-        int fn = fn_minus1 + fn_minus2;
-        printf("%d\n", fn);
-
-        fn_minus2 = fn_minus1;
-        fn_minus1 = fn;
-    }
-
-    return 0;
-}
-
-```
-
-***
-
-## Testing
-
-Try compiling and run the program:
-
-```bash
-gcc -Wall -o fib fib_seed_bug.c
-./fib
-```
-
-It compiles first time! Result! :D We shouldn't jinx it though...
-
-When prompted, enter how many Fibonacci numbers to print.
-
-If you enter `5`, you should see:
-
-```bash
-1
-0
-1
-2
-3
-5
-```
-
-But wait, that’s not right! The Fibonacci sequence should start with `0` and `1`. Our first two printed values are swapped. And the loop printed one extra value (`5`) too many! Lets use `printf` debugging to find out what’s going wrong.
-
-*** 
-
-## Adding Debug Prints
-
-We’ll add `printf` statements inside the loop to print the internal state of our variables each iteration:
+This function should calculate the sum of the numbers from 1 to `n`:
 
 ```c
+int total_up_to(int n)
+{
+    int total = 0;
 
-// fib_seed_debug.c
-#include <stdio.h>
-
-int main(void) {
-    int n = 0;
-    printf("Enter the number of terms in the Fibonacci sequence to print: ");
-    scanf("%d", &n);
-
-    int fn_minus1 = 1;
-    int fn_minus2 = 0;
-
-    printf("%d\n%d\n", fn_minus1, fn_minus2);
-
-    for (int i = 2; i < n; i++) {
-        int fn = fn_minus1 + fn_minus2;
-        printf("Loop %d: fn_minus1 = %d, fn_minus2 = %d, fn = %d\n", i, fn_minus1, fn_minus2, fn);
-
-        printf("%d\n", fn);
-
-        fn_minus2 = fn_minus1;
-        fn_minus1 = fn;
+    for (int i = 1; i < n; i++) {
+        total = total + i;
     }
 
-    return 0;
-}
-
-```
-
-In this case if we enter `5` again, we get:
-
-```bash
-1
-0
-Loop 2: fn_minus1 = 1, fn_minus2 = 0, fn = 1
-1
-Loop 3: fn_minus1 = 1, fn_minus2 = 1, fn = 2
-2
-Loop 4: fn_minus1 = 2, fn_minus2 = 1, fn = 3
-3
-Loop 5: fn_minus1 = 3, fn_minus2 = 2, fn = 5
-5
-```
-
-Looking at this we can see that our initial seed values are swapped. `fn_minus1` should start at `0` and `fn_minus2` at `1`. Lets sort that out and check the output again.
-
-```c
-// fib_seed_fix.c
-#include <stdio.h>
-
-int main(void) {
-    int n = 0;
-    printf("Enter the number of terms in the Fibonacci sequence to print: ");
-    scanf("%d", &n);
-
-    int fn_minus1 = 0;  
-    int fn_minus2 = 1; // Seed Bug fixed here
-
-    printf("%d\n%d\n", fn_minus1, fn_minus2);
-
-    for (int i = 2; i <= n; i++) {
-        int fn = fn_minus1 + fn_minus2;
-        printf("Loop %d: fn_minus1 = %d, fn_minus2 = %d, fn = %d\n", i, fn_minus1, fn_minus2, fn);
-
-        printf("%d\n", fn);
-
-        fn_minus2 = fn_minus1;
-        fn_minus1 = fn;
-    }
-
-    return 0;
+    return total;
 }
 ```
 
-Now when we run it with `5` we get:
-
-```bash
-0
-1
-Loop 2: fn_minus1 = 0, fn_minus2 = 1, fn = 1
-1
-Loop 3: fn_minus1 = 1, fn_minus2 = 0, fn = 1
-1
-Loop 4: fn_minus1 = 1, fn_minus2 = 1, fn = 2
-2
-Loop 5: fn_minus1 = 2, fn_minus2 = 1, fn = 3
-3
-```
-
-Which is correct! The Fibonacci sequence starts with `0` and `1`, and the subsequent numbers are correct too. However we are getting 6 numbers instead of 5 - this should set alarm bells ringing that we have and "off by one" error in our loop condition.
-
-***
-
-## Fixing the Loop Condition
-
-Looking closely at the loop we can see that we are starting at `2` and going to `<= n`, meaning we are actually printing `n + 1` numbers. We can quickly fix this by changing the loop condition to `< n` instead of `<= n`.
+However:
 
 ```c
-// fib_final.c
-#include <stdio.h>
+printf("%d\n", total_up_to(5));
+```
 
-int main(void) {
-    int n = 0;
-    printf("Enter the number of terms in the Fibonacci sequence to print: ");
-    scanf("%d", &n);
+prints:
 
-    int fn_minus1 = 0;  
-    int fn_minus2 = 1; // Seed Bug fixed here
+```text
+10
+```
 
-    printf("%d\n%d\n", fn_minus1, fn_minus2);
+when we expected:
 
-    for (int i = 2; i < n; i++) { // loop condition bug fixed here
-        int fn = fn_minus1 + fn_minus2;
-        printf("Loop %d: fn_minus1 = %d, fn_minus2 = %d, fn = %d\n", i, fn_minus1, fn_minus2, fn);
+```text
+15
+```
 
-        printf("%d\n", fn);
+We know there is a bug, but we do not yet know where.
 
-        fn_minus2 = fn_minus1;
-        fn_minus1 = fn;
+## Printing variable values
+
+We can add a debug print inside the loop:
+
+```c
+int total_up_to(int n)
+{
+    int total = 0;
+
+    for (int i = 1; i < n; i++) {
+        total = total + i;
+
+        printf(
+            "i=%d total=%d\n",
+            i,
+            total
+        );
     }
 
-    return 0;
+    return total;
 }
 ```
 
-Now when we run it with `5` we get:
-```bash
-Enter the number of terms in the Fibonacci sequence to print: 5
-0
-1
-Loop 2: fn_minus1 = 0, fn_minus2 = 1, fn = 1
-1
-Loop 3: fn_minus1 = 1, fn_minus2 = 0, fn = 1
-1
-Loop 4: fn_minus1 = 1, fn_minus2 = 1, fn = 2
-2
+This prints:
+
+```text
+i=1 total=1
+i=2 total=3
+i=3 total=6
+i=4 total=10
 ```
 
-Great! We have the correct Fibonacci sequence starting with `0` and `1`, and we are printing exactly `5` numbers as requested. We can now remove the debug prints by commenting out the line if we want a clean output. 
-Trying a few more values of `n` confirms everything is working as expected for example `n = 10` gives:
+The debug output shows that the loop stops when `i` reaches 4.
 
-```bash
-0
-1
-1
-1
-2
-3
-5
-8
-13
-21
+That suggests the problem is probably in the loop condition.
+
+## Finding the bug
+
+The loop currently uses:
+
+```c
+i < n
 ```
 
-***
+which excludes the final value.
 
-Phew! Debugging complete. This shows the importance of predicting the output of the program before running it. If we had not known what the Fibonacci sequence should look like, we may not have spotted the errors as easily.
+Changing it to:
 
-Looking at code littered with commented printf statements is not uncommon, they probably are a sign that the programmer has had to debug the code multiple times (mine certainly is).
+```c
+i <= n
+```
 
-Next we can look at how to use compiler flags to enable or disable debug prints without needing to comment them out manually.
+fixes the problem:
+
+```c
+for (int i = 1; i <= n; i++) {
+    total = total + i;
+}
+```
+
+The function now produces the expected result.
+
+## What should we print?
+
+Useful things to print include:
+
+- loop counters
+- function parameters
+- values being returned
+- variables that are changing unexpectedly
+- values used in conditions
+
+For example:
+
+```c
+printf("i = %d\n", i);
+printf("temperature = %.1f\n", temperature);
+printf("state = %d\n", state);
+```
+
+Try to print enough information to understand what the program is doing without flooding the terminal with thousands of lines of output.
+
+## Removing debug prints
+
+Debug prints are usually temporary:
+
+```c
+printf("Debug: value = %d\n", value);
+```
+
+Once the problem has been found and fixed, remove the prints or disable them using techniques described on the Debug vs Release page.
+
+## Printf or a debugger?
+
+`printf()` debugging works everywhere and is often the quickest way to investigate a problem.
+
+A debugger allows the program to be paused so that variables can be inspected without adding print statements.
+
+In practice, experienced programmers use both approaches regularly.

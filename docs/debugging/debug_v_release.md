@@ -7,108 +7,196 @@ layout: default
 
 # Debug vs. Release in C
 
-## Introduction
 
-Software projects typically have two configurations:
+# Debug vs release builds
 
-*   **Debug**: Used during development and testing. Includes debug information in the executable (using the `-g` compile flag needed for gdb) and may run tests. These builds are not optimized, making debugging easier but resulting in larger, slower executables.
+While developing a program, we often want as much information as possible when something goes wrong.
 
-*   **Release**: Used when the project is finished. Debug information is excluded, tests are not run, and optimizations (e.g., `-O2`) are applied to reduce size or improve performance.
+Once the program is finished, we usually care more about performance and executable size.
 
-We will now look at how to easily **switch off** tests and our debug prints when we do not want to run them.
+For this reason, software is often built in either **debug** or **release** mode.
 
-***
+## Debug builds
 
-## Using the Preprocessor for Conditional Compilation
+A debug build prioritises finding and fixing problems.
 
-When running tests, you might call a function like this:
+Typical features include:
 
-```c
-int main() {
-    // test the function
-    run_sum_tests();
+- debug information for a debugger
+- additional checks
+- debug messages
+- little or no optimisation
 
-    // rest of your very important program
-}
+A typical compiler command might be:
+
+```bash
+gcc -g -O0 main.c -o main
 ```
 
-`run_sum_tests()` contains various test cases to verify the correctness of your code, before proceeding with the main program logic.
+Here:
 
-If you are ready for release, you could manually remove or comment out these lines. For small projects, this is easy. But for large projects, this is impractical.
+```text
+-g
+```
 
-Instead, we can use the **`#define` preprocessor directive** and wrap test calls like this:
+adds debugging information, while:
+
+```text
+-O0
+```
+
+disables compiler optimisations.
+
+This makes debugging easier because the generated machine code stays close to the original source code.
+
+## Release builds
+
+A release build prioritises performance and executable size.
+
+Typical features include:
+
+- compiler optimisations enabled
+- debug information removed
+- debug messages disabled
+
+For example:
+
+```bash
+gcc -O2 main.c -o main
+```
+
+The exact optimisation level depends on the project, but release builds generally produce smaller and faster executables.
+
+## Enabling debug code
+
+Sometimes it is useful to include code that only runs in a debug build:
 
 ```c
-int main() {
-    // test the function
 #ifdef DEBUG
-    run_sum_tests();
+printf("temperature = %.1f\n", temperature);
 #endif
-
-    // rest of your very important program
-}
 ```
 
-Now when you compile your program, the compiler will include the test function call only if `DEBUG` is defined.
+This code only exists when `DEBUG` has been defined.
 
-## Defining `DEBUG`
-
-The best practice is to define `DEBUG` **at compile time**, not in the source code (like using `#define DEBUG`). This keeps your code clean and makes switching between debug and release easy.
-
-### Debug Build (tests included):
-
-We can define a variable at compile time using the `-D MACRO` flag. For example, to define `DEBUG`, compile with:
+For example:
 
 ```bash
-gcc -Wall -g -D DEBUG -o main.exe main.c
+gcc -DDEBUG main.c -o main
 ```
 
-This is the same as having `#define DEBUG` at the top of your source file, but it keeps your source code cleaner. The `-g` flag includes debug information for use with debuggers like `gdb` (more on that later).
+The `-D` option defines a preprocessor symbol.
 
-### Release Build (tests excluded):
+In this case:
 
-For release builds we omit the `-D DEBUG` and `-g`flags and  also optionally add optimization flags like `-O2`:
+```text
+DEBUG
+```
+
+is defined, so the `printf()` statement is compiled into the program.
+
+Without:
 
 ```bash
-gcc -Wall -O2 -o main.exe main.c
+-DDEBUG
 ```
 
-## Using a Debug Flag - Fibonacci Example 
+the debug print is removed completely.
 
-Instead of commenting out debug prints later, use a preprocessor flag:
+## Example
 
 ```c
 #include <stdio.h>
 
-int main(void) {
-    int n = 0;
-    printf("Enter the number of terms in the Fibonacci sequence to print: ");
-    scanf("%d", &n);
-
-    int fn_minus1 = 0;
-    int fn_minus2 = 1;
-    int fn = 1;
-
-    printf("%d\n%d\n", fn_minus1, fn_minus2);
-
-    for (int i = 2; i < n; i++) {
-        fn_minus2 = fn_minus1;
-        fn_minus1 = fn;
-        fn = fn_minus1 + fn_minus2;
-
-        printf("%d\n", fn);
+int main(void)
+{
+    int value = 42;
 
 #ifdef DEBUG
-        printf("[DEBUG] fn=%d fn-1=%d fn-2=%d\n", fn, fn_minus1, fn_minus2);
+    printf("Debug: value = %d\n", value);
 #endif
-    }
+
+    printf("Program running\n");
 
     return 0;
 }
 ```
 
-Compile with debug enabled:
+Debug build:
 
 ```bash
-gcc -Wall -D DEBUG -o fib fib.c
+gcc -DDEBUG main.c -o main
 ```
+
+Output:
+
+```text
+Debug: value = 42
+Program running
+```
+
+Release build:
+
+```bash
+gcc main.c -o main
+```
+
+Output:
+
+```text
+Program running
+```
+## Debug and release targets in a Makefile
+
+In practice, we normally do not type the debug and release compiler options manually.
+
+Instead, a Makefile often provides separate targets:
+
+```make
+debug:
+	gcc -g -O0 -DDEBUG main.c -o main
+
+release:
+	gcc -O2 main.c -o main
+```
+
+We can then build the debug version using:
+
+```bash
+make debug
+```
+
+or the release version using:
+
+```bash
+make release
+```
+
+This keeps the build settings in one place and avoids repeatedly typing long compiler commands.
+
+Larger projects often have additional targets such as:
+
+```bash
+make test
+make debug
+make release
+make clean
+```
+
+The exact names vary between projects, but the idea is always the same: different targets build the project with different settings.
+
+## A useful rule
+
+While developing:
+
+```text
+Build for debugging.
+```
+
+When releasing software:
+
+```text
+Build for performance.
+```
+
+The exact settings vary between projects, but the idea is always the same: debug builds help find problems, while release builds focus on the final program.
