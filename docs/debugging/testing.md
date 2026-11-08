@@ -1,7 +1,7 @@
 ---
 title: Testing
 parent: Debugging
-nav_order: 2
+nav_order: 3
 layout: default
 ---
 
@@ -16,11 +16,9 @@ layout: default
 {:toc}
 </details>
 
-## Introduction
+Testing code is an extremely important part of the software development cycle. A modern car, jam-packed with electronics and sensors, may have upwards of **100 million lines of code**. The fact that a *bug* in the code may cause a [fatal accident](https://en.wikipedia.org/wiki/2009%E2%80%932011_Toyota_vehicle_recalls) means that every single block of code will be tested. Indeed, software engineers often write tests **before** they write the actual code. This is known as **Test-Driven Development (TDD)**.
 
-Testing code is an extremely important part of the software development cycle. A top-of-the-range car, jam-packed with electronics and sensors, may have upwards of **100 million lines of code**. The fact that a *bug* in the code may cause a [fatal accident](https://en.wikipedia.org/wiki/2009%E2%80%932011_Toyota_vehicle_recalls) means that every single block of code will be tested. Indeed, software engineers often write tests **before** they write the actual code. This is known as **Test-Driven Development (TDD)**.
-
-# Testing
+## Creating useful tests
 
 Testing is the process of checking that a program behaves as expected.
 
@@ -94,11 +92,7 @@ This allows us to test the functions directly without typing input each time.
 For example:
 
 ```c
-check_int(
-    "addition with positive values",
-    12,
-    operation_add(7, 5)
-);
+check_int("addition with positive values", 12, operation_add(7, 5));
 ```
 
 The test supplies:

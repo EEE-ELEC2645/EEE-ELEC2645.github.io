@@ -1,15 +1,13 @@
 ---
 title: Using a Debugger
 parent: Debugging
-nav_order: 1
+nav_order: 2
 layout: default
 ---
 
 # Using a debugger
 
-`printf()` is often the quickest way to investigate a bug.
-
-A debugger provides another approach. Instead of printing values, we can pause the program and inspect its state while it is running.
+While `printf()` is often the quickest way to investigate a bug using a debugger provides another more powerful approach. Instead of printing values, we can pause the program and inspect its state while it is running.
 
 Different IDEs have different debugger interfaces, but the basic workflow is usually the same.
 
