@@ -1,7 +1,7 @@
 ---
-title: Volatile & Static
+title: Volatile and static
 parent: C Basics
-nav_order: 13
+nav_order: 9
 layout: default
 ---
 
@@ -153,6 +153,23 @@ This prints:
 ```
 
 The variable `count` can only be accessed inside `print_count()`, but it keeps its value for the whole time the program is running.
+
+```mermaid
+sequenceDiagram
+    participant M as main()
+    participant P as print_count()
+    M->>P: first call
+    Note over P: count goes from 0 to 1, prints 1
+    P-->>M: return
+    M->>P: second call
+    Note over P: count is still 1, goes to 2, prints 2
+    P-->>M: return
+    M->>P: third call
+    Note over P: count is still 2, goes to 3, prints 3
+    P-->>M: return
+```
+
+Without `static`, every call would start again from `count = 0` and print `1`.
 
 This use of `static` means:
 

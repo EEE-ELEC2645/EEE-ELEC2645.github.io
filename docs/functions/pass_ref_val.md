@@ -65,6 +65,8 @@ number++;
 
 The original variable inside `main()` is not changed.
 
+![Two areas of memory, main() and increment(). In main(), value contains 99 at address 0x1000. A purple arrow labelled copy of 99 goes to number in increment(), at address 0x2000, which contains 100 after number++. value in main() is still 99.]({{ "/assets/images/pass_ref_val_copy.svg" | relative_url }})
+
 In this example, `main()` is the caller. When we refer to the caller's variable, we mean `value`, which belongs to `main()`.
 
 ## Returning the changed value
@@ -161,6 +163,8 @@ After: 100
 ```
 
 The function receives the address of `value`, so it can access and change the original variable inside `main()`.
+
+![Two areas of memory, main() and increment(). In increment(), the pointer number, at address 0x2000, contains 0x1000. An orange arrow goes from number back to value in main(), at address 0x1000, which has changed from 99 to 100 after (*number)++.]({{ "/assets/images/pass_ref_val_address.svg" | relative_url }})
 
 ## What the pointer syntax means
 

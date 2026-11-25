@@ -1,6 +1,7 @@
 ---
 title: Joystick
-nav_order: 11
+parent: Console Libraries
+nav_order: 2
 layout: default
 ---
 

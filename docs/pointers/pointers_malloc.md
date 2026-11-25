@@ -68,6 +68,8 @@ int *values = malloc(10 * sizeof(int));
 
 `malloc()` returns the address of the allocated memory. We store that address in a pointer.
 
+![Two areas of memory, the stack and the heap. On the stack, the pointer values, at address 0x7f00, contains 0x5000, and is freed automatically. An arrow goes to a block of ten ints on the heap starting at 0x5000, each holding a question mark because malloc() does not initialise them. The block stays until free(values) is called.]({{ "/assets/images/pointers_malloc_stack_heap.svg" | relative_url }})
+
 Using `sizeof` makes sure the correct number of bytes is requested:
 
 ```c
@@ -144,6 +146,8 @@ values = NULL;
 ```
 
 This does not change what `free()` does, but it makes accidental reuse easier to spot. Basically, protect yourself from yourself.
+
+![After free(values), the pointer values still contains 0x5000, but the block on the heap has been freed: a dashed red arrow, labelled dangling pointer, points to dashed red boxes marked freed, not yours any more. After values = NULL, the pointer contains NULL and points nowhere, so if (values == NULL) can catch it.]({{ "/assets/images/pointers_malloc_free.svg" | relative_url }})
 
 ## Complete example
 

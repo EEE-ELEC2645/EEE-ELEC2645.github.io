@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="210" viewBox="0 0 640 210" role="img" aria-labelledby="title desc">
+  <title id="title">The string "Hello" in a char array</title>
+  <desc id="desc">The array greeting has six elements, [0] to [5], holding the characters H, e, l, l and o, followed by the null terminator, backslash zero, in element [5].</desc>
+  <style>
+    .card { fill: #302f38; stroke: #4a4955; }
+    .name { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 17px; fill: #f0f0f0; }
+    .type { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .value { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #f0f0f0; }
+    .note { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #a9a9b8; }
+    .var { fill: #263548; stroke: #7cb7ff; stroke-width: 2.5; }
+    .term { fill: #233a2a; stroke: #7ee787; stroke-width: 2.5; }
+    .termtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #7ee787; }
+    .bad { fill: #3d2426; stroke: #ff7b72; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .badvalue { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #ff7b72; }
+    .badnote { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #ff7b72; }
+  </style>
+  <rect class="card" x="1" y="1" width="638" height="208" rx="12"/>
+  <text class="name" x="80" y="44">char greeting[] = "Hello";</text>
+  <text class="type" x="120" y="80" text-anchor="middle">[0]</text>
+  <rect class="var" x="80" y="92" width="80" height="52"/>
+  <text class="value" x="120" y="126" text-anchor="middle">'H'</text>
+  <text class="type" x="200" y="80" text-anchor="middle">[1]</text>
+  <rect class="var" x="160" y="92" width="80" height="52"/>
+  <text class="value" x="200" y="126" text-anchor="middle">'e'</text>
+  <text class="type" x="280" y="80" text-anchor="middle">[2]</text>
+  <rect class="var" x="240" y="92" width="80" height="52"/>
+  <text class="value" x="280" y="126" text-anchor="middle">'l'</text>
+  <text class="type" x="360" y="80" text-anchor="middle">[3]</text>
+  <rect class="var" x="320" y="92" width="80" height="52"/>
+  <text class="value" x="360" y="126" text-anchor="middle">'l'</text>
+  <text class="type" x="440" y="80" text-anchor="middle">[4]</text>
+  <rect class="var" x="400" y="92" width="80" height="52"/>
+  <text class="value" x="440" y="126" text-anchor="middle">'o'</text>
+  <text class="type" x="520" y="80" text-anchor="middle">[5]</text>
+  <rect class="term" x="480" y="92" width="80" height="52"/>
+  <text class="termtext" x="520" y="126" text-anchor="middle">'\0'</text>
+  <text class="note" x="80" y="176">5 visible characters, 6 elements: the compiler adds the null terminator <tspan class="type">'\0'</tspan>.</text>
+</svg>

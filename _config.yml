@@ -4,9 +4,17 @@ email: j.p.avery@leeds.ac.uk
 description: Reference documentation for the C code used in the ELEC2645 Embedded Systems Project Module.
 theme: just-the-docs
 
-url: https://eee-elec2645.github.io/
+url: https://eee-elec2645.github.io
 
 favicon_ico: "/assets/images/favicon.ico"
+
+# Picture shown when a page link is shared (Teams, Minerva, social media).
+# jekyll-seo-tag reads it per page, so it is set for every page here.
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/images/social_preview.png
 
 
 aux_links:

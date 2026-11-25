@@ -1,7 +1,7 @@
 ---
 title: Typedef
-parent: C Basics
-nav_order: 12
+parent: Arrays, Strings and Structs
+nav_order: 6
 layout: default
 ---
 
@@ -42,7 +42,7 @@ instead of:
 unsigned int count = 10;
 ```
 
-This does not create a completely new type. `uint` is simply another name for `unsigned int`.
+This does not create a completely new type. `uint` is another name for `unsigned int`.
 
 You will usually see `typedef` used with structs and enums, where it saves us from repeatedly writing `struct` or `enum`.
 

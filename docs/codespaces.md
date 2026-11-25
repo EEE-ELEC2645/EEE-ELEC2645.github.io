@@ -1,6 +1,7 @@
 ---
 title: Codespaces
-nav_order: 98
+parent: Tools
+nav_order: 1
 layout: default
 ---
 
@@ -93,12 +94,12 @@ The **Run and Debug** panel can run a program one line at a time and show the cu
 To try it:
 
 1. Open **Run and Debug** from the left-hand toolbar.
-2. Select the activity you are working on.
+2. Select the activity you are working on from the drop-down list at the top of the panel.
 3. Click beside a line number to add a breakpoint.
-4. Press `F5` or select the green play button.
+4. Press `F5` or select the green play button next to the drop-down list.
 5. Use **Step Over** to move through the program one line at a time.
 
-The debugger first uses the Makefile to compile the correct source files.
+The debugger first uses the Makefile to compile the correct source files. The play button at the top right of the editor does not use the Makefile and compiles only the open file, so do not use it in the labs.
 
 > The debugger can only start after the program compiles successfully. Fix any compiler errors first.
 

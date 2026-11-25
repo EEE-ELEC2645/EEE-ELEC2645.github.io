@@ -1,5 +1,5 @@
 ---
-title: Basic Data Types
+title: Basic data types
 parent: C Basics
 nav_order: 1
 layout: default
@@ -134,6 +134,8 @@ printf("%u\n", count);
 ```
 
 This does not produce `-1`. The value wraps around to the largest value the type can represent.
+
+![Two number lines lined up at zero. A signed 8-bit integer (int8_t) runs from -128 to 127; an unsigned 8-bit integer (uint8_t) runs from 0 to 255. An arrow shows 0 - 1 wrapping round to 255. An unsigned int does the same with 32 bits: 0 - 1 gives 4294967295.]({{ "/assets/images/basic_types_signed_unsigned.svg" | relative_url }})
 
 Unsigned types are useful when we specifically need their range or behaviour, but signed integers are often simpler for ordinary counting and calculations.
 

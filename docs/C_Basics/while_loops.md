@@ -1,7 +1,7 @@
 ---
 title: While loops
 parent: C Basics
-nav_order: 4
+nav_order: 7
 layout: default
 ---
 
@@ -250,6 +250,22 @@ while (number < 5) {
 This is one reason to be careful when using `continue` inside a `while` loop.
 
 ## Choosing between the two loops
+
+The difference is where the condition is checked:
+
+```mermaid
+flowchart TB
+    WS(["while loop starts"]) --> W1{"condition?"}
+    W1 -->|true| W2["loop body"]
+    W2 --> W1
+    W1 -->|false| W3["after the loop"]
+    DS(["do...while loop starts"]) --> D1["loop body"]
+    D1 --> D2{"condition?"}
+    D2 -->|true| D1
+    D2 -->|false| D3["after the loop"]
+```
+
+A `while` loop can skip the body completely. A `do...while` loop always runs it at least once.
 
 Use a `while` loop when the body might not need to run:
 

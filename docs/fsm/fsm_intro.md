@@ -1,88 +1,135 @@
 ---
-title: FSM Introduction
+title: States, events and transitions
 parent: Finite State Machines (FSM)
 nav_order: 1
 layout: default
 ---
 
-# Introduction to Finite State Machines
+# States, events and transitions
 
-Finite State Machines (FSMs) are a simple way to structure embedded code when your system has a small number of distinct modes. Instead of scattering logic across many `if` statements, you define states, decide events that cause transitions, and keep the behaviour in each state clear and predictable.
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
-## Why Use FSMs in Embedded Systems?
+An FSM is designed before it is coded: you decide which states the program has and which events move it between them. This page designs the FSM for the Square, Cube and Exit menu in the Unit 2 project template. [Writing an FSM in C]({% link docs/fsm/fsm_in_c.md %}) turns the design into code.
 
-FSMs are great for embedded applications because they make your code:
+## Four words
 
-- Predictable: each state has a clear set of allowed transitions
-- Readable: you can see all the modes in one place
-- Testable: you can test each state and transition independently
-- Scalable: adding a new state is usually a small change
+Four words describe the whole design:
 
-This is exactly the kind of structure used in the course FSM lab: [https://github.com/EEE-ELEC2645/Unit_3_4_FSM](https://github.com/EEE-ELEC2645/Unit_3_4_FSM)
+| Word | Meaning | In the Square and Cube menu |
+|---|---|---|
+| State | which mode the program is in right now | `STATE_CUBE` |
+| Event | something that happens | the user types `2` |
+| Transition | moving from one state to another | main menu to cube |
+| Action | the job done while in a state | calculate the cube |
 
-## The Core Idea
+An FSM writes down which mode you are in, and which moves are allowed.
 
-An FSM is defined by:
+## The state diagram
 
-1. States: the modes your system can be in
-2. Events: inputs or conditions that cause a change
-3. Transitions: rules for moving between states
-4. Actions: what your system does while in each state
+In a state diagram, states are the boxes and events label the arrows between them:
 
-Think of a simple LED controller with three modes:
-
-| State | Description | Event | Next State |
-|------|-------------|-------|------------|
-| OFF | LED is off | Button press | ON |
-| ON | LED is on | Button press | BLINK |
-| BLINK | LED blinks | Button press | OFF |
-
-## A Minimal FSM Example
-
-This example shows the basic structure. The button press triggers state changes, and each state has its own behaviour.
-
-```c
-typedef enum {
-    STATE_OFF,
-    STATE_ON,
-    STATE_BLINK
-} LedState;
-
-static LedState current_state = STATE_OFF;
-static uint8_t button_event = 0;  // Set to 1 in an EXTI callback
-
-void fsm_update(void)
-{
-    // Handle transitions first
-    if (button_event) {
-        button_event = 0;
-        if (current_state == STATE_OFF) {
-            current_state = STATE_ON;
-        } else if (current_state == STATE_ON) {
-            current_state = STATE_BLINK;
-        } else {
-            current_state = STATE_OFF;
-        }
-    }
-
-    // State actions
-    if (current_state == STATE_OFF) {
-        led_off();
-    } else if (current_state == STATE_ON) {
-        led_on();
-    } else {
-        blink_led_nonblocking();
-    }
-}
+```mermaid
+stateDiagram-v2
+    [*] --> MAIN_MENU
+    MAIN_MENU --> SQUARE: select 1
+    MAIN_MENU --> CUBE: select 2
+    MAIN_MENU --> EXIT: select 3
+    MAIN_MENU --> MAIN_MENU: invalid selection
+    SQUARE --> MAIN_MENU: complete
+    CUBE --> MAIN_MENU: complete
+    EXIT --> [*]
 ```
 
-## Practical Notes for This Course
+The filled dot at the top is where the program starts, and the ringed dot at the bottom is where it ends. Reading the diagram:
 
-- Use an enum for states so they are easy to read and debug.
-- Keep transitions separate from actions. This makes changes safer.
-- Trigger transitions using interrupt-driven events (for example, set a flag in the EXTI callback, process it in `main`).
-- If a state needs timing (like blink), use a timer interrupt or `HAL_GetTick()` instead of `HAL_Delay()`.
+- the program starts in `MAIN_MENU`
+- from `MAIN_MENU`, selecting 1, 2 or 3 moves to `SQUARE`, `CUBE` or `EXIT`
+- an invalid selection loops back to `MAIN_MENU`, so a typing mistake does not crash or exit the program
+- `SQUARE` and `CUBE` each have one way out: when the calculation is complete, back to `MAIN_MENU`
+- `EXIT` is the only way the program ends
 
-## Where This Fits Next
+## The transition table
 
-In the FSM lab, you will build a small state machine that responds to inputs and updates outputs in a structured way. It brings together the ideas from GPIO, interrupts, and timers into a single, clean program structure.
+The same design can be written as a table. Each arrow between two states becomes one row:
+
+| Current state | Event | Next state |
+|---|---|---|
+| Main menu | select square | Square |
+| Square | calculation completed | Main menu |
+| Main menu | select cube | Cube |
+| Cube | calculation completed | Main menu |
+| Main menu | invalid selection | Main menu |
+| Main menu | select exit | Exit |
+
+Current state plus event gives the next state. That is the whole rule.
+
+A table is useful when the diagram gets crowded and the arrow labels start to overlap. It also makes gaps easy to spot: if a state never appears in the "Current state" column, nothing can move the program out of it.
+
+## What a good FSM diagram shows
+
+The Unit 2 Software Design journal entry asks for an FSM diagram at about this level of detail. A good one shows:
+
+- meaningful states: the modes of the application, not every helper function
+- an arrow for every transition
+- an event label on every arrow
+- where the program starts and where it exits
+- important error or invalid-input routes, such as the invalid selection above
+
+The diagram and the code must agree. If you add a state to the code, add it to the diagram as well.
+
+## Is every menu an FSM?
+
+Not on its own. A menu with one `switch` that calls unrelated functions has states in name only. In the Square and Cube menu the states are deliberately simple, so the pattern is easy to see.
+
+In your project, the states should be the real modes of one application, and some of them should lead somewhere other than the menu. A quiz, for example, might go from `MAIN_MENU` to `ASK_QUESTION`, then to `SHOW_ANSWER`, back to `ASK_QUESTION` until the questions run out, and then to `SHOW_SCORE`.
+
+## Complete example
+
+Mermaid diagrams are written as text inside a `mermaid` code block, so they can live in your project's `README.md` next to your code. GitHub draws them when you view the README, and so does the Markdown preview in your Codespace. This is the source of the diagram above:
+
+````markdown
+```mermaid
+stateDiagram-v2
+    [*] --> MAIN_MENU
+    MAIN_MENU --> SQUARE: select 1
+    MAIN_MENU --> CUBE: select 2
+    MAIN_MENU --> EXIT: select 3
+    MAIN_MENU --> MAIN_MENU: invalid selection
+    SQUARE --> MAIN_MENU: complete
+    CUBE --> MAIN_MENU: complete
+    EXIT --> [*]
+```
+````
+
+Each line is one arrow: `FROM --> TO: event`. `[*]` is the start when it is on the left of an arrow and the end when it is on the right. State names cannot contain spaces, so use underscores.
+
+The transition table is an ordinary Markdown table:
+
+```markdown
+| Current state | Event | Next state |
+|---|---|---|
+| Main menu | select square | Square |
+| Square | calculation completed | Main menu |
+```
+
+## Common mistakes
+
+- **A state with no way out.** Every state except the exit needs at least one arrow leaving it. Otherwise the program gets stuck there.
+- **Helper functions drawn as states.** `print_main_menu()` is part of the main menu state's action, not a state of its own.
+- **Missing invalid-input routes.** If the user can type something unexpected, the diagram should say where the program goes next.
+- **Unlabelled arrows.** An arrow without an event does not say what makes the transition happen.
+
+The main points to remember are:
+
+- a state is a mode, an event is something that happens, a transition is a move between states and an action is the work done in a state
+- design the states and transitions before writing the code
+- a state diagram and a transition table show the same design in two ways
+- every state needs a way out, and invalid input needs a route too
+- keep the diagram and the code in step

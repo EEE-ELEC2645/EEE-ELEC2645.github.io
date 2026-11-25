@@ -1,5 +1,5 @@
 ---
-title: Function Prototypes
+title: Function prototypes
 parent: Functions
 nav_order: 2
 layout: default

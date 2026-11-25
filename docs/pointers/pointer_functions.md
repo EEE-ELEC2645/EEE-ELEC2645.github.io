@@ -111,6 +111,8 @@ double_value(10, &answer);
 
 After the call, `answer` contains `20`.
 
+![Two areas of memory, main() and double_value(). In main(), answer at address 0x1000 holds 20 after the call. In double_value(), value holds 10 and the pointer result holds 0x1000, with an arrow back to answer: *result = value * 2; writes 20 into answer.]({{ "/assets/images/pointer_functions_output.svg" | relative_url }})
+
 For one result, returning the value is normally clearer:
 
 ```c

@@ -1,6 +1,7 @@
 ---
-title: Markdown Basics
-nav_order: 99
+title: Markdown basics
+parent: Tools
+nav_order: 3
 layout: default
 ---
 
@@ -216,39 +217,58 @@ Very useful! There are a number of ways of doing this:
 ## Inline Links
 
 ```md
-[ELEC2645 Website](https://eee-elec2645.github.io/)
+[Markdown Guide](https://www.markdownguide.org/)
 ```
 
-[ELEC2645 Website](https://eee-elec2645.github.io/)
+[Markdown Guide](https://www.markdownguide.org/)
 
 ## Reference Links
 
 ```md
 In the body of the text
-[ELEC2645 Website][elec2645web]
+[Markdown Guide][mdguide]
 
-Then later in the document you can put the reference 
-[elec2645web]: https://eee-elec2645.github.io/
-
+Then later in the document you can put the reference
+[mdguide]: https://www.markdownguide.org/
 ```
 
 In the body of the text
-[ELEC2645 Website][elec2645web2]
+[Markdown Guide][mdguide2]
 
 Then later in the document you can put the `[]: ` bit, normally at the bottom so it doesn't matter if it is rendered or not
 
-[elec2645web2]: https://eee-elec2645.github.io/
+[mdguide2]: https://www.markdownguide.org/
 
+## Relative links
 
-## Relative link
+A relative link points to another file in the same repository, using its path from the Markdown file you are writing in. This is how a README links to an activity guide, a design document or a diagram in your own repository. It keeps working when the repository is copied or renamed, which a full `https://github.com/...` link would not.
 
-```md
-[Example of a relative link](assets/images/link.png)
+For a repository laid out like this:
+
+```text
+my_project/
+├── README.md
+├── docs/
+│   └── wiring.md
+└── images/
+    └── fsm_diagram.png
 ```
 
-[Example of a relative link](assets/images/link.png)
+`README.md` can link to the wiring notes with:
 
+```md
+[Wiring notes](docs/wiring.md)
+```
 
+and `docs/wiring.md` can link back up one folder with `..`:
+
+```md
+[Back to the README](../README.md)
+```
+
+And here is an example of a relative link on this website:
+
+[Example of a relative link]({{ "/assets/images/link.png" | relative_url }})
 
 # Images
 
@@ -260,8 +280,7 @@ Follow the same format as links but we add ! before the brackets, like `![]()`. 
 
 ![Cat as a Service](https://cataas.com/cat "A different cat each time")
 
-It is not possible to scale or resize the images using Markdown by itself, but we can easily use a bit of `html` 
-
+It is not possible to scale or resize the images using Markdown by itself, but we can easily use a bit of `html`
 
 ```md
 <img src="https://cataas.com/cat" width="100" height="100" border="10" alt="A different cat each time"/>
@@ -269,27 +288,59 @@ It is not possible to scale or resize the images using Markdown by itself, but w
 
 <img src="https://cataas.com/cat" width="100" height="100" border="10" alt="A different cat each time"/>
 
+## Images in your own repository
 
-We can also (over)use `.gifs`
+Images do not have to come from another website. Screenshots, photos of your hardware and diagrams can be saved in your repository and shown in your README with a relative path, exactly like a relative link.
+
+Using the repository layout above, `README.md` shows the state diagram with:
 
 ```md
-<img src="https://media.giphy.com/media/qLHzYjlA2FW8g/giphy.gif" alt=An ancient meme which shows my age. />
+![State diagram for the main menu](images/fsm_diagram.png)
 ```
 
+and `docs/wiring.md`, one folder down, uses `../`:
 
-<img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3B2aGNlcXN3ZWw1bHlhdG82eW51azE4NTRtN3hta3g5c3pqbmF3ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Hcw7rjsIsHcmk/giphy.gif" alt="An ancient meme which shows my age."/>
+```md
+![State diagram for the main menu](../images/fsm_diagram.png)
+```
 
+The `html` version works the same way if you want to set the size:
 
+```md
+<img src="images/fsm_diagram.png" width="300" alt="State diagram for the main menu"/>
+```
 
-# Happy Coding! 
+To add an image to your repository:
+
+1. Create a folder such as `images` (right-click in the VS Code Explorer and choose **New Folder**).
+2. Drag the image file into that folder in the Explorer.
+3. Add the Markdown line to your README and check it in the preview (**Ctrl+Shift+V**, or **Cmd+Shift+V** on a Mac).
+4. Commit and push the image file as well as the README. If you forget the image, the README on GitHub shows a broken link.
+
+Some things that often go wrong:
+
+- the path is relative to the Markdown file, not to the top of the repository
+- GitHub treats `FSM.png` and `fsm.png` as different files, even though Windows and macOS do not, so match the case exactly
+- spaces in file names break links: use `fsm_diagram.png`, not `FSM diagram.png`
+- keep files small: a screenshot is fine, a 50 MB video is not
+
+We can also (over)use `.gifs`, saved in the repository like any other image:
+
+```md
+<img src="images/keyboard_cat.gif" alt="A cat in a blue shirt playing an electronic keyboard."/>
+```
+
+<img src="{{ "/assets/images/keyboard_cat.gif" | relative_url }}" alt="A cat in a blue shirt playing an electronic keyboard."/>
+
+# Happy Coding!
 
 <table>
 <tr>
 <td width="50%">
-<img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZnhsN2Z3bHZnOXM4Y3I0ZmJnaTU3ZDl1a2VxaTZ3OGhvNnJtdGd3OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/lJNoBCvQYp7nq/giphy.gif" alt=An ancient meme which shows my age. />
+<img src="{{ "/assets/images/cat_typing.gif" | relative_url }}" alt="A black and white cat typing furiously on a laptop."/>
 </td>
 <td width="50%">
-<img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTZudXJsb2dpMXJ6djM0ZWNsNHdwNDFoMXgyaHBtOXFuZ2JxNWJ2MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/SwImQhtiNA7io/giphy.gif" alt=An ancient meme which shows my age. />
+<img src="{{ "/assets/images/dog_typing.gif" | relative_url }}" alt="A golden retriever in a jumper typing on a laptop."/>
 </td>
 </tr>
 </table>

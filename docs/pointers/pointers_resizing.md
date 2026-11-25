@@ -62,6 +62,8 @@ int *resized_values =
 
 The allocated block may be moved to a new address, so `realloc()` returns a pointer to the resized memory.
 
+![Before: values holds 0x5000 and points to a block of three ints, 10, 20 and 30. After realloc() grows it to five ints, the block has moved: the old block at 0x5000 is freed, shown dashed in red with a dashed arrow from values, and resized_values holds 0x6000, pointing to a new block holding 10, 20, 30 and two uninitialised values. Then values = resized_values; so the old address is never used again.]({{ "/assets/images/pointers_resizing_realloc.svg" | relative_url }})
+
 Do not assign the result directly back to the original pointer:
 
 ```c

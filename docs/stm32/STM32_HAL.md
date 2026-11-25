@@ -1,7 +1,7 @@
 ---
-title: HAL Functions Reference
+title: HAL functions reference
 parent: STM32
-nav_order: 2
+nav_order: 6
 layout: default
 ---
 
@@ -1244,7 +1244,7 @@ __HAL_TIM_ENABLE_IT(&htim6, TIM_IT_UPDATE);   // Re-enable interrupts
 
 ## Complete Timer Interrupt Example
 
-This mirrors the workflow from [timers_HAL.md](timers_HAL.md):
+This mirrors the workflow on the [Timers in HAL page]({% link docs/timers/timers_HAL.md %}):
 
 ```c
 #include "main.h"
@@ -1290,7 +1290,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 ## Complete PWM Example
 
-This mirrors the workflow from [pwm_HAL.md](pwm_HAL.md):
+This mirrors the workflow on the [PWM in HAL page]({% link docs/pwm/pwm_HAL.md %}):
 
 ```c
 #include "main.h"

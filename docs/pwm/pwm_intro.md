@@ -1,6 +1,7 @@
 ---
-title: PWM Introduction
+title: PWM introduction
 parent: PWM
+grand_parent: STM32
 nav_order: 1
 layout: default
 math: katex

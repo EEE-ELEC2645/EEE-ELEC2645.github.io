@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="230" viewBox="0 0 640 230" role="img" aria-labelledby="title desc">
+  <title id="title">A pointer storing the address of a variable</title>
+  <desc id="desc">The pointer target_hp, at address 0x1008, contains the value 0x1000. An arrow goes from target_hp to the variable pikachu_hp, at address 0x1000, which contains 35.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f2a65a"/>
+    </marker>
+  </defs>
+  <style>
+    .card { fill: #302f38; stroke: #4a4955; }
+    .name { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 17px; fill: #f0f0f0; }
+    .type { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .value { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #f0f0f0; }
+    .addr { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .note { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #a9a9b8; }
+    .var { fill: #263548; stroke: #7cb7ff; stroke-width: 2.5; }
+    .ptr { fill: #3d2f22; stroke: #f2a65a; stroke-width: 2.5; }
+    .arrow { stroke: #f2a65a; stroke-width: 3; fill: none; }
+  </style>
+  <rect class="card" x="1" y="1" width="638" height="228" rx="12"/>
+
+  <!-- pointer -->
+  <text class="name" x="130" y="52" text-anchor="middle">target_hp</text>
+  <text class="type" x="130" y="72" text-anchor="middle">int *</text>
+  <rect class="ptr" x="50" y="84" width="160" height="56" rx="6"/>
+  <text class="value" x="130" y="120" text-anchor="middle">0x1000</text>
+  <text class="addr" x="130" y="164" text-anchor="middle">address 0x1008</text>
+
+  <!-- variable -->
+  <text class="name" x="500" y="52" text-anchor="middle">pikachu_hp</text>
+  <text class="type" x="500" y="72" text-anchor="middle">int</text>
+  <rect class="var" x="440" y="84" width="120" height="56" rx="6"/>
+  <text class="value" x="500" y="120" text-anchor="middle">35</text>
+  <text class="addr" x="500" y="164" text-anchor="middle">address 0x1000</text>
+
+  <!-- arrow -->
+  <line class="arrow" x1="212" y1="112" x2="434" y2="112" marker-end="url(#arrow)"/>
+  <text class="type" x="323" y="102" text-anchor="middle">points to</text>
+
+  <text class="note" x="320" y="208" text-anchor="middle">Addresses are made up: real ones are much longer.</text>
+</svg>

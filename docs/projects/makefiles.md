@@ -323,4 +323,123 @@ make clean
 
 Running `make` shows the available tests. Running `make test1`, `make test2` and so on builds and tests the chosen activity.
 
+## The Unit 2 project Makefile
+
+The Unit 2 project template builds two programs from the same library: the interactive application and a separate test program (see [testing]({% link docs/debugging/testing.md %}#compile-the-library-twice)). Its Makefile is set up for that.
+
+### Compiler flags
+
+```make
+CC := gcc
+CFLAGS := -Wall -Wextra -Wpedantic -std=c11 -g -O0
+```
+
+These are the Unit 1 flags plus two more: `-g` adds the information the debugger needs, and `-O0` turns off optimisation so that stepping through the code follows the lines you wrote. See [debug and release builds]({% link docs/debugging/debug_v_release.md %}).
+
+### Source lists
+
+Instead of naming files in every rule, the template lists them once in variables:
+
+```make
+APP_SOURCES := main.c funcs.c input.c
+APP_HEADERS := funcs.h input.h
+
+TEST_SOURCES := test_funcs.c funcs.c
+TEST_HEADERS := funcs.h
+```
+
+The test program uses `funcs.c`, but not `main.c` or `input.c`, so it never shows the menu or waits for the keyboard.
+
+### The two programs
+
+```make
+application.out: $(APP_SOURCES) $(APP_HEADERS)
+	$(CC) $(CFLAGS) $(APP_SOURCES) -o $@
+
+test_funcs.out: $(TEST_SOURCES) $(TEST_HEADERS)
+	$(CC) $(CFLAGS) $(TEST_SOURCES) -o $@
+```
+
+The headers are dependencies but are not passed to `gcc`. Listing them means that changing `funcs.h` makes Make rebuild both programs. They are left out of the compile command because the `.c` files already include them.
+
+```mermaid
+flowchart LR
+    M["main.c"] --> A["application.out"]
+    I["input.c, input.h"] --> A
+    F["funcs.c, funcs.h"] --> A
+    F --> T["test_funcs.out"]
+    TF["test_funcs.c"] --> T
+    T -->|"make test runs it"| R["test results"]
+```
+
+An arrow means "is needed to build". If any file on the left changes, Make rebuilds every program it points to, and only those.
+
+### The `all`, `test` and `clean` targets
+
+```make
+.PHONY: all test clean
+
+all: application.out
+
+test: test_funcs.out
+	./test_funcs.out
+
+clean:
+	rm -f *.out *.o
+```
+
+- `all` is the first target, so running `make` on its own builds the application
+- `make test` builds `test_funcs.out` if it is missing or out of date, then runs it. If any test fails, the test program returns `1` from `main()` and Make reports an error (see [make a test fail on purpose]({% link docs/debugging/testing.md %}#make-a-test-fail-on-purpose))
+- `make clean` removes the programs and any object files
+
+### Adding a source file
+
+The Makefile does not find source files by itself. If your project adds `quiz.c` and `quiz.h`, add them to the lists:
+
+```make
+APP_SOURCES := main.c funcs.c input.c quiz.c
+APP_HEADERS := funcs.h input.h quiz.h
+```
+
+If the tests use `quiz.c` too, add it to `TEST_SOURCES` and `quiz.h` to `TEST_HEADERS`. Forgetting to add the `.c` file gives a linker error when you build:
+
+```text
+main.c:28:(.text+0x10): undefined reference to `quiz_run'
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:35: application.out] Error 1
+```
+
+(The start of the first line shows the full path to `main.c`.) After changing the lists, rebuild everything with `make clean` and then `make`.
+
+### Using the maths library
+
+Programs that use functions from `math.h`, such as `sqrt()` or `pow()`, must be linked with `-lm` (see [linking the maths library]({% link docs/projects/compiler_flags.md %}#linking-the-maths-library)). The template does not include it, so add it to the end of both recipe lines:
+
+```make
+application.out: $(APP_SOURCES) $(APP_HEADERS)
+	$(CC) $(CFLAGS) $(APP_SOURCES) -o $@ -lm
+
+test_funcs.out: $(TEST_SOURCES) $(TEST_HEADERS)
+	$(CC) $(CFLAGS) $(TEST_SOURCES) -o $@ -lm
+```
+
+Add it to both, because the tests compile `funcs.c` as well. If `funcs.c` calls `sqrt()` and the test recipe has no `-lm`, `make test` fails with:
+
+```text
+funcs.c:40:(.text+0x74): undefined reference to `sqrt'
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:41: test_funcs.out] Error 1
+```
+
+### Commands to remember
+
+```bash
+make
+./application.out
+make test
+make clean
+```
+
+`make` builds the application, `./application.out` runs it, `make test` builds and runs the tests, and `make clean` removes everything that was built.
+
 Later, the STM32 projects will use CMake. A Makefile contains the build rules directly, while CMake describes the project and generates the files needed by the build system.

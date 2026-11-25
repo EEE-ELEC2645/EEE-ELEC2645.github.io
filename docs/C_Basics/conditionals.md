@@ -1,7 +1,7 @@
 ---
 title: Conditionals
 parent: C Basics
-nav_order: 3
+nav_order: 5
 layout: default
 ---
 
@@ -118,6 +118,23 @@ int main(void)
 ```
 
 The conditions are checked from top to bottom. As soon as one condition is true, its block runs and the remaining conditions are skipped.
+
+```mermaid
+flowchart TD
+    A{"grade #62;= 70 ?"} -->|yes| F["First"]
+    A -->|no| B{"grade #62;= 60 ?"}
+    B -->|yes| U["2:1"]
+    B -->|no| C{"grade #62;= 50 ?"}
+    C -->|yes| L["2:2"]
+    C -->|no| D{"grade #62;= 40 ?"}
+    D -->|yes| T["Third"]
+    D -->|no| X["Fail"]
+    F --> E["after the if statement"]
+    U --> E
+    L --> E
+    T --> E
+    X --> E
+```
 
 The order therefore matters. This version would not work:
 
@@ -350,6 +367,14 @@ Two
 
 This behaviour is called **fall-through**.
 
+```mermaid
+flowchart TD
+    S{"switch (choice)"} -->|"choice is 1"| C1["case 1:<br/>printf One"]
+    S -->|"choice is 2"| C2["case 2:<br/>printf Two"]
+    C1 -.->|"no break: falls through"| C2
+    C2 -->|break| E["after the switch"]
+```
+
 Occasionally fall-through is intentional, but most of the time it is a mistake. Add `break` unless you deliberately want execution to continue into the next case.
 
 If you do use intentional fall-through, add a comment to make it clear:
@@ -371,7 +396,7 @@ switch (choice) {
 
 ## Using `switch` with an `enum`
 
-A `switch` works particularly well with an `enum`. We will use this combination when implementing finite-state machines.
+A `switch` works particularly well with an `enum` (see [Enums]({% link docs/C_Basics/enums.md %}) in the next section). We will use this combination when [writing finite state machines]({% link docs/fsm/fsm_in_c.md %}).
 
 ```c
 #include <stdio.h>
@@ -380,11 +405,11 @@ typedef enum {
     MODE_IDLE,
     MODE_RUNNING,
     MODE_ERROR
-} mode_t;
+} device_mode_t;
 
 int main(void)
 {
-    mode_t mode = MODE_RUNNING;
+    device_mode_t mode = MODE_RUNNING;
 
     switch (mode) {
         case MODE_IDLE:

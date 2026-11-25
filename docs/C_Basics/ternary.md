@@ -1,7 +1,7 @@
 ---
-title: Ternary Operator
+title: Ternary operator
 parent: C Basics
-nav_order: 14
+nav_order: 6
 layout: default
 ---
 
@@ -129,7 +129,7 @@ This is often more useful than printing a Boolean as `0` or `1`.
 
 ## Choosing between enum values
 
-The two possible results can also be enum values:
+The two possible results can also be enum values (see [Enums]({% link docs/C_Basics/enums.md %})):
 
 ```c
 #include <stdbool.h>
@@ -162,7 +162,7 @@ However, the logical NOT operator is clearer:
 led_on = !led_on;
 ```
 
-Use the ternary operator to choose between two different values. Use `!` when you simply want to reverse a Boolean value.
+Use the ternary operator to choose between two different values. Use `!` when you only want to reverse a Boolean value.
 
 ## Use parentheses when they help
 

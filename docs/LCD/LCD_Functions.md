@@ -1,6 +1,7 @@
 ---
-title: LCD Functions Reference
+title: LCD functions reference
 parent: LCD
+grand_parent: Console Libraries
 nav_order: 2
 layout: default
 ---

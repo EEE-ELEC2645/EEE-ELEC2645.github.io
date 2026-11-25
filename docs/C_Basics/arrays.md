@@ -1,7 +1,7 @@
 ---
 title: Arrays
-parent: C Basics
-nav_order: 6
+parent: Arrays, Strings and Structs
+nav_order: 1
 layout: default
 ---
 
@@ -113,6 +113,8 @@ For an array of length `n`:
 - the final element is `array[n - 1]`
 
 This is a common source of **off-by-one errors** which occur so often they have a long [wikipedia page](https://en.wikipedia.org/wiki/Off-by-one_error). An array with five elements does not have an element at index `5`.
+
+![The array numbers as five boxes side by side, labelled [0] to [4], holding 10, 20, 30, 40 and 50 at addresses 0x1000 to 0x1010, 4 bytes apart. A dashed red box after them, labelled [5], holds a question mark and is marked not part of the array.]({{ "/assets/images/arrays_indexing.svg" | relative_url }})
 
 We can use an index to update an element as well as read it:
 
@@ -278,10 +280,7 @@ int main(void)
 
 The elements are stored row by row in memory:
 
-```text
-matrix[0][0]  matrix[0][1]  matrix[0][2]  matrix[1][0]  matrix[1][1]  matrix[1][2]
-      1             2             3             4             5             6
-```
+![matrix[2][3] drawn as a table of two rows and three columns holding 1, 2, 3 and 4, 5, 6. Below, the same values in memory order, row 0 first: [0][0], [0][1], [0][2] hold 1, 2, 3, then [1][0], [1][1], [1][2] hold 4, 5, 6.]({{ "/assets/images/arrays_2d.svg" | relative_url }})
 
 We do not need the pointer explanation yet. For now, the important point is that `matrix[row][column]` accesses one value from the array.
 

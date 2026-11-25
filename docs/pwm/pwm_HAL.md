@@ -1,6 +1,7 @@
 ---
 title: PWM in HAL
 parent: PWM
+grand_parent: STM32
 nav_order: 2
 layout: default
 math: katex

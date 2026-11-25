@@ -1,7 +1,7 @@
 ---
-title: More Strings
-parent: C Basics
-nav_order: 8
+title: More strings
+parent: Arrays, Strings and Structs
+nav_order: 3
 layout: default
 ---
 
@@ -408,5 +408,5 @@ Functions such as `strlen()`, `strcmp()` and `strchr()` expect a correctly null-
 - the newline added by `fgets()`
 - converting text into numbers
 
-These are covered on the [User Input Handling]({% link docs/menus/user_input.md %}) page. 
+These are covered on the [User input]({% link docs/menus/user_input.md %}) page. 
 

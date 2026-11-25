@@ -167,7 +167,7 @@ if (sscanf(line, "%f", &value) == 1) {
 
 The return value tells us whether one value was successfully converted.
 
-More detailed input conversion and validation are covered on the [User Input Handling]({% link docs/menus/user_input.md %}) page.
+More detailed input conversion and validation are covered on the [User input]({% link docs/menus/user_input.md %}) page.
 
 ## Closing a file
 
@@ -180,6 +180,16 @@ fclose(file);
 Closing the file finishes any pending writes and releases the resources used by the file.
 
 Do not continue using the `FILE *` after the file has been closed.
+
+Every program that uses a file follows the same steps:
+
+```mermaid
+flowchart TD
+    O["fopen()"] --> C{"file == NULL ?"}
+    C -->|yes| E["print an error and stop"]
+    C -->|no| U["read with fgets()<br/>or write with fprintf()"]
+    U --> X["fclose(file)"]
+```
 
 ## Complete example
 
@@ -281,3 +291,5 @@ A useful pattern to remember is:
 ```text
 open → check → use → close
 ```
+
+To keep a list of records, such as quiz scores or an inventory, from one run of a program to the next, see [Saving and loading records]({% link docs/files/file_records.md %}).

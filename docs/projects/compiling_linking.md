@@ -1,5 +1,5 @@
 ---
-title: Compiling & linking
+title: Compiling and linking
 parent: Building C Projects
 nav_order: 2
 layout: default
@@ -28,17 +28,12 @@ very_cool_project/
 
 The build process has two main stages:
 
-```text
-.c source files
-      |
-      | compile
-      v
-.o object files
-      |
-      | link
-      v
-executable program
+```mermaid
+flowchart LR
+    A[".c source files"] -->|compile| B[".o object files"]
+    B -->|link| C["executable program"]
 ```
+
 ## What are compiling and linking?
 
 Building a C program has two main stages:
@@ -223,25 +218,17 @@ If you see an undefined reference, start by checking that the relevant `.c` file
 
 For our example project:
 
-```text
-main.c ──────────────────► main.o
-                                  \
-                                   ► very_cool_project
-                                  /
-very_cool_maths.c ───────► very_cool_maths.o
+```mermaid
+flowchart LR
+    H["very_cool_maths.h"] -.->|included by| M["main.c"]
+    H -.->|included by| V["very_cool_maths.c"]
+    M -->|compile| MO["main.o"]
+    V -->|compile| VO["very_cool_maths.o"]
+    MO -->|link| P["very_cool_project"]
+    VO -->|link| P
 ```
 
-The header file is included while each source file is compiled:
-
-```text
-very_cool_maths.h
-        |
-        ├── included by main.c
-        |
-        └── included by very_cool_maths.c
-```
-
-The header provides declarations. It does not produce its own object file.
+The header file is included while each source file is compiled (the dotted arrows). The header provides declarations. It does not produce its own object file.
 
 For now, the commands to remember are:
 

@@ -208,4 +208,124 @@ Header file:  what the module provides
 Source file:  how the module works
 ```
 
-Functions that are private to one source file can be declared as `static`, as covered on the Static Functions page.
+Functions and variables that are private to one source file can be declared as `static`, as covered in [static functions]({% link docs/functions/static_functions.md %}).
+
+## Splitting a menu program
+
+Unit 2.1 Activity 3 and the Unit 2 project template split a menu program into three modules. To see why, here is the start of a menu program with everything in `main.c`:
+
+```c
+int main(void)
+{
+    int selection;
+    int value;
+
+    scanf("%d", &selection);
+    scanf("%d", &value);
+
+    if (selection == 1) {
+        printf("%d\n", value * value);
+    }
+
+    // more menu options...
+}
+```
+
+This is hard to test and hard to grow:
+
+- the calculation is tangled up with reading the keyboard
+- the answer is tangled up with printing
+- to check one calculation, you have to drive the whole menu by typing
+- the calculation cannot be reused anywhere else
+- one big file gets hard to find your way around
+
+### Three files, three jobs
+
+The template gives each part of the program its own module:
+
+| File | Job | Contains |
+|---|---|---|
+| `main.c` | command-line interface and FSM | prompts, output and state transitions |
+| `input.c` and `input.h` | validated input | `read_integer()`, which reads and converts whole lines |
+| `funcs.c` and `funcs.h` | reusable logic | `square_int()` and `cube_int()`, which calculate results without the terminal |
+
+Each file has one clear reason to change. A new menu option changes `main.c`, stricter input checking changes `input.c`, and a better calculation changes `funcs.c`.
+
+```mermaid
+flowchart LR
+    Main["main.c<br/>CLI and FSM"]
+    Input["input.c<br/>validated input"]
+    Funcs["funcs.c<br/>reusable logic"]
+    Tests["test_funcs.c<br/>unit tests"]
+
+    Main --> Input
+    Main --> Funcs
+    Tests --> Funcs
+```
+
+`main.c` calls the other modules; they never call `main.c`. The functions in `funcs.c` do not call `scanf()`, and preferably not `printf()` either. They take values as parameters and return results:
+
+```c
+// Hard to test: reads the keyboard and prints the answer
+void square_from_keyboard(void)
+{
+    int value;
+
+    scanf("%d", &value);
+    printf("%d\n", value * value);
+}
+
+// Easy to test: value in, result out
+int square_int(int value)
+{
+    return value * value;
+}
+```
+
+`main.c` does the reading and printing, and asks `funcs.c` for the answer:
+
+```c
+if (!read_integer("Enter an integer: ", &value)) {
+    printf("Invalid integer. Returning to the menu.\n");
+    return;
+}
+
+printf("Result: %d\n", square_int(value));
+```
+
+Because `square_int()` never touches the terminal, a separate test program can call it with known values and check the results. That is the arrow from `test_funcs.c` in the diagram, and it is how [testing]({% link docs/debugging/testing.md %}) works in Unit 2.
+
+### The header is the menu
+
+The header file is the menu: it lists what is on offer. The source file is the kitchen: it is where the work is done.
+
+```c
+// funcs.h
+
+#ifndef FUNCS_H
+#define FUNCS_H
+
+int square_int(int value);
+int cube_int(int value);
+int funcs_get_operation_count(void);
+void funcs_reset_operation_count(void);
+
+#endif
+```
+
+`main.c` and `test_funcs.c` order from the menu by including `funcs.h`. They never go into the kitchen: anything in `funcs.c` that is not on the menu, such as the private `operation_count` variable, stays there. See [private variables in a source file]({% link docs/functions/static_functions.md %}#private-variables-in-a-source-file).
+
+The whole application is built from all three source files:
+
+```bash
+gcc -Wall -Wextra -Wpedantic -std=c11 main.c funcs.c input.c -o application.out
+```
+
+In practice the template's [Makefile]({% link docs/projects/makefiles.md %}) runs this command for you.
+
+The main points to remember are:
+
+- a header file says what a module provides; its source file says how it works
+- include headers, never `.c` files, and compile every `.c` file
+- in Unit 2, `main.c` owns the interface and the FSM, `input.c` reads input and `funcs.c` holds the reusable logic
+- reusable functions take values as parameters and return results, without `scanf()` or `printf()`, so they can be tested directly

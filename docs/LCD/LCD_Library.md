@@ -1,6 +1,7 @@
 ---
-title: LCD Library Overview
+title: LCD library overview
 parent: LCD
+grand_parent: Console Libraries
 nav_order: 1
 layout: default
 ---

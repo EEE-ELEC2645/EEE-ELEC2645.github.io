@@ -1,5 +1,5 @@
 ---
-title: Debug vs Release
+title: Debug vs release
 parent: Debugging
 nav_order: 5
 layout: default
@@ -116,7 +116,7 @@ int main(void)
     printf("Debug: value = %d\n", value);
 #endif
 
-    printf("Program running\n");
+    printf("The answer is %d\n", value);
 
     return 0;
 }
@@ -132,7 +132,7 @@ Output:
 
 ```text
 Debug: value = 42
-Program running
+The answer is 42
 ```
 
 Release build:
@@ -144,8 +144,16 @@ gcc main.c -o main
 Output:
 
 ```text
-Program running
+The answer is 42
 ```
+The same source file gives two different programs:
+
+```mermaid
+flowchart LR
+    S["main.c"] -->|"gcc -g -O0 -DDEBUG"| D["debug build<br/>debugger works, debug prints included"]
+    S -->|"gcc -O2"| R["release build<br/>faster and smaller, no debug prints"]
+```
+
 ## Debug and release targets in a Makefile
 
 In practice, we normally do not type the debug and release compiler options manually.

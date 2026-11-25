@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="250" viewBox="0 0 640 250" role="img" aria-labelledby="title desc">
+  <title id="title">An array of five integers in memory</title>
+  <desc id="desc">The array numbers is five boxes next to each other, labelled [0] to [4], holding 10, 20, 30, 40 and 50 at addresses 0x1000 to 0x1010. A dashed red box after them, labelled [5] and holding a question mark, is marked not part of the array.</desc>
+  <style>
+    .card { fill: #302f38; stroke: #4a4955; }
+    .name { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 17px; fill: #f0f0f0; }
+    .type { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .value { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #f0f0f0; }
+    .addr { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .note { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #a9a9b8; }
+    .var { fill: #263548; stroke: #7cb7ff; stroke-width: 2.5; }
+    .bad { fill: #3d2426; stroke: #ff7b72; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .badtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #ff7b72; }
+    .badvalue { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #ff7b72; }
+    .badnote { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #ff7b72; }
+  </style>
+  <rect class="card" x="1" y="1" width="638" height="248" rx="12"/>
+  <text class="name" x="60" y="46">numbers</text>
+  <text class="type" x="148" y="46">int[5]</text>
+  <text class="type" x="100" y="84" text-anchor="middle">[0]</text>
+  <rect class="var" x="60" y="96" width="80" height="56"/>
+  <text class="value" x="100" y="132" text-anchor="middle">10</text>
+  <text class="addr" x="100" y="176" text-anchor="middle">0x1000</text>
+  <text class="type" x="180" y="84" text-anchor="middle">[1]</text>
+  <rect class="var" x="140" y="96" width="80" height="56"/>
+  <text class="value" x="180" y="132" text-anchor="middle">20</text>
+  <text class="addr" x="180" y="176" text-anchor="middle">0x1004</text>
+  <text class="type" x="260" y="84" text-anchor="middle">[2]</text>
+  <rect class="var" x="220" y="96" width="80" height="56"/>
+  <text class="value" x="260" y="132" text-anchor="middle">30</text>
+  <text class="addr" x="260" y="176" text-anchor="middle">0x1008</text>
+  <text class="type" x="340" y="84" text-anchor="middle">[3]</text>
+  <rect class="var" x="300" y="96" width="80" height="56"/>
+  <text class="value" x="340" y="132" text-anchor="middle">40</text>
+  <text class="addr" x="340" y="176" text-anchor="middle">0x100c</text>
+  <text class="type" x="420" y="84" text-anchor="middle">[4]</text>
+  <rect class="var" x="380" y="96" width="80" height="56"/>
+  <text class="value" x="420" y="132" text-anchor="middle">50</text>
+  <text class="addr" x="420" y="176" text-anchor="middle">0x1010</text>
+  <text class="badtext" x="500" y="84" text-anchor="middle">[5]</text>
+  <rect class="bad" x="464" y="96" width="76" height="56"/>
+  <text class="badvalue" x="502" y="132" text-anchor="middle">?</text>
+  <text class="badnote" x="502" y="176" text-anchor="middle">not part of</text>
+  <text class="badnote" x="502" y="193" text-anchor="middle">the array</text>
+  <text class="note" x="320" y="232" text-anchor="middle">Each int takes 4 bytes. Addresses are made up: real ones are much longer.</text>
+</svg>

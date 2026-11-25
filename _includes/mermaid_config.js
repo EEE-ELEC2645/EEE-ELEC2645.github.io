@@ -1,0 +1,83 @@
+{
+  "theme": "base",
+  "fontFamily": "\"DejaVu Sans\", Arial, sans-serif",
+  "themeVariables": {
+    "darkMode": true,
+    "fontFamily": "\"DejaVu Sans\", Arial, sans-serif",
+    "fontSize": "14px",
+
+    "background": "#27262b",
+    "primaryColor": "#263548",
+    "primaryBorderColor": "#7cb7ff",
+    "primaryTextColor": "#f0f0f0",
+    "secondaryColor": "#302f38",
+    "secondaryBorderColor": "#4a4955",
+    "secondaryTextColor": "#f0f0f0",
+    "tertiaryColor": "#302f38",
+    "tertiaryBorderColor": "#4a4955",
+    "tertiaryTextColor": "#f0f0f0",
+    "textColor": "#f0f0f0",
+    "lineColor": "#a9a9b8",
+
+    "mainBkg": "#263548",
+    "nodeBorder": "#7cb7ff",
+    "nodeTextColor": "#f0f0f0",
+    "edgeLabelBackground": "#27262b",
+    "clusterBkg": "#302f38",
+    "clusterBorder": "#4a4955",
+    "titleColor": "#f0f0f0",
+
+    "actorBkg": "#263548",
+    "actorBorder": "#7cb7ff",
+    "actorTextColor": "#f0f0f0",
+    "actorLineColor": "#77768a",
+    "signalColor": "#b392f0",
+    "signalTextColor": "#f0f0f0",
+    "noteBkgColor": "#302f38",
+    "noteBorderColor": "#4a4955",
+    "noteTextColor": "#f0f0f0",
+    "activationBkgColor": "#302f38",
+    "activationBorderColor": "#4a4955",
+    "labelBoxBkgColor": "#302f38",
+    "labelBoxBorderColor": "#4a4955",
+    "labelTextColor": "#f0f0f0",
+    "loopTextColor": "#f0f0f0",
+
+    "stateBkg": "#263548",
+    "stateBorder": "#7cb7ff",
+    "stateLabelColor": "#f0f0f0",
+    "transitionColor": "#a9a9b8",
+    "transitionLabelColor": "#f0f0f0",
+    "labelBackgroundColor": "#27262b",
+    "compositeBackground": "#302f38",
+    "altBackground": "#302f38",
+    "specialStateColor": "#f0f0f0",
+    "innerEndBackground": "#27262b"
+  },
+  "flowchart": {
+    "useMaxWidth": true,
+    "nodeSpacing": 30,
+    "rankSpacing": 35,
+    "padding": 10,
+    "diagramPadding": 8
+  },
+  "sequence": {
+    "useMaxWidth": true,
+    "mirrorActors": false,
+    "width": 120,
+    "height": 40,
+    "actorMargin": 40,
+    "boxMargin": 8,
+    "noteMargin": 8,
+    "messageMargin": 28,
+    "diagramMarginX": 8,
+    "diagramMarginY": 8,
+    "messageFontSize": 14,
+    "noteFontSize": 14,
+    "actorFontSize": 14
+  },
+  "state": {
+    "useMaxWidth": true,
+    "padding": 6
+  }
+}

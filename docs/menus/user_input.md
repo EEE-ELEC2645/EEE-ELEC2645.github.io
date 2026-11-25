@@ -1,323 +1,312 @@
 ---
-title: User Input Handling
+title: User input
 parent: Command Line Basics
-nav_order: 1
+nav_order: 3
 layout: default
 ---
 
-# Safe User Input Handling in C
+# User input
 
-Asking users for input is common in C programmes, but doing so safely can be tricky. This guide covers best practices for reading user input without falling into common pitfalls associated with functions like `scanf()`. Incorrect handling can lead to undefined behaviour, security vulnerabilities, and crashes — famous bugs such as Heartbleed were caused by improper input handling.
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
-The following is based on the excellent article by Felix Palmen: “A Beginner's Guide Away from `scanf()`”.
+Every program eventually meets a user who types `banana` when asked for a number. This page shows how to read input so that your program copes: read the whole line with `fgets()`, then check it with `sscanf()`. This is the `read_integer()` pattern used in Unit 2.1 Activity 3 and the Unit 2 project template.
 
-***
+Parts of this page are based on Felix Palmen's article "A beginner's guide away from `scanf()`".
 
-## Why Not Just Use `scanf()`?
+## What goes wrong with `scanf()`
 
-`scanf()` isn’t inherently broken, but for beginners, it can lead to serious problems. Here’s **Rule 0**:
+`scanf("%d", &number)` is fine when the user types a number. When they do not, two things go wrong.
 
-> **Rule 0:** Don’t use `scanf()` unless you know exactly what you’re doing.
+### Bad input stays in the input
 
-***
-
-## 1. Reading a Number from the User
-
-### The Classic Example
+If `scanf()` cannot read a number, it leaves the text where it is. A loop that tries again reads the same text again, forever:
 
 ```c
-// example1.c
-#include <stdio.h>
-int main(void) {
-    int a;
-    printf("enter a number: ");
-    scanf("%d", &a);
-    printf("You entered %d.\n", a);
+printf("Enter a number: ");
+while (scanf("%d", &number) != 1) {
+    printf("That is not a number. Try again: ");
 }
 ```
 
-Looks fine? Try this:
+Typing `abc` produces:
 
-    $ ./example1
-    enter a number: abcdefgh
-    You entered 38.
+```text
+Enter a number: abc
+That is not a number. Try again: That is not a number. Try again: That is not a number. Try again: ...
+```
 
-**Why?**
+Press `Ctrl+C` to stop it.
 
-*   `scanf()` tried to parse an integer but found no digits.
-*   The variable `a` remains **uninitialised**, leading to **undefined behaviour**.
+### Part of the input is accepted
 
-***
-
-### Undefined Behaviour in C
-
-C doesn’t protect you from mistakes. If input doesn’t match the format, `scanf()` leaves variables untouched. Using uninitialised variables can crash your programme or produce rubbish values.
-
-***
-
-### Retrying with `scanf()`
+`scanf()` reads as much of a number as it can and leaves the rest for the next read. In a menu that reads a choice and then a number:
 
 ```c
-#include <stdio.h>
-int main(void) {
-    int a;
-    printf("enter a number: ");
-    while (scanf("%d", &a) != 1) {
-        printf("enter a number: ");
+printf("Select item: ");
+scanf("%d", &choice);
+printf("Enter a number: ");
+scanf("%d", &number);
+```
+
+Typing `4.5` at the first prompt selects option 4. The `.5` is left behind, so the second `scanf()` fails straight away without waiting for the user:
+
+```text
+Select item: 4.5
+Enter a number: choice = 4, number = 0
+```
+
+The underlying problem is that `scanf()` is a tool for *parsing* text (picking values out of it), not for *reading* what the user typed.
+
+## Read a whole line with `fgets()`
+
+`fgets()` reads one whole line, including the newline from the Enter key, into a character array:
+
+```c
+char line[64];
+
+if (fgets(line, sizeof(line), stdin) == NULL) {
+    // no input: the user pressed Ctrl+D, or input ended
+}
+```
+
+- the second argument is the size of the array, so `fgets()` never writes past the end
+- `fgets()` returns `NULL` if there is nothing left to read
+- whatever the user typed has now been taken out of the input, so bad text cannot get stuck
+
+## Check the line with `sscanf()`
+
+`sscanf()` works like `scanf()`, but reads from a string instead of the keyboard. It returns the number of values it filled in. The format `"%d %c"` asks for a number and then any other character:
+
+```c
+int value;
+char extra;
+
+if (sscanf(line, "%d %c", &value, &extra) == 1) {
+    // exactly one number and nothing else
+}
+```
+
+- `%d` skips any spaces, then reads a whole number
+- the space skips any spaces and the newline after it
+- `%c` catches the first character left over, if there is one
+
+So a return value of exactly 1 means the line held one number and nothing else:
+
+| User types | `sscanf()` returns | Why |
+| --- | --- | --- |
+| `42` | 1 | a number and nothing else |
+| `  42  ` | 1 | spaces are skipped |
+| `-7` | 1 | negative numbers are fine |
+| `42abc` | 2 | `extra` caught the `a` |
+| `4.5` | 2 | `extra` caught the `.` |
+| `12 13` | 2 | `extra` caught the `1` of `13` |
+| `abc` | 0 | no number at the start |
+| (just Enter) | -1 (`EOF`) | the line is empty |
+
+## The `read_integer()` function
+
+Putting the two together gives the function used in Activity 3 and the project template:
+
+```c
+// Reads one whole line and checks that it holds exactly one integer.
+// Returns 1 and stores the number in *value if the input is valid.
+// Returns 0 if it is not, and leaves *value unchanged.
+int read_integer(const char *prompt, int *value)
+{
+    char line[64];
+    char extra;
+
+    printf("%s", prompt);
+
+    if (fgets(line, sizeof(line), stdin) == NULL) {
+        return 0;
     }
-    printf("You entered %d.\n", a);
+
+    if (sscanf(line, "%d %c", value, &extra) != 1) {
+        return 0;
+    }
+
+    return 1;
 }
 ```
 
-**Problem:** If input is invalid (e.g., `abc`), `scanf()` never “consumes” it, meaning the buffer is never cleared, causing an infinite loop.
+The function has two results: whether the input was valid, and the number itself. The return value reports success or failure, and the number comes back through the pointer `value`. See [pointers and functions]({% link docs/pointers/pointer_functions.md %}) if this pattern is new.
 
-***
-
-> **Rule 1:** `scanf()` is for **parsing** (extracting formatted data), not for **reading raw input**.
-
-***
-
-## 2. Reading a String from the User
-
-### Unsafe Example
+## Complete example
 
 ```c
 #include <stdio.h>
-int main(void) {
-    char name[12];
-    printf("What's your name? ");
-    scanf("%s", name);
-    printf("Hello %s!\n", name);
+
+int read_integer(const char *prompt, int *value);
+
+int main(void)
+{
+    int age = 0;
+
+    for (int attempt = 0; attempt < 3; attempt++) {
+        if (read_integer("Enter your age: ", &age)) {
+            printf("In 10 years you will be %d.\n", age + 10);
+            return 0;
+        }
+        printf("Please enter a whole number, like 19.\n");
+    }
+
+    printf("Too many invalid attempts.\n");
+    return 1;
+}
+
+// Reads one whole line and checks that it holds exactly one integer.
+// Returns 1 and stores the number in *value if the input is valid.
+// Returns 0 if it is not, and leaves *value unchanged.
+int read_integer(const char *prompt, int *value)
+{
+    char line[64];
+    char extra;
+
+    printf("%s", prompt);
+
+    if (fgets(line, sizeof(line), stdin) == NULL) {
+        return 0;
+    }
+
+    if (sscanf(line, "%d %c", value, &extra) != 1) {
+        return 0;
+    }
+
+    return 1;
 }
 ```
 
-**Issue:** Buffer overflow if input exceeds 11 characters → leading to the **dreaded undefined behaviour**.
+This produces (typing `abc`, then `12abc`, then `19`):
 
-***
+```text
+Enter your age: abc
+Please enter a whole number, like 19.
+Enter your age: 12abc
+Please enter a whole number, like 19.
+Enter your age: 19
+In 10 years you will be 29.
+```
 
-### Fix with Field Width
+The program gives up after three attempts. A loop that keeps asking forever would never end if the input ran out (for example after `Ctrl+D`), because `read_integer()` would keep returning 0.
+
+## Valid number, wrong value
+
+`read_integer()` checks that the user typed a number. It cannot know which numbers make sense for your program, so check the range yourself:
 
 ```c
-#include <stdio.h>
-int main(void) {
-    char name[40];
-    printf("What's your name? ");
-    scanf("%39s", name);
-    printf("Hello %s!\n", name);
+if (!read_integer("Enter your age: ", &age)) {
+    printf("Please enter a whole number.\n");
+} else if (age < 0 || age > 150) {
+    printf("%d is not a realistic age.\n", age);
+} else {
+    printf("In 10 years you will be %d.\n", age + 10);
 }
 ```
 
-**Rule 2:** Always use **field widths** with `%s` to prevent overflow.
+The same applies to menus: `7` is a valid number but not a valid menu option, which is what `default` in the `switch` is for.
 
-***
+## Reading text
 
-### `%s` Reads Only One Word
-
-`scanf("%s", name)` stops at whitespace. For full lines, use scansets:
-
-```c
-scanf(" %39[^\n]", name);
-```
-
-But beware: pressing Enter without input leaves `name` uninitialised.
-
-***
-
-> **Rule 3:** `scanf()` format strings differ from `printf()`. Read carefully.
-
-***
-
-## 3. A Better Way: `fgets()`
-
-`fgets()` reads a whole line safely:
+To read a line of text, such as a name, use `fgets()` on its own. The line includes the newline from the Enter key, so remove it:
 
 ```c
 #include <stdio.h>
 #include <string.h>
-int main(void) {
-    char name[40];
+
+int main(void)
+{
+    char name[32];
+
     printf("What's your name? ");
-    if (fgets(name, 40, stdin)) {
-        name[strcspn(name, "\n")] = 0; // remove newline
-        printf("Hello %s!\n", name);
+
+    if (fgets(name, sizeof(name), stdin) == NULL) {
+        return 1;
     }
+
+    name[strcspn(name, "\n")] = '\0';  // remove the newline, if there is one
+    printf("Hello %s!\n", name);
+    return 0;
 }
 ```
 
-We have to use `strcspn()` to strip the newline character (when the user hit enter) that `fgets()` includes.
+This produces (typing `Ada Lovelace`):
 
-***
+```text
+What's your name? Ada Lovelace
+Hello Ada Lovelace!
+```
 
-## 4. Reading Numbers Without `scanf()`
+`strcspn(name, "\n")` returns the position of the first newline (or the end of the string if there is none), and the `'\0'` ends the string there. Without that line the output would be:
 
-Use `atoi` (simple but limited)
+```text
+Hello Ada Lovelace
+!
+```
+
+Unlike `scanf("%s", ...)`, `fgets()` keeps the spaces, so the whole name is read.
+
+## Do not use `atoi()` or `atof()`
+
+You will see `atoi()` (text to `int`) and `atof()` (text to `double`) in older code. Avoid them:
+
+- `atoi("abc")` and `atoi("0")` both return 0, so you cannot tell an error from a real zero
+- `atoi("12abc")` returns 12 and ignores the rest without telling you
+- a number too big for an `int` gives undefined behaviour
+
+Use `read_integer()`, or [`strtol()`]({% link docs/menus/user_input_strtol.md %}) when you need more control.
+
+## Common mistakes
+
+### Mixing `scanf()` and `fgets()`
+
+`scanf("%d", &age)` reads the number but leaves the newline from the Enter key in the input. A following `fgets()` reads that newline as an empty line and does not wait for the user:
+
+```text
+Enter your age: 19
+Enter your name: Hello , you are 19.
+```
+
+Use `fgets()` for every input in the program, with `read_integer()` for numbers.
+
+### Using the value after a failed read
+
+If `read_integer()` returns 0, the number was not written. Do not use it:
 
 ```c
-#include <stdio.h>
-#include <stdlib.h>
-int main(void) {
-    int a;
-    char buf[1024];
-    do {
-        printf("enter a number: ");
-        if (!fgets(buf, 1024, stdin)) return 1;
-        a = atoi(buf);
-    } while (a == 0);
-    printf("You entered %d.\n", a);
-}
+read_integer("Enter a number: ", &number);
+printf("Double is %d\n", 2 * number);  // wrong if the read failed
 ```
 
-### `atoi()` — *ASCII to Integer*
+Always check the return value first.
 
-*   **Purpose:** Converts a string (e.g., `"123"`) into an `int`.
-*   **Header:** `#include <stdlib.h>`
-*   **Usage:**
-    ```c
-    int value = atoi("123"); // value = 123
-    ```
-*   **Behaviour:**
-    *   Reads characters from the start of the string until a non-digit is found.
-    *   Ignores leading whitespace.
-    *   Returns `0` if no valid conversion is possible.
-*   **Limitations:**
-    *   No error reporting — you can’t tell if `0` means “invalid input” or actual zero.
-    *   Doesn’t handle overflow or invalid characters well - what happens if you input "123abc"? or a number larger than `INT_MAX`?
+### `fflush(stdin)`
 
-Another simple function is `atof()` for floating-point numbers.
+You may see `fflush(stdin)` suggested online for clearing bad input. The C standard only defines `fflush()` for output, so on input it is undefined behaviour: it clears the input on some systems and does nothing on others. Reading whole lines with `fgets()` means there is nothing to clear.
 
-### `atof()` — *ASCII to Floating-point*
-*   **Purpose:** Converts a string (e.g., `"3.14"`) into a `double`.
-*   **Header:** `#include <stdlib.h>`
-*   **Usage:**
-    ```c
-    double value = atof("3.14"); // value = 3.14
-    ```
-*   **Behaviour:**
-    *   Similar to `atoi()`, but parses floating-point numbers.
-    *   Stops at the first invalid character.
-*   **Limitations:**
-    *   Same as `atoi()` — no error checking, no way to detect invalid input reliably.
+### Very large numbers
 
-***
+`sscanf()` with `%d` cannot report a number that is too big for an `int`. Typing `99999999999` in the complete example produces:
 
-### Better Alternatives
-
-*   Use **`strtol()`** for integers and **`strtod()`** for floating-point values:
-    *   They provide error checking via `endptr` and `errno`.
-    *   Safer for robust input handling.
-
-
-### Using `strtol()` (robust)
-
-```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-int main(void) {
-    long a;
-    char buf[1024];
-    int success;
-    do {
-        printf("enter a number: ");
-        if (!fgets(buf, 1024, stdin)) return 1;
-        char *endptr;
-        errno = 0;
-        a = strtol(buf, &endptr, 10);
-        if (errno == ERANGE || endptr == buf || (*endptr && *endptr != '\n'))
-            success = 0;
-        else
-            success = 1;
-    } while (!success);
-    printf("You entered %ld.\n", a);
-}
+```text
+Enter your age: 99999999999
+In 10 years you will be 1215752201.
 ```
 
-### `strtol()` — *String to Long Integer*
+The C standard says this is undefined behaviour, so any result is possible. [Checking numbers with `strtol()`]({% link docs/menus/user_input_strtol.md %}) shows how to detect it.
 
-*   **Purpose:** Converts a string (e.g., `"123"`) into a `long` integer with **error checking**.
-*   **Header:**
-    ```c
-    #include <stdlib.h>
-    #include <errno.h>
-    ```
-*   **Function Signature:**
-    ```c
-    long strtol(const char *nptr, char **endptr, int base);
-    ```
-*   **Parameters:**
-    *   `nptr`: Pointer to the string to convert.
-    *   `endptr`: Pointer to a pointer — after conversion, it points to the first character that wasn’t converted.
-    *   `base`: Number base (e.g., `10` for decimal, `16` for hex).
+The main points to remember are:
 
-### How It Works
-
-*   Reads characters from the string and converts them to a number.
-*   Stops at the first invalid character.
-*   Sets `errno` to `ERANGE` if the number is too large or too small.
-*   Allows you to check:
-    *   If **nothing was converted** (`endptr == nptr`).
-    *   If there are **extra characters** after the number (`*endptr != '\0'` or `'\n'`).
-
-### Why `strtol()` is Better than `atoi()`
-
-*   **Error detection:** Can tell if conversion failed or if extra characters exist.
-*   **Range checking:** Detects overflow/underflow.
-*   **Flexible:** Works with different bases (binary, hex, etc.).
-
-***
-
-## 5. Can `scanf()` Be Fixed?
-
-Yes, but it’s tricky:
-
-```c
-#include <stdio.h>
-int main(void) {
-    int a, rc;
-    printf("enter a number: ");
-    while ((rc = scanf("%d", &a)) == 0) {
-        scanf("%*[^\n]"); // discard invalid input
-        printf("enter a number: ");
-    }
-    if (rc == EOF)
-        printf("Nothing more to read.\n");
-    else
-        printf("You entered %d.\n", a);
-}
-```
-
-***
-
-> **Rule 4:** `scanf()` is powerful but dangerous. Prefer simpler, safer functions like `fgets()` for reading input.
-
-***
-
-## Best Practices for Safe Input in C
-
-1.  **Avoid `scanf()` for general input**  
-    Use `fgets()` for reading lines and then parse manually.
-
-2.  **Always validate input**  
-    Check return values of functions like `fgets()`, `strtol()`, etc.
-
-3.  **Prevent buffer overflows**
-    *   Use field widths with `%s` if you must use `scanf()`.
-    *   Allocate enough space for strings (including `\0` terminator).
-
-4.  **Use robust conversion functions**
-    *   Prefer `strtol()`, `strtod()`, etc., over `atoi()` for better error handling.
-
-5.  **Handle edge cases**
-    *   Empty input
-    *   Extra characters after numbers
-    *   Out-of-range values
-
-6.  **Never use `fflush(stdin)`**  
-    It’s undefined behaviour in C.
-
-7.  **Read the manual**  
-    `scanf()` and `printf()` format strings differ—know the rules.
-
-***
-
-```
+- `scanf()` leaves bad input behind and accepts partial numbers
+- read every input as a whole line with `fgets()`
+- check the line with `sscanf(line, "%d %c", ...)`: a return value of exactly 1 means one number and nothing else
+- return success or failure from the function, and the value through a pointer
+- check the range of a valid number yourself
+- remove the newline from text read with `fgets()`

@@ -109,6 +109,16 @@ int total = add(10, 20);
 
 After this line, `total` contains `30`.
 
+```mermaid
+sequenceDiagram
+    participant M as main()
+    participant A as add()
+    M->>A: add(10, 20)
+    Note over A: a is 10, b is 20
+    A-->>M: return a + b, which is 30
+    Note over M: total = 30
+```
+
 The `return` statement supplies the result and ends the function:
 
 ```c

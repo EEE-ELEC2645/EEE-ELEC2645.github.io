@@ -1,6 +1,7 @@
 ---
-title: Joystick Data Processing Pipeline
+title: Joystick data processing pipeline
 parent: Joystick
+grand_parent: Console Libraries
 nav_order: 1
 layout: default
 ---

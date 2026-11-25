@@ -1,5 +1,5 @@
 ---
-title: Fixed-Width Integer Types (stdint.h)
+title: Fixed-width integer types (stdint.h)
 parent: C Basics
 nav_order: 2
 layout: default
@@ -35,6 +35,8 @@ The header file `<stdint.h>` provides **fixed-width integer types** that are *al
 | `uint32_t` | 4 bytes | 0 to 4.2 billion |
 
 **Key:** The number in the type name (`8`, `16`, `32`) tells you the exact bit width.
+
+![uint8_t drawn as a row of 8 bits (1 byte), uint16_t as 16 bits (2 bytes) and uint32_t as 32 bits (4 bytes), to the same scale, with bit 0 on the right.]({{ "/assets/images/stdint_widths.svg" | relative_url }})
 
 ---
 

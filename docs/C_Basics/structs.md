@@ -1,7 +1,7 @@
 ---
 title: Structs
-parent: C Basics
-nav_order: 10
+parent: Arrays, Strings and Structs
+nav_order: 5
 layout: default
 ---
 
@@ -50,6 +50,8 @@ We access each member using the dot operator `.`:
 player_position.x = 10;
 player_position.y = 20;
 ```
+
+![player_position, of type struct point, drawn as one box containing two member boxes: .x holding 10 and .y holding 20.]({{ "/assets/images/structs_point.svg" | relative_url }})
 
 We can then use the members like normal variables:
 
@@ -343,6 +345,8 @@ This prints:
 ```text
 10
 ```
+
+![path is an array of three struct point values: path[0] holds x 0 and y 0, path[1] holds x 10 and y 5, path[2] holds x 20 and y 15. The x member of path[1], holding 10, is picked out as path[1].x: the index chooses the struct and the dot chooses the member.]({{ "/assets/images/structs_array.svg" | relative_url }})
 
 We can process the complete array using a `for` loop:
 
