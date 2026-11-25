@@ -61,6 +61,8 @@ heal_pokemon(&pikachu);
 
 The function now has a pointer to the original `pikachu` struct.
 
+![Two areas of memory, main() and heal_pokemon(). In main(), the struct pikachu at address 0x1000 has members .level holding 12 and .hp holding 50. In heal_pokemon(), the pointer pokemon holds 0x1000 and points to pikachu: pokemon->hp = 50; follows the pointer to the hp member.]({{ "/assets/images/pointers_structs_arrow.svg" | relative_url }})
+
 ## The `->` operator
 
 We use `.` when working directly with a struct variable:
@@ -87,7 +89,7 @@ is equivalent to:
 (*pokemon).hp
 ```
 
-The `->` form is much easier to read, and its nearly always used.
+The `->` form is much easier to read, and it is nearly always used.
 
 So basically what we need to keep in mind is:
 

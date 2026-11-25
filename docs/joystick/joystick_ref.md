@@ -1,6 +1,7 @@
 ---
-title: Joystick Library Reference
+title: Joystick library reference
 parent: Joystick
+grand_parent: Console Libraries
 nav_order: 2
 layout: default
 ---

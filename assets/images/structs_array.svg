@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="250" viewBox="0 0 640 250" role="img" aria-labelledby="title desc">
+  <title id="title">An array of structs</title>
+  <desc id="desc">path is an array of three struct point values. path[0] holds x 0 and y 0, path[1] holds x 10 and y 5, path[2] holds x 20 and y 15. The x member of path[1], holding 10, is highlighted as path[1].x.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f2a65a"/>
+    </marker>
+    <marker id="arrow-old" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#77768a"/>
+    </marker>
+    <marker id="arrow-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff7b72"/>
+    </marker>
+    <marker id="arrow-copy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b392f0"/>
+    </marker>
+  </defs>
+  <style>
+    .card { fill: #302f38; stroke: #4a4955; }
+    .region { fill: #393842; stroke: #5a5968; stroke-width: 1.5; }
+    .divider { stroke: #4a4955; stroke-width: 1.5; }
+    .name { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 17px; fill: #f0f0f0; }
+    .type { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .value { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #f0f0f0; }
+    .cell { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #f0f0f0; }
+    .addr { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .note { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #a9a9b8; }
+    .code { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; }
+    .var { fill: #263548; stroke: #7cb7ff; stroke-width: 2.5; }
+    .line { stroke: #7cb7ff; stroke-width: 2.5; fill: none; }
+    .ptr { fill: #3d2f22; stroke: #f2a65a; stroke-width: 2.5; }
+    .arrow { stroke: #f2a65a; stroke-width: 3; fill: none; }
+    .exprlabel { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #f2a65a; }
+    .newlabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #f2a65a; }
+    .old { stroke: #77768a; stroke-width: 2.5; stroke-dasharray: 8 6; fill: none; }
+    .fadedbox { fill: none; stroke: #77768a; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .fadedtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #77768a; }
+    .oldlabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #8e8da0; }
+    .copy { stroke: #b392f0; stroke-width: 3; fill: none; }
+    .copylabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #b392f0; }
+    .bad { fill: #3d2426; stroke: #ff7b72; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .badarrow { stroke: #ff7b72; stroke-width: 3; stroke-dasharray: 8 6; fill: none; }
+    .badtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #ff7b72; }
+    .badcell { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #ff7b72; }
+    .badnote { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #ff7b72; }
+    .term { fill: #233a2a; stroke: #7ee787; stroke-width: 2.5; }
+    .termtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #7ee787; }
+  </style>
+  <rect class="card" x="1" y="1" width="638" height="248" rx="12"/>
+  <text class="name" x="40" y="40">struct point path[3]</text>
+  <text class="type" x="125" y="76" text-anchor="middle">path[0]</text>
+  <rect class="region" x="40" y="86" width="170" height="92" rx="8"/>
+  <text class="type" x="85" y="106" text-anchor="middle">.x</text>
+  <rect class="var" x="53" y="116" width="64" height="46" rx="6"/>
+  <text class="value" x="85" y="147" text-anchor="middle">0</text>
+  <text class="type" x="165" y="106" text-anchor="middle">.y</text>
+  <rect class="var" x="133" y="116" width="64" height="46" rx="6"/>
+  <text class="value" x="165" y="147" text-anchor="middle">0</text>
+  <text class="type" x="315" y="76" text-anchor="middle">path[1]</text>
+  <rect class="region" x="230" y="86" width="170" height="92" rx="8"/>
+  <text class="type" x="275" y="106" text-anchor="middle">.x</text>
+  <rect class="ptr" x="243" y="116" width="64" height="46" rx="6"/>
+  <text class="value" x="275" y="147" text-anchor="middle">10</text>
+  <text class="type" x="355" y="106" text-anchor="middle">.y</text>
+  <rect class="var" x="323" y="116" width="64" height="46" rx="6"/>
+  <text class="value" x="355" y="147" text-anchor="middle">5</text>
+  <text class="type" x="505" y="76" text-anchor="middle">path[2]</text>
+  <rect class="region" x="420" y="86" width="170" height="92" rx="8"/>
+  <text class="type" x="465" y="106" text-anchor="middle">.x</text>
+  <rect class="var" x="433" y="116" width="64" height="46" rx="6"/>
+  <text class="value" x="465" y="147" text-anchor="middle">20</text>
+  <text class="type" x="545" y="106" text-anchor="middle">.y</text>
+  <rect class="var" x="513" y="116" width="64" height="46" rx="6"/>
+  <text class="value" x="545" y="147" text-anchor="middle">15</text>
+  <text class="exprlabel" x="270" y="214" text-anchor="middle">path[1].x</text>
+  <line class="arrow" x1="270" y1="200" x2="270" y2="168" marker-end="url(#arrow)"/>
+  <text class="note" x="270" y="234" text-anchor="middle">index chooses the struct, <tspan class="code">.</tspan> chooses the member</text>
+</svg>

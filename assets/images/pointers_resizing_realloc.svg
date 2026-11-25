@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="500" viewBox="0 0 640 500" role="img" aria-labelledby="title desc">
+  <title id="title">realloc moving a block to a bigger one</title>
+  <desc id="desc">Before: values holds 0x5000 and points to a block of three ints, 10, 20 and 30. After realloc grows it to five ints, the block has moved: resized_values holds 0x6000 and points to a new block holding 10, 20, 30 and two uninitialised values. The old block at 0x5000 is freed, so values must not be used until values = resized_values.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f2a65a"/>
+    </marker>
+    <marker id="arrow-old" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#77768a"/>
+    </marker>
+    <marker id="arrow-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff7b72"/>
+    </marker>
+    <marker id="arrow-copy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b392f0"/>
+    </marker>
+  </defs>
+  <style>
+    .card { fill: #302f38; stroke: #4a4955; }
+    .region { fill: #393842; stroke: #5a5968; stroke-width: 1.5; }
+    .divider { stroke: #4a4955; stroke-width: 1.5; }
+    .name { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 17px; fill: #f0f0f0; }
+    .type { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .value { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #f0f0f0; }
+    .cell { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #f0f0f0; }
+    .addr { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .note { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #a9a9b8; }
+    .code { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; }
+    .var { fill: #263548; stroke: #7cb7ff; stroke-width: 2.5; }
+    .line { stroke: #7cb7ff; stroke-width: 2.5; fill: none; }
+    .ptr { fill: #3d2f22; stroke: #f2a65a; stroke-width: 2.5; }
+    .arrow { stroke: #f2a65a; stroke-width: 3; fill: none; }
+    .exprlabel { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #f2a65a; }
+    .newlabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #f2a65a; }
+    .old { stroke: #77768a; stroke-width: 2.5; stroke-dasharray: 8 6; fill: none; }
+    .fadedbox { fill: none; stroke: #77768a; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .fadedtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #77768a; }
+    .oldlabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #8e8da0; }
+    .copy { stroke: #b392f0; stroke-width: 3; fill: none; }
+    .copylabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #b392f0; }
+    .bad { fill: #3d2426; stroke: #ff7b72; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .badarrow { stroke: #ff7b72; stroke-width: 3; stroke-dasharray: 8 6; fill: none; }
+    .badtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #ff7b72; }
+    .badcell { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #ff7b72; }
+    .badnote { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #ff7b72; }
+    .term { fill: #233a2a; stroke: #7ee787; stroke-width: 2.5; }
+    .termtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #7ee787; }
+  </style>
+  <rect class="card" x="1" y="1" width="638" height="498" rx="12"/>
+  <text class="note" x="40" y="36">before</text>
+  <text class="name" x="110" y="70" text-anchor="middle">values</text>
+  <text class="type" x="110" y="87" text-anchor="middle">int *</text>
+  <rect class="ptr" x="45" y="96" width="130" height="52" rx="6"/>
+  <text class="value" x="110" y="130" text-anchor="middle">0x5000</text>
+  <rect class="var" x="260" y="100" width="52" height="44"/>
+  <text class="cell" x="286" y="129" text-anchor="middle">10</text>
+  <rect class="var" x="312" y="100" width="52" height="44"/>
+  <text class="cell" x="338" y="129" text-anchor="middle">20</text>
+  <rect class="var" x="364" y="100" width="52" height="44"/>
+  <text class="cell" x="390" y="129" text-anchor="middle">30</text>
+  <text class="addr" x="260" y="164">0x5000</text>
+  <line class="arrow" x1="177" y1="122" x2="254" y2="122" marker-end="url(#arrow)"/>
+  <line class="divider" x1="30" y1="186" x2="610" y2="186"/>
+  <text class="note" x="40" y="214">after <tspan class="code">realloc()</tspan> grows it to 5 ints (the block may move)</text>
+  <text class="name" x="110" y="242" text-anchor="middle">values</text>
+  <text class="type" x="110" y="259" text-anchor="middle">int *</text>
+  <rect class="ptr" x="45" y="268" width="130" height="52" rx="6"/>
+  <text class="value" x="110" y="302" text-anchor="middle">0x5000</text>
+  <rect class="bad" x="260" y="272" width="52" height="44"/>
+  <text class="badcell" x="286" y="301" text-anchor="middle">10</text>
+  <rect class="bad" x="312" y="272" width="52" height="44"/>
+  <text class="badcell" x="338" y="301" text-anchor="middle">20</text>
+  <rect class="bad" x="364" y="272" width="52" height="44"/>
+  <text class="badcell" x="390" y="301" text-anchor="middle">30</text>
+  <text class="badtext" x="260" y="336">0x5000: freed by realloc()</text>
+  <line class="badarrow" x1="177" y1="294" x2="254" y2="294" marker-end="url(#arrow-bad)"/>
+  <text class="name" x="110" y="370" text-anchor="middle">resized_values</text>
+  <text class="type" x="110" y="387" text-anchor="middle">int *</text>
+  <rect class="ptr" x="35" y="396" width="150" height="52" rx="6"/>
+  <text class="value" x="110" y="430" text-anchor="middle">0x6000</text>
+  <rect class="var" x="260" y="400" width="52" height="44"/>
+  <text class="cell" x="286" y="429" text-anchor="middle">10</text>
+  <rect class="var" x="312" y="400" width="52" height="44"/>
+  <text class="cell" x="338" y="429" text-anchor="middle">20</text>
+  <rect class="var" x="364" y="400" width="52" height="44"/>
+  <text class="cell" x="390" y="429" text-anchor="middle">30</text>
+  <rect class="var" x="416" y="400" width="52" height="44"/>
+  <text class="cell" x="442" y="429" text-anchor="middle">?</text>
+  <rect class="var" x="468" y="400" width="52" height="44"/>
+  <text class="cell" x="494" y="429" text-anchor="middle">?</text>
+  <text class="addr" x="260" y="464">0x6000</text>
+  <line class="arrow" x1="187" y1="422" x2="254" y2="422" marker-end="url(#arrow)"/>
+  <text class="newlabel" x="320" y="488" text-anchor="middle">then <tspan class="code">values = resized_values;</tspan> so the old address is never used again</text>
+</svg>

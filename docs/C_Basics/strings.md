@@ -1,7 +1,7 @@
 ---
 title: Strings
-parent: C Basics
-nav_order: 7
+parent: Arrays, Strings and Structs
+nav_order: 2
 layout: default
 ---
 
@@ -43,10 +43,7 @@ char greeting[] = "Hello";
 
 The compiler automatically adds the null terminator, so `greeting` contains six elements:
 
-```text
-Index:       0     1     2     3     4      5
-Character:  'H'   'e'   'l'   'l'   'o'   '\0'
-```
+![The array greeting has six elements, [0] to [5], holding 'H', 'e', 'l', 'l' and 'o', then the null terminator '\0' in element [5].]({{ "/assets/images/strings_hello.svg" | relative_url }})
 
 Although `"Hello"` contains five visible characters, the array needs six elements because of the null terminator.
 
@@ -71,6 +68,8 @@ char name[4] = "Goku";
 ```
 
 The four visible characters fill the entire array, leaving no room for `'\0'`. The result is an array of characters, but not a correctly terminated C string.
+
+![char name[5] = "Goku" holds 'G', 'o', 'k' and 'u' followed by '\0', which fits exactly. char name[4] = "Goku" holds only 'G', 'o', 'k' and 'u'; a dashed red box after it shows there is no room for the null terminator.]({{ "/assets/images/strings_size.svg" | relative_url }})
 
 ## Be careful with non-ASCII text
 
@@ -360,6 +359,8 @@ for (size_t i = 0; buffer[i] != '\0'; i++) {
 ```
 
 When the loop finds `'\n'`, it replaces it with `'\0'`, ending the string at that position.
+
+![Before: the array holds 'H', 'e', 'l', 'l', 'o', then '\n' from the Enter key, then '\0'. After buffer[i] = '\0' replaces the newline, the string ends after 'o'; the old '\0' after it is unused.]({{ "/assets/images/strings_fgets_newline.svg" | relative_url }})
 
 The `<string.h>` library provides another way to do this using `strcspn`, which we will cover on the next page.
 

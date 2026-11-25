@@ -1,6 +1,6 @@
 ---
 title: Debugging
-nav_order: 7
+nav_order: 11
 layout: default
 ---
 
@@ -23,10 +23,11 @@ Debugging can be frustrating, but it builds experience and resilience. Good habi
 ```c
 #include <stdio.h>
 
-int main(void) {
+int main(void)
+{
     int count = 0;
     while (count < 10) {
-        printf("I love C ❤️\n");
+        printf("I love C <3 <3 <3\n");
         count; // BUG: forgot to increment count!
     }
     return 0;
@@ -34,3 +35,14 @@ int main(void) {
 ```
 
 In the example above, the program compiles fine but when running it enters an infinite loop because `count` is never incremented. This is a classic example of a run-time bug.
+
+The compiler even warns you about this one, if you compile with `-Wall`:
+
+```text
+main.c: In function ‘main’:
+main.c:8:9: warning: statement with no effect [-Wunused-value]
+    8 |         count; // BUG: forgot to increment count!
+      |         ^~~~~
+```
+
+A warning is often a bug the compiler has spotted for you, so read warnings before you run the program.

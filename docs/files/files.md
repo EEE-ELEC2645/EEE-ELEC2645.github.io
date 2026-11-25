@@ -1,6 +1,6 @@
 ---
 title: Files
-nav_order: 3
+nav_order: 6
 layout: default
 ---
 
@@ -11,7 +11,8 @@ Covering the basics of how to load and save data to files.
 ```c
 #include <stdio.h>
 
-int main(void) {
+int main(void)
+{
     // Open a file for writing
     FILE *f = fopen("love_for_c.txt", "w");
 
@@ -28,7 +29,22 @@ int main(void) {
     // Close the file
     fclose(f);
 
-    printf("Love letter saved to love_for_c.txt \n");
+    printf("Love letter saved to love_for_c.txt\n");
     return 0;
 }
+```
+
+This prints:
+
+```text
+Love letter saved to love_for_c.txt
+```
+
+and `love_for_c.txt` contains:
+
+```text
+Dear C,
+I love you because you trust me to know what I'm doing, even when I don't!
+Yours truly,
+A Happy Programmer
 ```

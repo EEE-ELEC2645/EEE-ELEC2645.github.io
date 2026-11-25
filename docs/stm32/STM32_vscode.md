@@ -1,7 +1,7 @@
 ---
-title: VScode Projects
+title: VS Code projects
 parent: STM32
-nav_order: 1
+nav_order: 2
 layout: default
 ---
 

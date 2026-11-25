@@ -19,12 +19,12 @@ A header file may be included more than once through different parts of a projec
 
 For example:
 
-```text
-main.c
-├── game.h
-│   └── maths_utils.h
-└── scores.h
-    └── maths_utils.h
+```mermaid
+flowchart TD
+    M["main.c"] -->|includes| G["game.h"]
+    M -->|includes| S["scores.h"]
+    G -->|includes| U["maths_utils.h<br/>reached twice"]
+    S -->|includes| U
 ```
 
 Both `game.h` and `scores.h` include the same utility header:

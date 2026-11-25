@@ -1,5 +1,5 @@
 ---
-title: Floating-Point Tests
+title: Floating-point tests
 parent: Debugging
 nav_order: 4
 layout: default
@@ -17,6 +17,8 @@ layout: default
 </details>
 
 ---
+
+[Testing]({% link docs/debugging/testing.md %}) compares whole numbers exactly with `check_int()`. Floating-point results need a different check.
 
 Floating-point numbers cannot always represent decimal values exactly.
 
@@ -73,6 +75,8 @@ The value:
 ```
 
 is known as a **tolerance**.
+
+![A zoomed-in number line around 0.3, not to scale. A band from 0.3 - 1e-6 to 0.3 + 1e-6 is close enough. 0.1 + 0.2 = 0.30000000000000004 lands inside the band, so the test passes; 0.3001 lands outside it, so it fails.]({{ "/assets/images/testing_fp_tolerance.svg" | relative_url }})
 
 ## A helper function
 

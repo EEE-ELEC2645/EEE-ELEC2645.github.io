@@ -1,7 +1,7 @@
 ---
-title: VScode Quick Start
+title: VS Code quick start
 parent: STM32
-nav_order: 0
+nav_order: 1
 layout: default
 ---
 
@@ -100,7 +100,7 @@ From the `ST7789V2_Driver_STM32L4/` folder. Just `#include "LCD.h"` and use them
 **Q: My code isn't working. Where do I debug?**
 1. Check `main.c` for typos
 2. Use `printf()` to print debug info
-3. See [Full Guide](STM32_vscode.md) for more details
+3. See [Full Guide]({% link docs/stm32/STM32_vscode.md %}) for more details
 
 **Q: What happens when I press Build?**
 1. **Compile** - Your `.c` files get turned into machine code the board can run
@@ -114,12 +114,12 @@ If there are errors, VS Code shows them. Fix the error and press Build again. It
 
 ## Next Steps
 
-- Check the [LCD Library Reference](../LCD/LCD_Library.md) for available functions
+- Check the [LCD Library Reference]({% link docs/LCD/LCD_Library.md %}) for available functions
 - Look at example projects in the [Unit_3_1_LCD_Test repo](https://github.com/EEE-ELEC2645/Unit_3_1_LCD_Test)
-- Read the [Full Project Guide](STM32_vscode.md) if you want to understand the deep structure
+- Read the [Full Project Guide]({% link docs/stm32/STM32_vscode.md %}) if you want to understand the deep structure
 
 ---
 
 ## Need More Details?
 
-The [Full Project Structure Guide](STM32_vscode.md) explains everything in detail - but you don't need it to get started!
+The [Full Project Structure Guide]({% link docs/stm32/STM32_vscode.md %}) explains everything in detail - but you don't need it to get started!

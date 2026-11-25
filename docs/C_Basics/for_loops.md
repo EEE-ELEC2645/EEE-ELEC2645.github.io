@@ -1,7 +1,7 @@
 ---
-title: For Loops
+title: For loops
 parent: C Basics
-nav_order: 5
+nav_order: 8
 layout: default
 ---
 
@@ -62,6 +62,17 @@ The loop then runs in this order:
 5. The condition is checked again.
 
 Once `i` reaches `5`, the condition `i < 5` is false and the loop stops.
+
+As a flowchart:
+
+```mermaid
+flowchart TD
+    A["int i = 0<br/>runs once"] --> B{"i #60; 5 ?"}
+    B -->|true| C["loop body<br/>printf(...)"]
+    C --> D["i++"]
+    D --> B
+    B -->|false| E["first line after the loop"]
+```
 
 ## Counting upwards
 
@@ -138,7 +149,7 @@ Here, `value += 2` increases `value` by two after each iteration.
 
 ## Processing an array
 
-`for` loops are commonly used to process arrays:
+`for` loops are commonly used to process arrays (covered fully in [Arrays]({% link docs/C_Basics/arrays.md %})):
 
 ```c
 #include <stdio.h>

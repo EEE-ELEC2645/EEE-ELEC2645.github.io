@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" role="img" aria-labelledby="title desc">
+  <title id="title">A string that fits and one that does not</title>
+  <desc id="desc">char name[5] = "Goku" holds G, o, k and u followed by the null terminator, which fits exactly. char name[4] = "Goku" holds only G, o, k and u; a dashed red box after it shows there is no room for the null terminator.</desc>
+  <style>
+    .card { fill: #302f38; stroke: #4a4955; }
+    .name { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 17px; fill: #f0f0f0; }
+    .type { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .value { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #f0f0f0; }
+    .note { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #a9a9b8; }
+    .var { fill: #263548; stroke: #7cb7ff; stroke-width: 2.5; }
+    .term { fill: #233a2a; stroke: #7ee787; stroke-width: 2.5; }
+    .termtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #7ee787; }
+    .bad { fill: #3d2426; stroke: #ff7b72; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .badvalue { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #ff7b72; }
+    .badnote { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #ff7b72; }
+  </style>
+  <rect class="card" x="1" y="1" width="638" height="298" rx="12"/>
+  <text class="name" x="60" y="44">char name[5] = "Goku";</text>
+  <rect class="var" x="60" y="62" width="80" height="52"/>
+  <text class="value" x="100" y="96" text-anchor="middle">'G'</text>
+  <rect class="var" x="140" y="62" width="80" height="52"/>
+  <text class="value" x="180" y="96" text-anchor="middle">'o'</text>
+  <rect class="var" x="220" y="62" width="80" height="52"/>
+  <text class="value" x="260" y="96" text-anchor="middle">'k'</text>
+  <rect class="var" x="300" y="62" width="80" height="52"/>
+  <text class="value" x="340" y="96" text-anchor="middle">'u'</text>
+  <rect class="term" x="380" y="62" width="80" height="52"/>
+  <text class="termtext" x="420" y="96" text-anchor="middle">'\0'</text>
+  <text class="note" x="470" y="93">fits exactly</text>
+  <text class="name" x="60" y="174">char name[4] = "Goku";</text>
+  <rect class="var" x="60" y="192" width="80" height="52"/>
+  <text class="value" x="100" y="226" text-anchor="middle">'G'</text>
+  <rect class="var" x="140" y="192" width="80" height="52"/>
+  <text class="value" x="180" y="226" text-anchor="middle">'o'</text>
+  <rect class="var" x="220" y="192" width="80" height="52"/>
+  <text class="value" x="260" y="226" text-anchor="middle">'k'</text>
+  <rect class="var" x="300" y="192" width="80" height="52"/>
+  <text class="value" x="340" y="226" text-anchor="middle">'u'</text>
+  <rect class="bad" x="384" y="192" width="76" height="52"/>
+  <text class="badvalue" x="422" y="226" text-anchor="middle">'\0'</text>
+  <text class="badnote" x="470" y="215">no room for the</text>
+  <text class="badnote" x="470" y="232">null terminator</text>
+  <text class="note" x="60" y="276">Without <tspan class="type">'\0'</tspan>, functions such as <tspan class="type">printf("%s")</tspan> do not know where the string ends.</text>
+</svg>

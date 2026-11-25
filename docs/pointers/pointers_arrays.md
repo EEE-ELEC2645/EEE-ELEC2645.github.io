@@ -69,6 +69,8 @@ This accesses:
 values[1]
 ```
 
+![The pointer value_pointer contains 0x1000 and points to values[0], which holds 10. The expression value_pointer + 1 points to values[1], at 0x1004, which holds 20. The array values holds 10, 20, 30, 40 and 50 at addresses 0x1000 to 0x1010: adding 1 moves to the next int, 4 bytes further on.]({{ "/assets/images/pointers_arrays_pointer.svg" | relative_url }})
+
 In general:
 
 ```c

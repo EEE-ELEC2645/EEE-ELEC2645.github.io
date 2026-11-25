@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="250" viewBox="0 0 640 250" role="img" aria-labelledby="title desc">
+  <title id="title">Comparing with a tolerance</title>
+  <desc id="desc">A zoomed-in number line around the expected value 0.3. A shaded band from 0.3 minus 1e-6 to 0.3 plus 1e-6 is close enough. The result 0.30000000000000004 is inside the band, so the test passes even though it is not exactly 0.3. The value 0.3001 is outside the band, so it fails.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f2a65a"/>
+    </marker>
+    <marker id="arrow-old" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#77768a"/>
+    </marker>
+    <marker id="arrow-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff7b72"/>
+    </marker>
+    <marker id="arrow-copy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b392f0"/>
+    </marker>
+  </defs>
+  <style>
+    .card { fill: #302f38; stroke: #4a4955; }
+    .region { fill: #393842; stroke: #5a5968; stroke-width: 1.5; }
+    .divider { stroke: #4a4955; stroke-width: 1.5; }
+    .name { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 17px; fill: #f0f0f0; }
+    .type { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .value { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #f0f0f0; }
+    .cell { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #f0f0f0; }
+    .addr { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .note { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #a9a9b8; }
+    .code { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; }
+    .var { fill: #263548; stroke: #7cb7ff; stroke-width: 2.5; }
+    .line { stroke: #7cb7ff; stroke-width: 2.5; fill: none; }
+    .ptr { fill: #3d2f22; stroke: #f2a65a; stroke-width: 2.5; }
+    .arrow { stroke: #f2a65a; stroke-width: 3; fill: none; }
+    .exprlabel { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #f2a65a; }
+    .newlabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #f2a65a; }
+    .old { stroke: #77768a; stroke-width: 2.5; stroke-dasharray: 8 6; fill: none; }
+    .fadedbox { fill: none; stroke: #77768a; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .fadedtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #77768a; }
+    .oldlabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #8e8da0; }
+    .copy { stroke: #b392f0; stroke-width: 3; fill: none; }
+    .copylabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #b392f0; }
+    .bad { fill: #3d2426; stroke: #ff7b72; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .badarrow { stroke: #ff7b72; stroke-width: 3; stroke-dasharray: 8 6; fill: none; }
+    .badtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #ff7b72; }
+    .badcell { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #ff7b72; }
+    .badnote { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #ff7b72; }
+    .term { fill: #233a2a; stroke: #7ee787; stroke-width: 2.5; }
+    .termtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #7ee787; }
+  </style>
+  <rect class="card" x="1" y="1" width="638" height="248" rx="12"/>
+  <line class="line" x1="40" y1="130" x2="600" y2="130"/>
+  <rect class="var" x="220" y="104" width="200" height="52" rx="6"/>
+  <text class="type" x="320" y="96" text-anchor="middle">close enough: within 1e-6 of 0.3</text>
+  <line class="line" x1="320" y1="112" x2="320" y2="148"/>
+  <text class="type" x="320" y="176" text-anchor="middle">0.3</text>
+  <text class="type" x="220" y="176" text-anchor="middle">0.3 - 1e-6</text>
+  <text class="type" x="420" y="176" text-anchor="middle">0.3 + 1e-6</text>
+  <circle class="ptr" cx="338" cy="130" r="7"/>
+  <text class="newlabel" x="338" y="212" text-anchor="middle">0.1 + 0.2 = 0.30000000000000004: passes</text>
+  <line class="arrow" x1="338" y1="198" x2="338" y2="142" marker-end="url(#arrow)"/>
+  <circle class="bad" cx="560" cy="130" r="7"/>
+  <text class="badnote" x="560" y="96" text-anchor="middle">0.3001: fails</text>
+  <text class="note" x="320" y="238" text-anchor="middle">Not to scale: the band is drawn much wider than 2e-6.</text>
+</svg>

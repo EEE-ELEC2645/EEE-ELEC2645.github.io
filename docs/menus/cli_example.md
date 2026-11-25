@@ -1,211 +1,172 @@
 ---
-title: Command-Line Menu Example
+title: A first menu
 parent: Command Line Basics
 nav_order: 1
 layout: default
 ---
 
-# Command-Line Menu System in C
+# A first menu
 
-## Introduction
+<details markdown="block">
+  <summary>
+    Table of contents
+  </summary>
+  {: .text-delta }
+1. TOC
+{:toc}
+</details>
 
-Command-line interfaces (CLI) are simple but can be made more user-friendly by adding menus. This example demonstrates a **menu-driven program in C** that allows the user to select from multiple options, perform tasks, and return to the main menu.
+A menu program does three things: it prints the options, reads the user's choice and acts on it. Think of it as a café where the waiter is `printf()` and the order pad is `scanf()`.
 
-***
+## Printing the menu
 
-## Full Source Code (`main.c`)
+Put the menu in its own function. Most programs show the menu more than once, and a function means the menu text is written in one place:
 
 ```c
-// ELEC2645 Unit 2 Activity 2 - Menu-Driven Program
-#include <stdio.h>   // for printf(), scanf()
-#include <stdlib.h>  // for exit()
-
-// ---------- Function Prototypes ----------
-void main_menu(void);
-int get_user_input(void);
-void select_menu_item(int input);
-void print_main_menu(void);
-void go_back_to_main(void);
-void menu_item_1(void); // Square a number
-void menu_item_2(void); // ASCII code -> character
-void menu_item_3(void); // Celsius -> Fahrenheit
-void menu_item_4(void); // Even/Odd
-
-#define PI 3.14159f
-
-// ---------- Main Function ----------
-int main(void) {
-    main_menu();
-    return 0;
-}
-
-// ---------- Menu Functions ----------
-void main_menu(void) {
-    print_main_menu();
-    int input = get_user_input();
-    select_menu_item(input);
-}
-
-int get_user_input(void) {
-    int input;
-    printf("\nSelect item: ");
-    scanf("%d", &input); // assume valid input for this activity
-    return input;
-}
-
-void select_menu_item(int input) {
-    switch (input) {
-        case 1: menu_item_1(); break;
-        case 2: menu_item_2(); break;
-        case 3: menu_item_3(); break;
-        case 4: menu_item_4(); break;
-        case 6: printf("Exiting program...\n"); exit(0);
-        default: printf("Invalid selection. Exiting...\n"); exit(1);
-    }
-}
-
-void print_main_menu(void) {
-    printf("\n----------- Main menu -----------\n");
-    printf("\n\t1. Square a number\t\n");
-    printf("\n\t2. ASCII code -> char\t\n");
-    printf("\n\t3. Celsius -> Fahrenheit\n");
-    printf("\n\t4. Even or Odd\t\t\n");
-    printf("\n\t6. Exit\t\t\t\n");
-    printf("---------------------------------\n");
-}
-
-void go_back_to_main(void) {
-    char input;
-    do {
-        printf("\nEnter 'b' or 'B' to go back to main menu: ");
-        scanf(" %c", &input);
-    } while (input != 'b' && input != 'B');
-    main_menu();
-}
-
-// ---------- Menu Item Functions ----------
-void menu_item_1(void) {
-    printf("\n>> Menu 1: Square a number\n");
-    printf("Enter a number to square:\n");
-    int num;
-    scanf("%d", &num);
-    printf("Result: %d\n", num * num);
-    go_back_to_main();
-}
-
-void menu_item_2(void) {
-    printf("\n>> Menu 2: ASCII code to character\n");
-    int code;
-    printf("Enter ASCII code (e.g. 65 for 'A'):\n");
-    scanf("%d", &code);
-    if (code < 0 || code > 127) {
-        printf("Code out of ASCII range (0-127)\n");
-    } else {
-        printf("Character: '%c'\n", (char)code);
-    }
-    go_back_to_main();
-}
-
-void menu_item_3(void) {
-    printf("\n>> Menu 3: Celsius to Fahrenheit\n");
-    int celsius;
-    printf("Enter temperature in Celsius:\n");
-    scanf("%d", &celsius);
-    float fahrenheit = (celsius * 9.0f / 5.0f) + 32.0f;
-    printf("%d°C = %.2f°F\n", celsius, fahrenheit);
-    go_back_to_main();
-}
-
-void menu_item_4(void) {
-    printf("\n>> Menu 4: Even or Odd\n");
-    int num;
-    printf("Enter an integer:\n");
-    scanf("%d", &num);
-    if (num % 2 == 0) {
-        printf("%d is Even\n", num);
-    } else {
-        printf("%d is Odd\n", num);
-    }
-    go_back_to_main();
+void print_menu(void)
+{
+    printf("=== CLI Cafe ===\n");
+    printf("1. Chocolate cake\n");
+    printf("2. Carrot cake\n");
+    printf("3. Cookies\n");
+    printf("4. Coffee\n");
+    printf("================\n");
 }
 ```
 
-***
+## Reading the choice
 
-## Detailed Explanation of Each Function
+`scanf()` with `%d` reads a whole number and stores it at the address of `choice`:
 
-### **`main()`**
+```c
+int choice = 0;
 
-*   Entry point of the program.
-*   Calls `main_menu()` to start the menu loop.
+printf("Select your treat: ");
+scanf("%d", &choice);  // assumes the user types a whole number
+```
 
-***
+`choice` starts at `0` so that it always has a known value, even if `scanf()` cannot read a number. For now we assume the user types a number. [User input]({% link docs/menus/user_input.md %}) shows how to handle everything else.
 
-### **`main_menu()`**
+## Acting on the choice
 
-*   Displays the menu using `print_main_menu()`.
-*   Gets user input via `get_user_input()`.
-*   Passes the input to `select_menu_item()` for processing.
+A `switch` statement picks one action for each menu number. Anything that is not on the menu goes to `default`:
 
-***
+```c
+switch (choice) {
+    case 1:
+        printf("You chose chocolate cake.\n");
+        break;
+    // ...one case for each option...
+    default:
+        printf("Sorry, %d is not on the menu.\n", choice);
+        break;
+}
+```
 
-### **`print_main_menu()`**
+[Conditionals]({% link docs/C_Basics/conditionals.md %}) covers `switch` in more detail.
 
-*   Prints a formatted menu with options:
-    *   **1**: Square a number
-    *   **2**: ASCII code → character
-    *   **3**: Celsius → Fahrenheit
-    *   **4**: Even or Odd
-    *   **6**: Exit program
+## Complete example
 
-***
+```c
+#include <stdio.h>
 
-### **`get_user_input()`**
+void print_menu(void);
 
-*   Prompts the user to enter an integer.
-*   Uses `scanf()` to read the input.
-*   Returns the integer to `main_menu()`.
+int main(void)
+{
+    int choice = 0;
 
-***
+    print_menu();
+    printf("Select your treat: ");
+    scanf("%d", &choice);  // assumes the user types a whole number
 
-### **`select_menu_item(int input)`**
+    switch (choice) {
+        case 1:
+            printf("You chose chocolate cake.\n");
+            break;
+        case 2:
+            printf("You chose carrot cake.\n");
+            break;
+        case 3:
+            printf("You chose cookies.\n");
+            break;
+        case 4:
+            printf("You chose coffee. Good luck with the lab!\n");
+            break;
+        default:
+            printf("Sorry, %d is not on the menu.\n", choice);
+            break;
+    }
 
-*   Uses a `switch` statement to call the correct function based on user input.
-*   If input is invalid, prints an error and exits.
+    return 0;
+}
 
-***
+void print_menu(void)
+{
+    printf("=== CLI Cafe ===\n");
+    printf("1. Chocolate cake\n");
+    printf("2. Carrot cake\n");
+    printf("3. Cookies\n");
+    printf("4. Coffee\n");
+    printf("================\n");
+}
+```
 
-### **`go_back_to_main()`**
+This produces (typing `4`):
 
-*   After completing an operation, prompts the user to enter `'b'` or `'B'` to return to the main menu.
-*   Loops until valid input is given.
-*   Calls `main_menu()` again.
+```text
+=== CLI Cafe ===
+1. Chocolate cake
+2. Carrot cake
+3. Cookies
+4. Coffee
+================
+Select your treat: 4
+You chose coffee. Good luck with the lab!
+```
 
-***
+## Common mistakes
 
-### **Menu Item Functions**
+### Forgetting `break`
 
-*   **`menu_item_1()`**: Squares an integer entered by the user.
-*   **`menu_item_2()`**: Converts an ASCII code (0–127) to its corresponding character.
-*   **`menu_item_3()`**: Converts Celsius temperature to Fahrenheit using the formula: `F = C x 9\5 + 32`
-*   **`menu_item_4()`**: Checks if an integer is even or odd using `num % 2`.
+Without `break`, the program carries on into the next case. If the `break` after chocolate cake is missing, typing `1` produces:
 
-***
+```text
+Select your treat: 1
+You chose chocolate cake.
+You chose carrot cake.
+```
 
-## Example Output
+Two cakes for the price of one, but not what you asked for. Compiling with `-Wextra` warns you about this:
 
-    ----------- Main menu -----------
-        1. Square a number
-        2. ASCII code -> char
-        3. Celsius -> Fahrenheit
-        4. Even or Odd
-        6. Exit
-    ---------------------------------
-    Select item: 1
-    >> Menu 1: Square a number
-    Enter a number to square:
-    Result: 25
-    Enter 'b' or 'B' to go back to main menu:
+```text
+warning: this statement may fall through [-Wimplicit-fallthrough=]
+```
 
-***
+### Not giving `choice` a starting value
 
+If `choice` is declared as `int choice;` and the user types a word, `scanf()` leaves `choice` unchanged. It then holds whatever happened to be in memory, so the program might print any number. Giving it a starting value makes the result predictable.
+
+### The menu and the `switch` disagree
+
+If you add an option to `print_menu()` but forget its `case`, choosing it goes to `default`. When you add or remove an option, change both.
+
+## Two problems with the café
+
+The café works, but it has two problems:
+
+1. **It serves one customer and closes.** The program ends after one choice. A real menu should come back after each option. [Going back to the menu]({% link docs/menus/menu_flow.md %}) shows how the Unit 2.1 Activity 1 menu does this, and why it gets messy as the program grows.
+2. **It cannot cope with unexpected input.** If you order `chips`, `scanf()` cannot read a number, `choice` keeps its starting value and the program prints:
+
+   ```text
+   Sorry, 0 is not on the menu.
+   ```
+
+   [User input]({% link docs/menus/user_input.md %}) shows how to read input safely and give a helpful error message.
+
+The main points to remember are:
+
+- print the menu from its own function
+- give `choice` a starting value before reading into it
+- use a `switch` with a `break` after every case and a `default` for anything unexpected
+- keep the menu text and the `case` labels in step

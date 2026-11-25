@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300" role="img" aria-labelledby="title desc">
+  <title id="title">ELEC2645 Embedded Systems Project</title>
+  <desc id="desc">A retro games console. Its LCD screen shows ELEC2645 in large pixel letters, EMBEDDED SYSTEMS PROJECT, the ELEC2645 Bot d[o_0]b and PRESS START, next to a pixel-art Parkinson Building clock tower. Beside the screen are a joystick and two buttons labelled A and B.</desc>
+  <style>
+    .card { fill: #302f38; stroke: #4a4955; }
+    .screen { fill: #263548; stroke: #7cb7ff; stroke-width: 3; }
+    .pix { fill: #f0f0f0; shape-rendering: crispEdges; }
+    .tower { fill: #a9a9b8; shape-rendering: crispEdges; }
+    .sub { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 19px; fill: #a9a9b8; letter-spacing: 1px; }
+    .bot { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 30px; fill: #f2a65a; }
+    .start { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 19px; fill: #f0f0f0; }
+    .stick { fill: #393842; stroke: #5a5968; stroke-width: 2; }
+    .knob { fill: #302f38; stroke: #77768a; stroke-width: 2.5; }
+    .btn-a { fill: #3d2f22; stroke: #f2a65a; stroke-width: 2.5; }
+    .btn-b { fill: #233a2a; stroke: #7ee787; stroke-width: 2.5; }
+    .label { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 15px; fill: #f0f0f0; }
+    .grille { stroke: #4a4955; stroke-width: 3; stroke-linecap: round; }
+    .blink { animation: blink 1.2s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .blink { animation: none; } }
+  </style>
+  <rect class="card" x="1" y="1" width="798" height="298" rx="24"/>
+  <rect class="screen" x="30" y="30" width="560" height="240" rx="10"/>
+  <rect class="pix" x="60" y="62" width="35" height="7"/>
+  <rect class="pix" x="60" y="69" width="7" height="7"/>
+  <rect class="pix" x="60" y="76" width="7" height="7"/>
+  <rect class="pix" x="60" y="83" width="28" height="7"/>
+  <rect class="pix" x="60" y="90" width="7" height="7"/>
+  <rect class="pix" x="60" y="97" width="7" height="7"/>
+  <rect class="pix" x="60" y="104" width="35" height="7"/>
+  <rect class="pix" x="102" y="62" width="7" height="7"/>
+  <rect class="pix" x="102" y="69" width="7" height="7"/>
+  <rect class="pix" x="102" y="76" width="7" height="7"/>
+  <rect class="pix" x="102" y="83" width="7" height="7"/>
+  <rect class="pix" x="102" y="90" width="7" height="7"/>
+  <rect class="pix" x="102" y="97" width="7" height="7"/>
+  <rect class="pix" x="102" y="104" width="35" height="7"/>
+  <rect class="pix" x="144" y="62" width="35" height="7"/>
+  <rect class="pix" x="144" y="69" width="7" height="7"/>
+  <rect class="pix" x="144" y="76" width="7" height="7"/>
+  <rect class="pix" x="144" y="83" width="28" height="7"/>
+  <rect class="pix" x="144" y="90" width="7" height="7"/>
+  <rect class="pix" x="144" y="97" width="7" height="7"/>
+  <rect class="pix" x="144" y="104" width="35" height="7"/>
+  <rect class="pix" x="193" y="62" width="21" height="7"/>
+  <rect class="pix" x="186" y="69" width="7" height="7"/>
+  <rect class="pix" x="214" y="69" width="7" height="7"/>
+  <rect class="pix" x="186" y="76" width="7" height="7"/>
+  <rect class="pix" x="186" y="83" width="7" height="7"/>
+  <rect class="pix" x="186" y="90" width="7" height="7"/>
+  <rect class="pix" x="186" y="97" width="7" height="7"/>
+  <rect class="pix" x="214" y="97" width="7" height="7"/>
+  <rect class="pix" x="193" y="104" width="21" height="7"/>
+  <rect class="pix" x="235" y="62" width="21" height="7"/>
+  <rect class="pix" x="228" y="69" width="7" height="7"/>
+  <rect class="pix" x="256" y="69" width="7" height="7"/>
+  <rect class="pix" x="256" y="76" width="7" height="7"/>
+  <rect class="pix" x="249" y="83" width="7" height="7"/>
+  <rect class="pix" x="242" y="90" width="7" height="7"/>
+  <rect class="pix" x="235" y="97" width="7" height="7"/>
+  <rect class="pix" x="228" y="104" width="35" height="7"/>
+  <rect class="pix" x="284" y="62" width="14" height="7"/>
+  <rect class="pix" x="277" y="69" width="7" height="7"/>
+  <rect class="pix" x="270" y="76" width="7" height="7"/>
+  <rect class="pix" x="270" y="83" width="28" height="7"/>
+  <rect class="pix" x="270" y="90" width="7" height="7"/>
+  <rect class="pix" x="298" y="90" width="7" height="7"/>
+  <rect class="pix" x="270" y="97" width="7" height="7"/>
+  <rect class="pix" x="298" y="97" width="7" height="7"/>
+  <rect class="pix" x="277" y="104" width="21" height="7"/>
+  <rect class="pix" x="333" y="62" width="7" height="7"/>
+  <rect class="pix" x="326" y="69" width="14" height="7"/>
+  <rect class="pix" x="319" y="76" width="7" height="7"/>
+  <rect class="pix" x="333" y="76" width="7" height="7"/>
+  <rect class="pix" x="312" y="83" width="7" height="7"/>
+  <rect class="pix" x="333" y="83" width="7" height="7"/>
+  <rect class="pix" x="312" y="90" width="35" height="7"/>
+  <rect class="pix" x="333" y="97" width="7" height="7"/>
+  <rect class="pix" x="333" y="104" width="7" height="7"/>
+  <rect class="pix" x="354" y="62" width="35" height="7"/>
+  <rect class="pix" x="354" y="69" width="7" height="7"/>
+  <rect class="pix" x="354" y="76" width="28" height="7"/>
+  <rect class="pix" x="382" y="83" width="7" height="7"/>
+  <rect class="pix" x="382" y="90" width="7" height="7"/>
+  <rect class="pix" x="354" y="97" width="7" height="7"/>
+  <rect class="pix" x="382" y="97" width="7" height="7"/>
+  <rect class="pix" x="361" y="104" width="21" height="7"/>
+  <text class="sub" x="60" y="148">EMBEDDED SYSTEMS PROJECT</text>
+  <text class="bot" x="60" y="222">d[o_0]b</text>
+  <text class="start" x="200" y="219">&gt; PRESS START<tspan class="blink">_</tspan></text>
+  <rect class="tower" x="514" y="46" width="18" height="6"/>
+  <rect class="tower" x="502" y="52" width="36" height="6"/>
+  <rect class="tower" x="496" y="64" width="54" height="6"/>
+  <rect class="tower" x="496" y="70" width="54" height="6"/>
+  <rect class="tower" x="490" y="76" width="60" height="6"/>
+  <rect class="tower" x="484" y="82" width="78" height="6"/>
+  <rect class="tower" x="484" y="88" width="24" height="6"/>
+  <rect class="tower" x="514" y="88" width="6" height="6"/>
+  <rect class="tower" x="526" y="88" width="6" height="6"/>
+  <rect class="tower" x="538" y="88" width="24" height="6"/>
+  <rect class="tower" x="484" y="94" width="78" height="6"/>
+  <rect class="tower" x="484" y="100" width="78" height="6"/>
+  <rect class="tower" x="484" y="106" width="78" height="6"/>
+  <rect class="tower" x="484" y="112" width="78" height="6"/>
+  <rect class="tower" x="478" y="118" width="12" height="6"/>
+  <rect class="tower" x="556" y="118" width="12" height="6"/>
+  <rect class="tower" x="478" y="124" width="90" height="6"/>
+  <rect class="tower" x="478" y="130" width="18" height="6"/>
+  <rect class="tower" x="508" y="130" width="6" height="6"/>
+  <rect class="tower" x="526" y="130" width="6" height="6"/>
+  <rect class="tower" x="550" y="130" width="18" height="6"/>
+  <rect class="tower" x="478" y="136" width="18" height="6"/>
+  <rect class="tower" x="502" y="136" width="12" height="6"/>
+  <rect class="tower" x="520" y="136" width="12" height="6"/>
+  <rect class="tower" x="538" y="136" width="30" height="6"/>
+  <rect class="tower" x="478" y="142" width="18" height="6"/>
+  <rect class="tower" x="502" y="142" width="12" height="6"/>
+  <rect class="tower" x="520" y="142" width="12" height="6"/>
+  <rect class="tower" x="538" y="142" width="30" height="6"/>
+  <rect class="tower" x="478" y="148" width="18" height="6"/>
+  <rect class="tower" x="502" y="148" width="12" height="6"/>
+  <rect class="tower" x="520" y="148" width="12" height="6"/>
+  <rect class="tower" x="538" y="148" width="30" height="6"/>
+  <rect class="tower" x="478" y="154" width="18" height="6"/>
+  <rect class="tower" x="502" y="154" width="12" height="6"/>
+  <rect class="tower" x="520" y="154" width="12" height="6"/>
+  <rect class="tower" x="538" y="154" width="30" height="6"/>
+  <rect class="tower" x="478" y="160" width="18" height="6"/>
+  <rect class="tower" x="502" y="160" width="12" height="6"/>
+  <rect class="tower" x="520" y="160" width="12" height="6"/>
+  <rect class="tower" x="538" y="160" width="30" height="6"/>
+  <rect class="tower" x="478" y="166" width="18" height="6"/>
+  <rect class="tower" x="502" y="166" width="12" height="6"/>
+  <rect class="tower" x="520" y="166" width="12" height="6"/>
+  <rect class="tower" x="538" y="166" width="30" height="6"/>
+  <rect class="tower" x="478" y="172" width="18" height="6"/>
+  <rect class="tower" x="502" y="172" width="12" height="6"/>
+  <rect class="tower" x="520" y="172" width="12" height="6"/>
+  <rect class="tower" x="538" y="172" width="30" height="6"/>
+  <rect class="tower" x="472" y="178" width="96" height="6"/>
+  <rect class="tower" x="472" y="184" width="24" height="6"/>
+  <rect class="tower" x="550" y="184" width="18" height="6"/>
+  <rect class="tower" x="472" y="190" width="24" height="6"/>
+  <rect class="tower" x="502" y="190" width="42" height="6"/>
+  <rect class="tower" x="550" y="190" width="18" height="6"/>
+  <rect class="tower" x="502" y="196" width="42" height="6"/>
+  <rect class="tower" x="466" y="202" width="30" height="6"/>
+  <rect class="tower" x="502" y="202" width="6" height="6"/>
+  <rect class="tower" x="520" y="202" width="6" height="6"/>
+  <rect class="tower" x="532" y="202" width="12" height="6"/>
+  <rect class="tower" x="550" y="202" width="24" height="6"/>
+  <rect class="tower" x="466" y="208" width="30" height="6"/>
+  <rect class="tower" x="502" y="208" width="6" height="6"/>
+  <rect class="tower" x="514" y="208" width="18" height="6"/>
+  <rect class="tower" x="538" y="208" width="6" height="6"/>
+  <rect class="tower" x="550" y="208" width="24" height="6"/>
+  <rect class="tower" x="466" y="214" width="30" height="6"/>
+  <rect class="tower" x="502" y="214" width="6" height="6"/>
+  <rect class="tower" x="514" y="214" width="18" height="6"/>
+  <rect class="tower" x="538" y="214" width="6" height="6"/>
+  <rect class="tower" x="550" y="214" width="24" height="6"/>
+  <rect class="tower" x="466" y="220" width="30" height="6"/>
+  <rect class="tower" x="502" y="220" width="12" height="6"/>
+  <rect class="tower" x="532" y="220" width="12" height="6"/>
+  <rect class="tower" x="550" y="220" width="24" height="6"/>
+  <rect class="tower" x="466" y="226" width="30" height="6"/>
+  <rect class="tower" x="502" y="226" width="42" height="6"/>
+  <rect class="tower" x="550" y="226" width="24" height="6"/>
+  <rect class="tower" x="466" y="232" width="30" height="6"/>
+  <rect class="tower" x="502" y="232" width="42" height="6"/>
+  <rect class="tower" x="550" y="232" width="24" height="6"/>
+  <rect class="tower" x="466" y="238" width="30" height="6"/>
+  <rect class="tower" x="502" y="238" width="42" height="6"/>
+  <rect class="tower" x="550" y="238" width="24" height="6"/>
+  <rect class="tower" x="466" y="244" width="30" height="6"/>
+  <rect class="tower" x="502" y="244" width="42" height="6"/>
+  <rect class="tower" x="550" y="244" width="24" height="6"/>
+  <rect class="tower" x="466" y="250" width="30" height="6"/>
+  <rect class="tower" x="502" y="250" width="42" height="6"/>
+  <rect class="tower" x="550" y="250" width="24" height="6"/>
+  <rect class="tower" x="466" y="256" width="30" height="6"/>
+  <rect class="tower" x="502" y="256" width="42" height="6"/>
+  <rect class="tower" x="550" y="256" width="24" height="6"/>
+  <rect class="tower" x="466" y="262" width="30" height="6"/>
+  <rect class="tower" x="502" y="262" width="42" height="6"/>
+  <rect class="tower" x="550" y="262" width="24" height="6"/>
+  <circle class="stick" cx="695" cy="105" r="46"/>
+  <circle class="knob" cx="695" cy="105" r="20"/>
+  <circle class="btn-b" cx="665" cy="215" r="20"/>
+  <circle class="btn-a" cx="735" cy="195" r="20"/>
+  <text class="label" x="665" y="220" text-anchor="middle">B</text>
+  <text class="label" x="735" y="200" text-anchor="middle">A</text>
+  <line class="grille" x1="655" y1="252" x2="667" y2="264"/>
+  <line class="grille" x1="677" y1="252" x2="689" y2="264"/>
+  <line class="grille" x1="699" y1="252" x2="711" y2="264"/>
+  <line class="grille" x1="721" y1="252" x2="733" y2="264"/>
+</svg>

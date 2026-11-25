@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="270" viewBox="0 0 640 270" role="img" aria-labelledby="title desc">
+  <title id="title">Fixed-width integer types drawn bit by bit</title>
+  <desc id="desc">uint8_t is a row of 8 bits (1 byte), uint16_t is 16 bits (2 bytes) and uint32_t is 32 bits (4 bytes), each drawn to the same scale with bit 0 on the right.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#f2a65a"/>
+    </marker>
+    <marker id="arrow-old" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#77768a"/>
+    </marker>
+    <marker id="arrow-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff7b72"/>
+    </marker>
+    <marker id="arrow-copy" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b392f0"/>
+    </marker>
+  </defs>
+  <style>
+    .card { fill: #302f38; stroke: #4a4955; }
+    .region { fill: #393842; stroke: #5a5968; stroke-width: 1.5; }
+    .divider { stroke: #4a4955; stroke-width: 1.5; }
+    .name { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 17px; fill: #f0f0f0; }
+    .type { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .value { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 22px; fill: #f0f0f0; }
+    .cell { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #f0f0f0; }
+    .addr { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #a9a9b8; }
+    .note { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #a9a9b8; }
+    .code { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; }
+    .var { fill: #263548; stroke: #7cb7ff; stroke-width: 2.5; }
+    .line { stroke: #7cb7ff; stroke-width: 2.5; fill: none; }
+    .ptr { fill: #3d2f22; stroke: #f2a65a; stroke-width: 2.5; }
+    .arrow { stroke: #f2a65a; stroke-width: 3; fill: none; }
+    .exprlabel { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #f2a65a; }
+    .newlabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #f2a65a; }
+    .old { stroke: #77768a; stroke-width: 2.5; stroke-dasharray: 8 6; fill: none; }
+    .fadedbox { fill: none; stroke: #77768a; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .fadedtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #77768a; }
+    .oldlabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #8e8da0; }
+    .copy { stroke: #b392f0; stroke-width: 3; fill: none; }
+    .copylabel { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #b392f0; }
+    .bad { fill: #3d2426; stroke: #ff7b72; stroke-width: 2.5; stroke-dasharray: 8 6; }
+    .badarrow { stroke: #ff7b72; stroke-width: 3; stroke-dasharray: 8 6; fill: none; }
+    .badtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 14px; fill: #ff7b72; }
+    .badcell { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #ff7b72; }
+    .badnote { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 13px; fill: #ff7b72; }
+    .term { fill: #233a2a; stroke: #7ee787; stroke-width: 2.5; }
+    .termtext { font-family: "DejaVu Sans Mono", Consolas, "Courier New", monospace; font-size: 18px; fill: #7ee787; }
+  </style>
+  <rect class="card" x="1" y="1" width="638" height="268" rx="12"/>
+  <text class="name" x="40" y="74">uint8_t</text>
+  <rect class="var" x="492.0" y="52" width="13.5" height="30"/>
+  <rect class="var" x="505.5" y="52" width="13.5" height="30"/>
+  <rect class="var" x="519.0" y="52" width="13.5" height="30"/>
+  <rect class="var" x="532.5" y="52" width="13.5" height="30"/>
+  <rect class="var" x="546.0" y="52" width="13.5" height="30"/>
+  <rect class="var" x="559.5" y="52" width="13.5" height="30"/>
+  <rect class="var" x="573.0" y="52" width="13.5" height="30"/>
+  <rect class="var" x="586.5" y="52" width="13.5" height="30"/>
+  <text class="type" x="492.0" y="100">bit 7</text>
+  <text class="type" x="600" y="100" text-anchor="end">bit 0</text>
+  <text class="note" x="40" y="94">1 byte</text>
+  <text class="name" x="40" y="144">uint16_t</text>
+  <rect class="var" x="384.0" y="122" width="13.5" height="30"/>
+  <rect class="var" x="397.5" y="122" width="13.5" height="30"/>
+  <rect class="var" x="411.0" y="122" width="13.5" height="30"/>
+  <rect class="var" x="424.5" y="122" width="13.5" height="30"/>
+  <rect class="var" x="438.0" y="122" width="13.5" height="30"/>
+  <rect class="var" x="451.5" y="122" width="13.5" height="30"/>
+  <rect class="var" x="465.0" y="122" width="13.5" height="30"/>
+  <rect class="var" x="478.5" y="122" width="13.5" height="30"/>
+  <rect class="var" x="492.0" y="122" width="13.5" height="30"/>
+  <rect class="var" x="505.5" y="122" width="13.5" height="30"/>
+  <rect class="var" x="519.0" y="122" width="13.5" height="30"/>
+  <rect class="var" x="532.5" y="122" width="13.5" height="30"/>
+  <rect class="var" x="546.0" y="122" width="13.5" height="30"/>
+  <rect class="var" x="559.5" y="122" width="13.5" height="30"/>
+  <rect class="var" x="573.0" y="122" width="13.5" height="30"/>
+  <rect class="var" x="586.5" y="122" width="13.5" height="30"/>
+  <text class="type" x="384.0" y="170">bit 15</text>
+  <text class="type" x="600" y="170" text-anchor="end">bit 0</text>
+  <text class="note" x="40" y="164">2 bytes</text>
+  <text class="name" x="40" y="214">uint32_t</text>
+  <rect class="var" x="168.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="181.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="195.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="208.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="222.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="235.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="249.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="262.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="276.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="289.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="303.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="316.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="330.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="343.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="357.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="370.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="384.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="397.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="411.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="424.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="438.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="451.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="465.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="478.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="492.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="505.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="519.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="532.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="546.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="559.5" y="192" width="13.5" height="30"/>
+  <rect class="var" x="573.0" y="192" width="13.5" height="30"/>
+  <rect class="var" x="586.5" y="192" width="13.5" height="30"/>
+  <text class="type" x="168.0" y="240">bit 31</text>
+  <text class="type" x="600" y="240" text-anchor="end">bit 0</text>
+  <text class="note" x="40" y="234">4 bytes</text>
+  <text class="note" x="320" y="258" text-anchor="middle">The number in the name is the number of bits.</text>
+</svg>

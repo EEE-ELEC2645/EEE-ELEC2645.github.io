@@ -1,6 +1,7 @@
 ---
 title: Interrupts
-nav_order: 14
+parent: STM32
+nav_order: 5
 layout: default
 ---
 

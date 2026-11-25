@@ -1,5 +1,5 @@
 ---
-title: Printf Debugging
+title: Printf debugging
 parent: Debugging
 nav_order: 1
 layout: default

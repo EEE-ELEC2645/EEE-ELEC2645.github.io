@@ -16,7 +16,7 @@ layout: default
 {:toc}
 </details>
 
-A pointer is a variable that stores a memory address, unlike a normal variable which store values. For example:
+A pointer is a variable that stores a memory address, unlike a normal variable, which stores a value. For example:
 
 ```c
 int pikachu_hp = 35;
@@ -56,6 +56,10 @@ pikachu_hp     int
 &pikachu_hp    address of an int
 target_hp      pointer to an int
 ```
+
+In memory, `target_hp` holds the address of `pikachu_hp`:
+
+![target_hp, at address 0x1008, contains 0x1000, the address of pikachu_hp, which contains 35. An arrow goes from target_hp to pikachu_hp.]({{ "/assets/images/pointer_basics_target.svg" | relative_url }})
 
 A pointer should have a type that matches the variable it targets:
 
@@ -162,6 +166,8 @@ target_hp = &eevee_hp;
 
 Notice that there is no `*` before `target_hp`. We are changing the address stored in the pointer.
 
+![target_hp now contains 0x1004, the address of eevee_hp. A faded dashed arrow shows it used to point to pikachu_hp; a solid arrow shows it now points to eevee_hp. Both HP values are unchanged.]({{ "/assets/images/pointer_basics_change_target.svg" | relative_url }})
+
 We can then change the new target:
 
 ```c
@@ -261,6 +267,8 @@ int *target_hp = NULL;
 ```
 
 `NULL` means that the pointer does not currently point to a valid object.
+
+![The pointer target_hp contains NULL. There is no arrow: it points to nothing, so check target_hp != NULL before using *target_hp.]({{ "/assets/images/pointer_basics_null.svg" | relative_url }})
 
 Before dereferencing a pointer that may be `NULL`, check it:
 

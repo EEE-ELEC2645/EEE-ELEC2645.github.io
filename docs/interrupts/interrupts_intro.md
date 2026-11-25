@@ -1,6 +1,7 @@
 ---
-title: Interrupts Introduction
+title: Interrupts introduction
 parent: Interrupts
+grand_parent: STM32
 nav_order: 1
 layout: default
 math: katex
@@ -162,7 +163,7 @@ We maintain separate timestamp variables for each button to track the last time 
 
 ## Timer Interrupts
 
-Like GPIO interrupts, timers can also trigger interrupts when they reach their period (see the [Timers Introduction](../timers/timers_intro.md) for more on how timers count). This is more efficient than polling `HAL_GetTick()` in a loop.
+Like GPIO interrupts, timers can also trigger interrupts when they reach their period (see the [Timers Introduction]({% link docs/timers/timers_intro.md %}) for more on how timers count). This is more efficient than polling `HAL_GetTick()` in a loop.
 
 ### Timer Interrupt Callback
 
@@ -176,7 +177,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 }
 ```
 
-Timer interrupts are covered in detail in the [Timers HAL section](../timers/timers_HAL.md).
+Timer interrupts are covered in detail in the [Timers HAL section]({% link docs/timers/timers_HAL.md %}).
 
 ## Best Practices for ISRs
 

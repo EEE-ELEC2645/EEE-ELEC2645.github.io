@@ -1,6 +1,7 @@
 ---
 title: PWM
-nav_order: 13
+parent: STM32
+nav_order: 4
 layout: default
 ---
 

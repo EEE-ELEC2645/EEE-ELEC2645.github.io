@@ -1,6 +1,7 @@
 ---
-title: Colour Palette System
+title: Colour palette system
 parent: LCD
+grand_parent: Console Libraries
 nav_order: 3
 layout: default
 ---
@@ -303,7 +304,7 @@ Use an online RGB565 converter you can find colours [here](https://rgbcolorpicke
 
 ### Step 2: Add to LCD.h with Bytes Swapped
 
-Open [ST7789V2_Driver_STM32L4/Core/Inc/LCD.h](ST7789V2_Driver_STM32L4/Core/Inc/LCD.h) and add your colour as a define with the bytes swapped:
+Open `ST7789V2_Driver_STM32L4/Core/Inc/LCD.h` in your project and add your colour as a define with the bytes swapped:
 
 ```c
 // Add your custom colours at the top of LCD.h, near other colour definitions

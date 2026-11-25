@@ -1,7 +1,7 @@
 ---
 title: Enums
-parent: C Basics
-nav_order: 9
+parent: Arrays, Strings and Structs
+nav_order: 4
 layout: default
 ---
 
